@@ -4,6 +4,7 @@ import cert1 from "@/assets/cert-google-data.png";
 import cert2 from "@/assets/cert-ibm-ai.jpg";
 import cert3 from "@/assets/cert-deep-learning.jpg";
 import { X } from "lucide-react";
+import { Sarcophagus } from "./Sarcophagus";
 
 const certs = [
   { img: cert1, title: "Google Data Analytics", issuer: "Google · Coursera", date: "Feb 2026", link: "https://coursera.org/verify/professional-cert/4V3WLQA2B3PL" },
@@ -14,16 +15,20 @@ const certs = [
 export const Certificates = () => {
   const [open, setOpen] = useState<number | null>(null);
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
+  const [unsealed, setUnsealed] = useState(false);
 
   return (
     <section id="certificates" className="relative py-28 px-6 overflow-hidden">
       <div className="container max-w-6xl">
         <SectionTitle eyebrow="𓋹 · CHAPTER · III" title="Hall of Sacred Tablets" />
-        <p className="text-center text-foreground/70 max-w-2xl mx-auto -mt-8 mb-12 italic">
+        {!unsealed ? (
+          <Sarcophagus label="𓋹 · SACRED · TABLETS · WITHIN · 𓋹" onOpen={() => setUnsealed(true)} />
+        ) : (
+        <>
+        <p className="text-center text-foreground/70 max-w-2xl mx-auto -mt-8 mb-12 italic reveal-up">
           Move your light across the chamber to reveal the engraved tablets of knowledge.
         </p>
-
-        <div className="grid md:grid-cols-3 gap-10">
+        <div className="grid md:grid-cols-3 gap-10 reveal-up">
           {certs.map((c, i) => {
             const isRevealed = revealed.has(i);
             return (
@@ -51,6 +56,8 @@ export const Certificates = () => {
             );
           })}
         </div>
+        </>
+        )}
       </div>
 
       {open !== null && (
