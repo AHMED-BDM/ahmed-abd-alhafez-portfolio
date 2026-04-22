@@ -4,6 +4,7 @@ import p1 from "@/assets/project-fleet.png";
 import p2 from "@/assets/project-hr-dashboard.png";
 import p3 from "@/assets/project-sales.png";
 import { ExternalLink, X } from "lucide-react";
+import { Sarcophagus } from "./Sarcophagus";
 
 const projects = [
   { img: p1, title: "Fleet Performance Dashboard", desc: "Interactive Power BI dashboard tracking fleet costs, distances and driver spending patterns with KPI cards.", tags: ["Power BI", "KPI", "Analytics"], link: "#" },
@@ -21,21 +22,7 @@ export const Projects = () => {
         <SectionTitle eyebrow="𓍢 · CHAPTER · IV" title="Treasure Chamber" />
 
         {!opened ? (
-          <div className="relative max-w-2xl mx-auto">
-            <div className="aspect-[4/5] gold-frame bg-stone shadow-deep flex flex-col items-center justify-center p-10 relative overflow-hidden">
-              <div className="absolute inset-0 shimmer-gold opacity-30" />
-              <div className="text-7xl text-primary torch-flicker mb-6">𓊃</div>
-              <h3 className="font-display text-3xl text-gold text-center mb-4">Sealed Chamber</h3>
-              <p className="text-foreground/80 text-center mb-8 max-w-sm italic">
-                Beyond this gate lie the treasures forged from data. Speak the word to enter.
-              </p>
-              <button
-                onClick={() => setOpened(true)}
-                className="px-10 py-4 bg-primary text-primary-foreground font-display tracking-widest gold-frame shadow-gold hover:scale-105 transition-transform">
-                BREAK THE SEAL
-              </button>
-            </div>
-          </div>
+          <Sarcophagus label="𓊃 · ROYAL · TREASURE · CHAMBER · 𓊃" intensity="strong" onOpen={() => setOpened(true)} />
         ) : (
           <div className="grid md:grid-cols-3 gap-8 reveal-up">
             {projects.map((p, i) => (

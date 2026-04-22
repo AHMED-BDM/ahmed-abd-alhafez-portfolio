@@ -1,6 +1,6 @@
 import heroNight from "@/assets/hero-temple-night.jpg";
 import heroDay from "@/assets/hero-temple-day.jpg";
-import profile from "@/assets/profile-pharaoh.png";
+import profile from "@/assets/profile-real.jpg";
 
 export const Hero = ({ mode }: { mode: "night" | "day" }) => (
   <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24">
@@ -40,8 +40,9 @@ export const Hero = ({ mode }: { mode: "night" | "day" }) => (
 
       <div className="relative flex justify-center reveal-up" style={{ animationDelay: "0.3s" }}>
         <div className="absolute inset-0 rounded-full blur-3xl bg-primary/30 float-slow" />
-        <div className="relative gold-frame p-3 bg-card/40 backdrop-blur-sm rounded-md float-slow">
-          <img src={profile} alt="Pharaonic portrait of Ahmed" className="w-72 md:w-96 h-auto" width={384} height={384} />
+        <div className="relative gold-frame p-3 bg-card/40 backdrop-blur-sm rounded-md float-slow overflow-hidden">
+          <img src={profile} alt="Portrait of Ahmed Abd Al-Hafez" className="w-72 md:w-96 h-auto object-cover" width={384} height={384} />
+          <div className="pointer-events-none absolute inset-0 shimmer-gold opacity-20" />
         </div>
       </div>
     </div>

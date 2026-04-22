@@ -9,26 +9,38 @@ import { Skills } from "@/components/portfolio/Skills";
 import { Certificates } from "@/components/portfolio/Certificates";
 import { Projects } from "@/components/portfolio/Projects";
 import { Contact } from "@/components/portfolio/Contact";
+import { SoundProvider, SoundToggle } from "@/components/portfolio/SoundContext";
+import { Mummies } from "@/components/portfolio/Mummies";
+import { Curse } from "@/components/portfolio/Curse";
+import { Whispers } from "@/components/portfolio/Whispers";
+import { SecretPapyrus } from "@/components/portfolio/SecretPapyrus";
 
 const Index = () => {
   const [entered, setEntered] = useState(false);
   const [mode, setMode] = useState<"night" | "day">("night");
 
   return (
-    <div className={mode === "day" ? "day min-h-screen" : "min-h-screen"}>
-      {!entered && <EntryGate onEnter={() => setEntered(true)} />}
-      <CustomCursor mode={mode} />
-      <Navbar />
-      <ModeToggle mode={mode} onToggle={() => setMode(m => m === "night" ? "day" : "night")} />
-      <main>
-        <Hero mode={mode} />
-        <About />
-        <Skills />
-        <Certificates />
-        <Projects />
-        <Contact />
-      </main>
-    </div>
+    <SoundProvider>
+      <div className={mode === "day" ? "day min-h-screen" : "min-h-screen"}>
+        {!entered && <EntryGate onEnter={() => setEntered(true)} />}
+        <CustomCursor mode={mode} />
+        <Navbar />
+        <ModeToggle mode={mode} onToggle={() => setMode(m => m === "night" ? "day" : "night")} />
+        <SoundToggle />
+        <Mummies mode={mode} />
+        <Curse />
+        <Whispers />
+        <SecretPapyrus />
+        <main>
+          <Hero mode={mode} />
+          <About />
+          <Skills />
+          <Certificates />
+          <Projects />
+          <Contact />
+        </main>
+      </div>
+    </SoundProvider>
   );
 };
 
