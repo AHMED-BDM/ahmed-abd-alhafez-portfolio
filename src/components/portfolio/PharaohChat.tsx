@@ -86,9 +86,9 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-[90] flex flex-col items-end gap-3">
+    <div className="fixed bottom-5 right-5 z-[90] flex flex-col items-end gap-3 cursor-auto pointer-events-auto" data-cursor="native">
       {open && (
-        <div className={`gold-frame w-[min(24rem,calc(100vw-1.5rem))] shadow-deep ${panelClasses}`}>
+        <div className={`gold-frame w-[min(24rem,calc(100vw-1.5rem))] shadow-deep cursor-auto pointer-events-auto ${panelClasses}`} data-cursor="native">
           <div className="flex items-center justify-between border-b border-border/70 px-4 py-3">
             <div>
               <p className="font-display text-sm tracking-[0.28em] text-primary">𓂀 ORACLE</p>
