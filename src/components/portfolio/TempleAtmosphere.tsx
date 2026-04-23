@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSound } from "./SoundContext";
 
 const createParticles = (count: number, speed: [number, number]) =>
@@ -13,10 +13,31 @@ const createParticles = (count: number, speed: [number, number]) =>
     driftY: `${-24 - Math.random() * 80}px`,
   }));
 
-export const TempleAtmosphere = ({ mode }: { mode: "night" | "day" }) => {
+export const TempleAtmosphere = ({
+  mode,
+  intensity,
+  reducedEffects,
+}: {
+  mode: "night" | "day";
+  intensity: "subtle" | "immersive";
+  reducedEffects: boolean;
+}) => {
   const { enabled, play } = useSound();
-  const goldMotes = useMemo(() => createParticles(22, [9, 18]), []);
-  const dustMotes = useMemo(() => createParticles(30, [10, 22]), []);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const goldMotes = useMemo(() => createParticles(reducedEffects ? 10 : 22, [9, 18]), [reducedEffects]);
+  const dustMotes = useMemo(() => createParticles(reducedEffects ? 14 : 30, [10, 22]), [reducedEffects]);
+  const glyphs = useMemo(() => ["𓂀", "𓋹", "𓊃", "𓎼", "𓆣", "𓏏"], []);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const max = Math.max(document.body.scrollHeight - window.innerHeight, 1);
+      setScrollProgress(Math.min(1, window.scrollY / max));
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!enabled) return;
@@ -36,6 +57,8 @@ export const TempleAtmosphere = ({ mode }: { mode: "night" | "day" }) => {
         <>
           <div className="night-gold-sheen" />
           <div className="night-gold-vignette" />
+          <div className="night-shadow-drift" />
+          {!reducedEffects && <div className="night-shadow-figure" />}
           {goldMotes.map((mote) => (
             <span
               key={mote.id}
@@ -52,13 +75,26 @@ export const TempleAtmosphere = ({ mode }: { mode: "night" | "day" }) => {
               }}
             />
           ))}
+          {!reducedEffects && (
+            <div className="night-glow-eyes">
+              <span />
+              <span />
+            </div>
+          )}
         </>
       ) : (
         <>
-          <div className="day-storm-haze" />
+          <div className="day-storm-haze" style={{ opacity: 0.45 + scrollProgress * (intensity === "immersive" ? 0.4 : 0.22) }} />
           <div className="day-dust-band day-dust-band-a" />
           <div className="day-dust-band day-dust-band-b" />
           <div className="day-light-bloom" />
+          {!reducedEffects && (
+            <div className="day-hidden-glyphs" style={{ opacity: 0.08 + scrollProgress * 0.12 }}>
+              {glyphs.map((glyph, index) => (
+                <span key={glyph} style={{ left: `${8 + index * 14}%`, top: `${18 + (index % 2) * 22}%` }}>{glyph}</span>
+              ))}
+            </div>
+          )}
           {dustMotes.map((mote) => (
             <span
               key={mote.id}
