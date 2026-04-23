@@ -9,29 +9,36 @@ import { Skills } from "@/components/portfolio/Skills";
 import { Certificates } from "@/components/portfolio/Certificates";
 import { Projects } from "@/components/portfolio/Projects";
 import { Contact } from "@/components/portfolio/Contact";
-import { SoundProvider, SoundToggle } from "@/components/portfolio/SoundContext";
+import { SoundProvider } from "@/components/portfolio/SoundContext";
 import { Mummies } from "@/components/portfolio/Mummies";
 import { Curse } from "@/components/portfolio/Curse";
 import { Whispers } from "@/components/portfolio/Whispers";
 import { SecretPapyrus } from "@/components/portfolio/SecretPapyrus";
 import { TempleAtmosphere } from "@/components/portfolio/TempleAtmosphere";
 import { PharaohChat } from "@/components/portfolio/PharaohChat";
+import { AtmosphereControls } from "@/components/portfolio/AtmosphereControls";
+import { usePerformanceMode } from "@/hooks/usePerformanceMode";
 
 const Index = () => {
   const [entered, setEntered] = useState(false);
   const [mode, setMode] = useState<"night" | "day">("night");
+  const [intensity, setIntensity] = useState<"subtle" | "immersive">("immersive");
+  const { reducedEffects } = usePerformanceMode();
 
   return (
-    <SoundProvider mode={mode}>
+    <SoundProvider mode={mode} intensity={intensity} reducedEffects={reducedEffects}>
       <div className={mode === "day" ? "day min-h-screen" : "min-h-screen"}>
         {!entered && <EntryGate onEnter={() => setEntered(true)} />}
         <CustomCursor mode={mode} />
-        <TempleAtmosphere mode={mode} />
+        <TempleAtmosphere mode={mode} intensity={intensity} reducedEffects={reducedEffects} />
         <Navbar />
         <ModeToggle mode={mode} onToggle={() => setMode(m => m === "night" ? "day" : "night")} />
-        <SoundToggle />
+        <AtmosphereControls
+          intensity={intensity}
+          onIntensityToggle={() => setIntensity((value) => (value === "immersive" ? "subtle" : "immersive"))}
+        />
         <Mummies mode={mode} />
-        <Curse />
+        <Curse reducedEffects={reducedEffects} />
         <Whispers />
         <SecretPapyrus />
         <main>
