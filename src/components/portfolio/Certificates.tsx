@@ -41,11 +41,11 @@ export const Certificates = () => {
                   <div className="aspect-[4/3] overflow-hidden bg-muted">
                     <img src={c.img} alt={c.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   </div>
-                  <div className="p-4 text-center">
-                    <h3 className="font-display text-lg text-gold tracking-wide">{c.title}</h3>
-                    <p className="text-sm text-foreground/70 mt-1">{c.issuer}</p>
-                    <p className="text-xs text-primary/70 tracking-widest mt-2">{c.date.toUpperCase()}</p>
-                  </div>
+                </div>
+                <div className={`px-3 pt-4 text-center transition-all duration-700 ${isRevealed ? "opacity-100" : "opacity-40"}`}>
+                  <h3 className="font-display text-lg text-gold tracking-wide">{c.title}</h3>
+                  <p className="text-sm text-foreground/70 mt-1">{c.issuer}</p>
+                  <p className="text-xs text-primary/70 tracking-widest mt-2">{c.date.toUpperCase()}</p>
                 </div>
                 {!isRevealed && (
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
