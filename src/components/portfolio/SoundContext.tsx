@@ -166,17 +166,20 @@ export const SoundProvider = ({
       const softVolume = getAdaptiveVolume(mode === "night" ? 0.35 : 0.28);
 
       if (mode === "day") {
-        if (Math.random() < 0.65) play("gust", { pan, volume: softVolume });
-        if (Math.random() < 0.18) play("whisper", { pan: pan * 0.7, volume: getAdaptiveVolume(0.18) });
+        if (Math.random() < 0.65) synth.noise(2.2, softVolume * 0.024, 900, pan);
+        if (Math.random() < 0.18) synth.noise(2.4, getAdaptiveVolume(0.18) * 0.03, 1400, pan * 0.7);
       } else {
-        if (Math.random() < 0.32) play("rumble", { pan, volume: getAdaptiveVolume(0.12) });
-        if (Math.random() < 0.4) play("whisper", { pan, volume: getAdaptiveVolume(0.16) });
-        if (Math.random() < 0.26) play("glint", { pan, volume: getAdaptiveVolume(0.12) });
+        if (Math.random() < 0.32) synth.noise(2, getAdaptiveVolume(0.12) * 0.08, 180, pan);
+        if (Math.random() < 0.4) synth.noise(2.4, getAdaptiveVolume(0.16) * 0.03, 1400, pan);
+        if (Math.random() < 0.26) {
+          synth.tone(740, 0.18, "triangle", getAdaptiveVolume(0.12) * 0.016, pan);
+          setTimeout(() => synth.tone(1110, 0.12, "sine", getAdaptiveVolume(0.12) * 0.011, pan), 40);
+        }
       }
     }, reducedEffects ? 22000 : 16000);
 
     return () => window.clearInterval(interval);
-  }, [enabled, getAdaptiveVolume, mode, play, reducedEffects]);
+  }, [enabled, getAdaptiveVolume, mode, reducedEffects, synth]);
 
   const play = useCallback((kind: SoundKind, options?: { pan?: number; volume?: number }) => {
     if (!enabled) return;
