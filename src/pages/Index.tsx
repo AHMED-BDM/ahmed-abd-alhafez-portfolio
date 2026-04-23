@@ -14,16 +14,19 @@ import { Mummies } from "@/components/portfolio/Mummies";
 import { Curse } from "@/components/portfolio/Curse";
 import { Whispers } from "@/components/portfolio/Whispers";
 import { SecretPapyrus } from "@/components/portfolio/SecretPapyrus";
+import { TempleAtmosphere } from "@/components/portfolio/TempleAtmosphere";
+import { PharaohChat } from "@/components/portfolio/PharaohChat";
 
 const Index = () => {
   const [entered, setEntered] = useState(false);
   const [mode, setMode] = useState<"night" | "day">("night");
 
   return (
-    <SoundProvider>
+    <SoundProvider mode={mode}>
       <div className={mode === "day" ? "day min-h-screen" : "min-h-screen"}>
         {!entered && <EntryGate onEnter={() => setEntered(true)} />}
         <CustomCursor mode={mode} />
+        <TempleAtmosphere mode={mode} />
         <Navbar />
         <ModeToggle mode={mode} onToggle={() => setMode(m => m === "night" ? "day" : "night")} />
         <SoundToggle />
@@ -39,6 +42,7 @@ const Index = () => {
           <Projects />
           <Contact />
         </main>
+        <PharaohChat mode={mode} />
       </div>
     </SoundProvider>
   );
