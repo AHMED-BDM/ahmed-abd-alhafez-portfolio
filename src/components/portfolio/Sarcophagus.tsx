@@ -8,18 +8,25 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
   const [opening, setOpening] = useState(false);
   const { play } = useSound();
 
-  const handleClick = () => {
+  const getPan = (event: React.MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const relativeX = (event.clientX - rect.left) / rect.width;
+    return (relativeX - 0.5) * 1.4;
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (opening) return;
     setOpening(true);
-    play("open");
-    if (intensity === "strong") play("rumble");
+    const pan = getPan(event);
+    play("open", { pan, volume: 1 });
+    if (intensity === "strong") play("rumble", { pan, volume: 1 });
     setTimeout(onOpen, intensity === "strong" ? 1500 : 1200);
   };
 
   return (
     <div className="relative max-w-md mx-auto select-none">
       <div
-        onMouseEnter={() => play("hover")}
+          onMouseEnter={(event) => play("hover", { pan: getPan(event), volume: 0.9 })}
         onClick={handleClick}
         className={`group relative cursor-pointer ${opening ? "" : "hover:scale-[1.02]"} transition-transform duration-500`}
         style={{ filter: opening ? "drop-shadow(0 0 60px hsl(var(--primary)/0.8))" : "drop-shadow(0 30px 40px rgba(0,0,0,0.6))" }}

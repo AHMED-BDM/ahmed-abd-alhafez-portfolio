@@ -28,13 +28,14 @@ export const Projects = () => {
             {projects.map((p, i) => (
               <div key={i}
                 onClick={() => setActive(i)}
-                className="group relative gold-frame bg-card/70 backdrop-blur shadow-deep cursor-pointer hover:-translate-y-2 hover:shadow-gold transition-all duration-500">
-                <div className="aspect-video overflow-hidden">
-                  <img src={p.img} alt={p.title} loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                className="group relative cursor-pointer hover:-translate-y-2 transition-all duration-500">
+                <div className="gold-frame bg-card/70 backdrop-blur shadow-deep overflow-hidden hover:shadow-gold transition-all duration-500">
+                  <div className="aspect-video overflow-hidden">
+                    <img src={p.img} alt={p.title} loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  </div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-80" />
-                <div className="absolute inset-x-0 bottom-0 p-5">
+                <div className="px-2 pt-4">
                   <h3 className="font-display text-lg text-gold tracking-wide mb-2">{p.title}</h3>
                   <p className="text-sm text-foreground/80 mb-3 line-clamp-2">{p.desc}</p>
                   <div className="flex flex-wrap gap-1.5">

@@ -11,7 +11,9 @@ export const Whispers = () => {
     window.addEventListener("click", mark);
     const id = setInterval(() => {
       const idle = Date.now() - lastInteraction > 12000;
-      if ((idle && Math.random() < 0.4) || Math.random() < 0.05) play("whisper");
+      if ((idle && Math.random() < 0.4) || Math.random() < 0.05) {
+        play("whisper", { pan: Math.random() * 1.6 - 0.8, volume: idle ? 1 : 0.75 });
+      }
     }, 18000);
     return () => {
       clearInterval(id);
