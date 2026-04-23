@@ -54,9 +54,9 @@ export const Projects = () => {
       </div>
 
       {active !== null && (
-        <div onClick={() => setActive(null)} className="fixed inset-0 z-[80] bg-background/95 backdrop-blur-md flex items-center justify-center p-6 reveal-up">
-          <button className="absolute top-6 right-6 text-primary"><X className="w-8 h-8" /></button>
-          <div onClick={e => e.stopPropagation()} className="gold-frame p-3 bg-card max-w-5xl w-full">
+        <div onClick={() => setActive(null)} className="fixed inset-0 z-[80] bg-background/95 backdrop-blur-md flex items-center justify-center p-6 reveal-up cursor-auto pointer-events-auto" data-cursor="native">
+          <button className="absolute top-6 right-6 text-primary cursor-pointer" data-cursor="native"><X className="w-8 h-8" /></button>
+          <div onClick={e => e.stopPropagation()} className="gold-frame p-3 bg-card max-w-5xl w-full cursor-auto" data-cursor="native">
             <img src={projects[active].img} alt={projects[active].title} className="w-full h-auto" />
             <div className="p-6">
               <h3 className="font-display text-2xl text-gold mb-2">{projects[active].title}</h3>

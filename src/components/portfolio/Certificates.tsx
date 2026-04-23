@@ -61,9 +61,9 @@ export const Certificates = () => {
       </div>
 
       {open !== null && (
-        <div onClick={() => setOpen(null)} className="fixed inset-0 z-[80] bg-background/95 backdrop-blur-md flex items-center justify-center p-6 reveal-up">
-          <button className="absolute top-6 right-6 text-primary"><X className="w-8 h-8" /></button>
-          <div onClick={e => e.stopPropagation()} className="gold-frame p-3 bg-card max-w-4xl w-full">
+        <div onClick={() => setOpen(null)} className="fixed inset-0 z-[80] bg-background/95 backdrop-blur-md flex items-center justify-center p-6 reveal-up cursor-auto pointer-events-auto" data-cursor="native">
+          <button className="absolute top-6 right-6 text-primary cursor-pointer" data-cursor="native"><X className="w-8 h-8" /></button>
+          <div onClick={e => e.stopPropagation()} className="gold-frame p-3 bg-card max-w-4xl w-full cursor-auto" data-cursor="native">
             <img src={certs[open].img} alt={certs[open].title} className="w-full h-auto" />
             <div className="p-5 text-center">
               <h3 className="font-display text-2xl text-gold">{certs[open].title}</h3>

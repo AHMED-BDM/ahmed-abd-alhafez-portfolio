@@ -193,6 +193,11 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+@keyframes templeFlicker {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  45% { opacity: 0.94; filter: brightness(0.96); }
+  55% { opacity: 1; filter: brightness(1.04); }
+}
 @keyframes scrollUnroll {
   0% { transform: scaleY(0.05); opacity: 0; }
   60% { transform: scaleY(1.02); opacity: 1; }
@@ -208,4 +213,16 @@
 
 /* Custom cursor */
 .has-custom-cursor, .has-custom-cursor * { cursor: none !important; }
+.has-custom-cursor a,
+.has-custom-cursor button,
+.has-custom-cursor input,
+.has-custom-cursor textarea,
+.has-custom-cursor select,
+.has-custom-cursor [role='button'],
+.has-custom-cursor [data-cursor='native'] {
+  cursor: auto !important;
+}
+.temple-flicker {
+  animation: templeFlicker 0.28s ease-in-out 1;
+}
 @media (hover: none) { .has-custom-cursor, .has-custom-cursor * { cursor: auto !important; } }

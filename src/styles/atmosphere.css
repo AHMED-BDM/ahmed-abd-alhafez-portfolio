@@ -29,6 +29,44 @@
   opacity: 0;
 }
 
+.night-shadow-drift {
+  background:
+    radial-gradient(circle at 18% 34%, hsl(var(--background) / 0.16), transparent 24%),
+    radial-gradient(circle at 82% 22%, hsl(var(--background) / 0.14), transparent 20%),
+    radial-gradient(circle at 56% 70%, hsl(var(--background) / 0.18), transparent 28%);
+  animation: shadowBreath 28s ease-in-out infinite;
+}
+
+.night-shadow-figure {
+  inset: 0;
+  background: radial-gradient(circle at 12% 62%, hsl(var(--foreground) / 0.08), transparent 8%);
+  opacity: 0;
+  animation: shadowFigure 24s linear infinite;
+}
+
+.night-glow-eyes {
+  position: absolute;
+  right: 10%;
+  top: 18%;
+  width: 3.5rem;
+  height: 1.25rem;
+  opacity: 0;
+  animation: eyeFlash 18s linear infinite;
+}
+
+.night-glow-eyes span {
+  position: absolute;
+  top: 0;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: hsl(var(--primary-glow) / 0.85);
+  box-shadow: 0 0 12px hsl(var(--primary-glow) / 0.6);
+}
+
+.night-glow-eyes span:first-child { left: 0.4rem; }
+.night-glow-eyes span:last-child { right: 0.4rem; }
+
 .night-gold-mote {
   background: radial-gradient(circle, hsl(var(--primary-glow) / 0.75) 0%, hsl(var(--primary) / 0.15) 55%, transparent 72%);
   box-shadow: 0 0 18px hsl(var(--primary-glow) / 0.22);
@@ -60,6 +98,20 @@
 .day-dust-mote {
   background: radial-gradient(circle, hsl(var(--foreground) / 0.22), transparent 72%);
   animation: floatingDust var(--duration, 16s) linear infinite;
+}
+
+.day-hidden-glyphs {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+}
+
+.day-hidden-glyphs span {
+  position: absolute;
+  font-family: 'Cinzel', serif;
+  color: hsl(var(--accent) / 0.55);
+  font-size: clamp(1rem, 1.8vw, 1.8rem);
+  animation: glyphReveal 8s ease-in-out infinite;
 }
 
 @keyframes gildedSweep {
@@ -100,4 +152,27 @@
     opacity: 0;
     transform: translate3d(var(--drift-x), var(--drift-y), 0) scale(1.1);
   }
+}
+
+@keyframes shadowBreath {
+  0%, 100% { opacity: 0.42; transform: translate3d(0, 0, 0) scale(1); }
+  50% { opacity: 0.62; transform: translate3d(1%, -1%, 0) scale(1.04); }
+}
+
+@keyframes eyeFlash {
+  0%, 92%, 100% { opacity: 0; }
+  93%, 94% { opacity: 0.85; }
+  95% { opacity: 0.18; }
+}
+
+@keyframes shadowFigure {
+  0%, 78%, 100% { opacity: 0; transform: translate3d(-8%, 0, 0) scale(0.96); }
+  82% { opacity: 0.12; }
+  90% { opacity: 0; transform: translate3d(12%, -1%, 0) scale(1.02); }
+}
+
+@keyframes glyphReveal {
+  0%, 100% { opacity: 0; transform: translateY(0); }
+  18%, 24% { opacity: 1; transform: translateY(-2px); }
+  40% { opacity: 0; transform: translateY(-4px); }
 }
