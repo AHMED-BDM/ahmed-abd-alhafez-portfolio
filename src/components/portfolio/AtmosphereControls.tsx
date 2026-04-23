@@ -7,20 +7,26 @@ type AtmosphereControlsProps = {
 };
 
 export const AtmosphereControls = ({ intensity, onIntensityToggle }: AtmosphereControlsProps) => {
-  const { enabled, toggle, play } = useSound();
+  const { initialized, enabled, toggle, enableSound, play } = useSound();
 
   return (
     <div className="fixed bottom-5 left-5 z-[85] flex items-center gap-2 rounded-md border border-primary/30 bg-card/85 px-3 py-2 backdrop-blur-md shadow-deep cursor-auto pointer-events-auto">
       <button
         type="button"
         onClick={() => {
+          if (!initialized) {
+            enableSound();
+            return;
+          }
+
           toggle();
           play("click", { pan: -0.35, volume: 0.45 });
         }}
-        className="flex h-10 w-10 items-center justify-center rounded-md border border-primary/30 bg-background/40 text-primary transition hover:border-primary hover:shadow-gold cursor-pointer"
-        aria-label={enabled ? "Mute ambient sound" : "Enable ambient sound"}
+        className="flex min-w-[9rem] items-center justify-center gap-2 rounded-md border border-primary/30 bg-background/40 px-3 py-2 text-primary transition hover:border-primary hover:shadow-gold cursor-pointer"
+        aria-label={!initialized ? "Enable ambient sound" : enabled ? "Mute ambient sound" : "Enable ambient sound"}
       >
         {enabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+        <span className="text-[11px] font-display tracking-[0.18em]">{!initialized ? "ENABLE SOUND" : enabled ? "MUTE" : "UNMUTE"}</span>
       </button>
 
       <button

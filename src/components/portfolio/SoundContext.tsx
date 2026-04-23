@@ -4,12 +4,14 @@ type TempleMode = "night" | "day";
 type SoundKind = "hover" | "click" | "open" | "rumble" | "whisper" | "curse" | "glint" | "gust";
 
 type Ctx = {
+  initialized: boolean;
   enabled: boolean;
   toggle: () => void;
+  enableSound: () => void;
   play: (kind: SoundKind, options?: { pan?: number; volume?: number }) => void;
 };
 
-const SoundCtx = createContext<Ctx>({ enabled: false, toggle: () => {}, play: () => {} });
+const SoundCtx = createContext<Ctx>({ initialized: false, enabled: false, toggle: () => {}, enableSound: () => {}, play: () => {} });
 export const useSound = () => useContext(SoundCtx);
 
 const useSynth = () => {
@@ -127,9 +129,11 @@ export const SoundProvider = ({
   intensity: "subtle" | "immersive";
   reducedEffects: boolean;
 }) => {
+  const [initialized, setInitialized] = useState(false);
   const [enabled, setEnabled] = useState(false);
   const synth = useSynth();
   const enabledAtRef = useRef<number | null>(null);
+  const initSourceRef = useRef<string | null>(null);
 
   const intensityScale = useMemo(() => {
     if (reducedEffects) return 0.45;
@@ -145,21 +149,60 @@ export const SoundProvider = ({
     [intensityScale],
   );
 
+  const initializeAudio = useCallback(async (source: "button" | "click" | "scroll" | "mousemove") => {
+    if (typeof window === "undefined") return;
+
+    console.log(`[TempleAudio] initialize requested via ${source}`);
+
+    try {
+      initSourceRef.current = source;
+      const audioContext = synth.ensure();
+      console.log("[TempleAudio] audio context created", audioContext.state);
+      await audioContext.resume?.();
+      console.log("[TempleAudio] play() triggered for ambient layer");
+      setInitialized(true);
+      setEnabled(true);
+    } catch (error) {
+      console.error("[TempleAudio] playback failed during initialization", error);
+    }
+  }, [synth]);
+
   useEffect(() => {
-    if (!enabled) {
+    if (typeof window === "undefined" || initialized) return;
+
+    const onClick = () => void initializeAudio("click");
+    const onScroll = () => void initializeAudio("scroll");
+    const onMouseMove = () => void initializeAudio("mousemove");
+
+    window.addEventListener("click", onClick, { once: true, passive: true });
+    window.addEventListener("scroll", onScroll, { once: true, passive: true });
+    window.addEventListener("mousemove", onMouseMove, { once: true, passive: true });
+
+    return () => {
+      window.removeEventListener("click", onClick);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("mousemove", onMouseMove);
+    };
+  }, [initializeAudio, initialized]);
+
+  useEffect(() => {
+    if (!initialized || !enabled) {
       enabledAtRef.current = null;
       synth.stopAmbient();
       return;
     }
 
     if (!enabledAtRef.current) enabledAtRef.current = Date.now();
-    void synth.ensure().resume?.();
+    console.log(`[TempleAudio] ambient playback active (${initSourceRef.current ?? "toggle"})`);
+    void synth.ensure().resume?.().catch((error) => {
+      console.error("[TempleAudio] failed to resume ambient context", error);
+    });
     synth.startAmbient(mode);
     return () => synth.stopAmbient();
-  }, [enabled, mode, synth]);
+  }, [enabled, initialized, mode, synth]);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!initialized || !enabled) return;
 
     const interval = window.setInterval(() => {
       const pan = Math.random() * 1.5 - 0.75;
@@ -179,12 +222,14 @@ export const SoundProvider = ({
     }, reducedEffects ? 22000 : 16000);
 
     return () => window.clearInterval(interval);
-  }, [enabled, getAdaptiveVolume, mode, reducedEffects, synth]);
+  }, [enabled, getAdaptiveVolume, initialized, mode, reducedEffects, synth]);
 
   const play = useCallback((kind: SoundKind, options?: { pan?: number; volume?: number }) => {
-    if (!enabled) return;
+    if (!initialized || !enabled) return;
     const pan = options?.pan ?? 0;
     const volume = getAdaptiveVolume(options?.volume ?? 1);
+
+    console.log(`[TempleAudio] play() triggered for ${kind}`, { pan, volume });
 
     switch (kind) {
       case "hover":
@@ -217,14 +262,29 @@ export const SoundProvider = ({
         synth.noise(2.2, 0.024 * volume, 900, pan);
         break;
     }
-  }, [enabled, getAdaptiveVolume, synth]);
+  }, [enabled, getAdaptiveVolume, initialized, synth]);
 
   const toggle = useCallback(() => {
-    if (!enabled) void synth.ensure().resume?.();
-    setEnabled((value) => !value);
-  }, [enabled, synth]);
+    if (!initialized) {
+      void initializeAudio("button");
+      return;
+    }
 
-  return <SoundCtx.Provider value={{ enabled, toggle, play }}>{children}</SoundCtx.Provider>;
+    if (!enabled) {
+      console.log("[TempleAudio] play() triggered from toggle");
+      void synth.ensure().resume?.().catch((error) => {
+        console.error("[TempleAudio] failed to resume from toggle", error);
+      });
+    }
+
+    setEnabled((value) => !value);
+  }, [enabled, initializeAudio, initialized, synth]);
+
+  const enableSound = useCallback(() => {
+    void initializeAudio("button");
+  }, [initializeAudio]);
+
+  return <SoundCtx.Provider value={{ initialized, enabled, toggle, enableSound, play }}>{children}</SoundCtx.Provider>;
 };
 
 export const SoundToggle = () => {
