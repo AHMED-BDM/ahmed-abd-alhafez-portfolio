@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState, ReactNode, useCallback } from "react";
+import { createContext, useContext, useEffect, useRef, useState, ReactNode, useCallback, useMemo } from "react";
 
 type TempleMode = "night" | "day";
 type SoundKind = "hover" | "click" | "open" | "rumble" | "whisper" | "curse" | "glint" | "gust";
@@ -116,25 +116,72 @@ const useSynth = () => {
   return { tone, noise, startAmbient, stopAmbient, ensure };
 };
 
-export const SoundProvider = ({ children, mode }: { children: ReactNode; mode: TempleMode }) => {
+export const SoundProvider = ({
+  children,
+  mode,
+  intensity,
+  reducedEffects,
+}: {
+  children: ReactNode;
+  mode: TempleMode;
+  intensity: "subtle" | "immersive";
+  reducedEffects: boolean;
+}) => {
   const [enabled, setEnabled] = useState(false);
   const synth = useSynth();
+  const enabledAtRef = useRef<number | null>(null);
+
+  const intensityScale = useMemo(() => {
+    if (reducedEffects) return 0.45;
+    return intensity === "immersive" ? 1 : 0.68;
+  }, [intensity, reducedEffects]);
+
+  const getAdaptiveVolume = useCallback(
+    (volume = 1) => {
+      const sessionMinutes = enabledAtRef.current ? (Date.now() - enabledAtRef.current) / 60000 : 0;
+      const fatigueScale = Math.max(0.55, 1 - sessionMinutes * 0.045);
+      return volume * intensityScale * fatigueScale;
+    },
+    [intensityScale],
+  );
 
   useEffect(() => {
     if (!enabled) {
+      enabledAtRef.current = null;
       synth.stopAmbient();
       return;
     }
 
+    if (!enabledAtRef.current) enabledAtRef.current = Date.now();
     void synth.ensure().resume?.();
     synth.startAmbient(mode);
     return () => synth.stopAmbient();
   }, [enabled, mode, synth]);
 
+  useEffect(() => {
+    if (!enabled) return;
+
+    const interval = window.setInterval(() => {
+      const pan = Math.random() * 1.5 - 0.75;
+      const softVolume = getAdaptiveVolume(mode === "night" ? 0.35 : 0.28);
+
+      if (mode === "day") {
+        if (Math.random() < 0.65) play("gust", { pan, volume: softVolume });
+        if (Math.random() < 0.18) play("whisper", { pan: pan * 0.7, volume: getAdaptiveVolume(0.18) });
+      } else {
+        if (Math.random() < 0.32) play("rumble", { pan, volume: getAdaptiveVolume(0.12) });
+        if (Math.random() < 0.4) play("whisper", { pan, volume: getAdaptiveVolume(0.16) });
+        if (Math.random() < 0.26) play("glint", { pan, volume: getAdaptiveVolume(0.12) });
+      }
+    }, reducedEffects ? 22000 : 16000);
+
+    return () => window.clearInterval(interval);
+  }, [enabled, getAdaptiveVolume, mode, play, reducedEffects]);
+
   const play = useCallback((kind: SoundKind, options?: { pan?: number; volume?: number }) => {
     if (!enabled) return;
     const pan = options?.pan ?? 0;
-    const volume = options?.volume ?? 1;
+    const volume = getAdaptiveVolume(options?.volume ?? 1);
 
     switch (kind) {
       case "hover":
@@ -167,7 +214,7 @@ export const SoundProvider = ({ children, mode }: { children: ReactNode; mode: T
         synth.noise(2.2, 0.024 * volume, 900, pan);
         break;
     }
-  }, [enabled, synth]);
+  }, [enabled, getAdaptiveVolume, synth]);
 
   const toggle = useCallback(() => {
     if (!enabled) void synth.ensure().resume?.();
