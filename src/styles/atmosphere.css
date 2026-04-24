@@ -4,7 +4,9 @@
 .day-dust-band,
 .day-light-bloom,
 .night-gold-mote,
-.day-dust-mote {
+.day-dust-mote,
+.day-sand-sky,
+.day-sand-sweep {
   position: absolute;
   inset: 0;
 }
@@ -75,20 +77,54 @@
 
 .day-storm-haze {
   background:
-    linear-gradient(105deg, transparent 0%, hsl(var(--primary) / 0.05) 24%, transparent 52%),
-    linear-gradient(12deg, hsl(var(--background) / 0.02), hsl(var(--background) / 0.08));
+    linear-gradient(105deg, transparent 0%, hsl(35 55% 60% / 0.18) 24%, transparent 52%),
+    linear-gradient(12deg, hsl(35 50% 55% / 0.12), hsl(28 45% 45% / 0.22));
   animation: dustPulse 11s ease-in-out infinite;
+}
+
+.day-sand-sky {
+  background:
+    radial-gradient(ellipse at 50% 0%, hsl(35 70% 70% / 0.55), transparent 60%),
+    linear-gradient(180deg, hsl(32 55% 60% / 0.35) 0%, hsl(28 50% 50% / 0.18) 60%, transparent 100%);
+  mix-blend-mode: multiply;
+  animation: sandSkyShift 14s ease-in-out infinite;
+}
+
+.day-sand-sweep {
+  background:
+    repeating-linear-gradient(
+      100deg,
+      transparent 0px,
+      hsl(35 50% 55% / 0.08) 2px,
+      transparent 6px,
+      hsl(35 55% 60% / 0.06) 10px,
+      transparent 18px
+    );
+  filter: blur(2px);
+  animation: sandSweep 8s linear infinite;
+  opacity: 0.7;
+}
+
+.day-sand-streak {
+  position: absolute;
+  width: 180px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, hsl(35 55% 60% / 0.55), transparent);
+  filter: blur(1px);
+  opacity: 0;
+  animation: sandStreak var(--duration, 6s) linear infinite;
 }
 
 .day-dust-band {
   inset: -10% -20%;
-  background: linear-gradient(90deg, transparent 0%, hsl(var(--foreground) / 0.05) 35%, hsl(var(--foreground) / 0.11) 50%, transparent 72%);
-  filter: blur(18px);
-  opacity: 0.45;
+  background: linear-gradient(90deg, transparent 0%, hsl(35 55% 55% / 0.18) 30%, hsl(28 50% 45% / 0.28) 50%, hsl(35 55% 55% / 0.18) 70%, transparent 100%);
+  filter: blur(22px);
+  opacity: 0.7;
 }
 
-.day-dust-band-a { animation: dustBand 20s linear infinite; }
-.day-dust-band-b { animation: dustBand 26s linear infinite reverse; }
+.day-dust-band-a { animation: dustBand 14s linear infinite; }
+.day-dust-band-b { animation: dustBand 18s linear infinite reverse; top: 20%; }
+.day-dust-band-c { animation: dustBand 22s linear infinite; top: -15%; opacity: 0.5; }
 
 .day-light-bloom {
   background: radial-gradient(circle at 82% 16%, hsl(var(--primary-glow) / 0.18), transparent 24%);
@@ -96,7 +132,7 @@
 }
 
 .day-dust-mote {
-  background: radial-gradient(circle, hsl(var(--foreground) / 0.22), transparent 72%);
+  background: radial-gradient(circle, hsl(35 55% 50% / 0.6), hsl(28 45% 40% / 0.2) 50%, transparent 75%);
   animation: floatingDust var(--duration, 16s) linear infinite;
 }
 
@@ -138,8 +174,24 @@
 }
 
 @keyframes dustBand {
-  0% { transform: translate3d(-18%, -2%, 0) skewX(-8deg); }
-  100% { transform: translate3d(18%, 4%, 0) skewX(-8deg); }
+  0% { transform: translate3d(-30%, -2%, 0) skewX(-8deg); }
+  100% { transform: translate3d(30%, 4%, 0) skewX(-8deg); }
+}
+
+@keyframes sandSkyShift {
+  0%, 100% { opacity: 0.7; transform: translate3d(0, 0, 0); }
+  50% { opacity: 1; transform: translate3d(2%, 1%, 0); }
+}
+
+@keyframes sandSweep {
+  0% { transform: translate3d(-10%, 0, 0); }
+  100% { transform: translate3d(10%, 0, 0); }
+}
+
+@keyframes sandStreak {
+  0% { opacity: 0; transform: translate3d(-30vw, 0, 0) rotate(-6deg); }
+  20% { opacity: 0.85; }
+  100% { opacity: 0; transform: translate3d(60vw, 8vh, 0) rotate(-6deg); }
 }
 
 @keyframes floatingDust {

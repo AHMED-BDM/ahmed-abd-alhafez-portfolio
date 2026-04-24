@@ -25,7 +25,8 @@ export const TempleAtmosphere = ({
   const { enabled, play } = useSound();
   const [scrollProgress, setScrollProgress] = useState(0);
   const goldMotes = useMemo(() => createParticles(reducedEffects ? 10 : 22, [9, 18]), [reducedEffects]);
-  const dustMotes = useMemo(() => createParticles(reducedEffects ? 14 : 30, [10, 22]), [reducedEffects]);
+  const dustMotes = useMemo(() => createParticles(reducedEffects ? 30 : 80, [6, 14]), [reducedEffects]);
+  const sandStreaks = useMemo(() => createParticles(reducedEffects ? 8 : 18, [4, 9]), [reducedEffects]);
   const glyphs = useMemo(() => ["𓂀", "𓋹", "𓊃", "𓎼", "𓆣", "𓏏"], []);
 
   useEffect(() => {
@@ -84,9 +85,12 @@ export const TempleAtmosphere = ({
         </>
       ) : (
         <>
-          <div className="day-storm-haze" style={{ opacity: 0.45 + scrollProgress * (intensity === "immersive" ? 0.4 : 0.22) }} />
+          <div className="day-sand-sky" style={{ opacity: 0.6 + scrollProgress * (intensity === "immersive" ? 0.35 : 0.2) }} />
+          <div className="day-storm-haze" style={{ opacity: 0.55 + scrollProgress * (intensity === "immersive" ? 0.4 : 0.22) }} />
           <div className="day-dust-band day-dust-band-a" />
           <div className="day-dust-band day-dust-band-b" />
+          <div className="day-dust-band day-dust-band-c" />
+          <div className="day-sand-sweep" />
           <div className="day-light-bloom" />
           {!reducedEffects && (
             <div className="day-hidden-glyphs" style={{ opacity: 0.08 + scrollProgress * 0.12 }}>
@@ -108,6 +112,18 @@ export const TempleAtmosphere = ({
                 animationDelay: mote.delay,
                 ["--drift-x" as string]: mote.driftX,
                 ["--drift-y" as string]: mote.driftY,
+              }}
+            />
+          ))}
+          {sandStreaks.map((streak) => (
+            <span
+              key={`streak-${streak.id}`}
+              className="day-sand-streak"
+              style={{
+                left: streak.left,
+                top: streak.top,
+                animationDuration: streak.duration,
+                animationDelay: streak.delay,
               }}
             />
           ))}
