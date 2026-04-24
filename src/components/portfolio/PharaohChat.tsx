@@ -32,6 +32,7 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([starterMessage]);
   const { play } = useSound();
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const greetedRef = useRef(false);
 
   const panelClasses = useMemo(
     () =>
@@ -44,6 +45,19 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading, open]);
+
+  useEffect(() => {
+    if (open && !greetedRef.current) {
+      greetedRef.current = true;
+      console.log("[PharaohChat] First open — fourth-wall greeting");
+      window.setTimeout(() => {
+        setMessages((current) => [
+          ...current,
+          { role: "assistant", content: "*كنت أعلم أنك ستتحدث معي.*" },
+        ]);
+      }, 700);
+    }
+  }, [open]);
 
   const sendMessage = async (prefill?: string) => {
     const content = (prefill ?? input).trim();

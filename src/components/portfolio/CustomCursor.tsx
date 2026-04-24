@@ -14,7 +14,13 @@ export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
       const target = e.target as HTMLElement | null;
       const next = { x: e.clientX, y: e.clientY };
       setPos(next);
-      setInteractive(Boolean(target?.closest("button,a,input,textarea,select,[role='button'],[data-cursor='native']")));
+      setInteractive(
+        Boolean(
+          target?.closest(
+            "button,a,input,textarea,select,label,[role='button'],[role='dialog'],[contenteditable='true'],[data-cursor='native']"
+          )
+        )
+      );
       setTrail((current) => [...current.slice(-4), { ...next, id: Date.now() + Math.random() }]);
     };
     window.addEventListener("mousemove", move);
