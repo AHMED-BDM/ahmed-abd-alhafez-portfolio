@@ -1,4 +1,5 @@
 import { Code2, Sparkles } from "lucide-react";
+import { useLang } from "@/i18n/LanguageContext";
 
 export const DevModeToggle = ({
   devMode,
@@ -6,7 +7,12 @@ export const DevModeToggle = ({
 }: {
   devMode: boolean;
   onToggle: () => void;
-}) => (
+}) => {
+  const { lang } = useLang();
+  const label = devMode
+    ? lang === "ar" ? "المعبد" : "TEMPLE"
+    : lang === "ar" ? "رؤية المطور" : "DEV VIEW";
+  return (
   <button
     onClick={onToggle}
     aria-label="Toggle developer mode"
@@ -15,7 +21,8 @@ export const DevModeToggle = ({
   >
     {devMode ? <Sparkles className="w-4 h-4" /> : <Code2 className="w-4 h-4" />}
     <span className="text-[10px] tracking-[0.25em] hidden sm:inline">
-      {devMode ? "TEMPLE" : "رؤية المطور"}
+      {label}
     </span>
   </button>
-);
+  );
+};

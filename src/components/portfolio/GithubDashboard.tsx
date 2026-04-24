@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Star, GitFork, ExternalLink, Github, Loader2 } from "lucide-react";
 import { SectionTitle } from "./About";
 import { aggregateLanguages, useGithub, type GhRepo } from "@/hooks/useGithub";
+import { useLang } from "@/i18n/LanguageContext";
 
 const LANG_GLYPH: Record<string, string> = {
   Python: "𓂀",
@@ -39,7 +40,7 @@ const Counter = ({ value, label }: { value: number; label: string }) => (
   </div>
 );
 
-const RepoTablet = ({ repo, onOpen }: { repo: GhRepo; onOpen: () => void }) => {
+const RepoTablet = ({ repo, onOpen, fallbackDesc }: { repo: GhRepo; onOpen: () => void; fallbackDesc: string }) => {
   const glyph = LANG_GLYPH[repo.language ?? ""] ?? "𓊃";
   const color = LANG_COLOR[repo.language ?? ""] ?? "hsl(var(--primary))";
   return (
@@ -70,7 +71,7 @@ const RepoTablet = ({ repo, onOpen }: { repo: GhRepo; onOpen: () => void }) => {
             </h3>
           </div>
           <p className="text-sm text-foreground/80 line-clamp-2 min-h-[2.5rem]" data-readable>
-            {repo.description ?? "نقش غامض من سجل المطور..."}
+            {repo.description ?? fallbackDesc}
           </p>
         </div>
       </div>
@@ -149,6 +150,7 @@ const LanguageRadial = ({ data }: { data: { name: string; count: number }[] }) =
 export const GithubDashboard = ({ devMode }: { devMode: boolean }) => {
   const { user, repos, loading, error } = useGithub("AHMED-BDM");
   const [active, setActive] = useState<GhRepo | null>(null);
+  const { t } = useLang();
 
   const stats = useMemo(() => {
     const stars = repos.reduce((s, r) => s + r.stargazers_count, 0);
@@ -168,17 +170,17 @@ export const GithubDashboard = ({ devMode }: { devMode: boolean }) => {
   return (
     <section id="github" className="relative py-28 px-6">
       <div className="container max-w-6xl">
-        <SectionTitle eyebrow="𓊪 · CHAPTER · V" title="سجل المطور الملكي" />
+        <SectionTitle eyebrow={t("gh.chapter")} title={t("gh.title")} />
 
         {loading && (
           <div className="flex items-center justify-center gap-2 text-primary py-10" data-readable>
-            <Loader2 className="w-5 h-5 animate-spin" /> فك رموز السجل...
+            <Loader2 className="w-5 h-5 animate-spin" /> {t("gh.loading")}
           </div>
         )}
 
         {error && !loading && (
           <div className="text-center text-foreground/70 py-6" data-readable>
-            تعذر استدعاء السجل من الإله Octocat — {error}
+            {t("gh.error")} {error}
           </div>
         )}
 
@@ -197,7 +199,7 @@ export const GithubDashboard = ({ devMode }: { devMode: boolean }) => {
                     {user.name ?? user.login}
                   </h3>
                   <p className="text-sm text-foreground/80 mt-1" data-readable>
-                    {user.bio ?? "كاتب نقوش الكود في المعبد الرقمي"}
+                    {user.bio ?? t("gh.bioFallback")}
                   </p>
                   <a
                     href={user.html_url}
@@ -210,9 +212,9 @@ export const GithubDashboard = ({ devMode }: { devMode: boolean }) => {
                   </a>
                 </div>
                 <div className="grid grid-cols-3 gap-6 md:gap-10">
-                  <Counter value={stats.count} label="REPOS" />
-                  <Counter value={stats.stars} label="STARS" />
-                  <Counter value={stats.forks} label="FORKS" />
+                  <Counter value={stats.count} label={t("gh.repos")} />
+                  <Counter value={stats.stars} label={t("gh.stars")} />
+                  <Counter value={stats.forks} label={t("gh.forks")} />
                 </div>
               </div>
             </div>
@@ -223,7 +225,7 @@ export const GithubDashboard = ({ devMode }: { devMode: boolean }) => {
                   className="font-display text-sm tracking-[0.3em] text-primary mb-4 text-center"
                   data-readable
                 >
-                  𓎛 · لغات النقوش · 𓎛
+                  {t("gh.langs")}
                 </h4>
                 <LanguageRadial data={langs} />
               </div>
@@ -232,20 +234,20 @@ export const GithubDashboard = ({ devMode }: { devMode: boolean }) => {
                   className="font-display text-sm tracking-[0.3em] text-primary mb-4 text-center"
                   data-readable
                 >
-                  𓂀 · نقوش رقمية · 𓂀
+                  {t("gh.digital")}
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
-                  <Counter value={user.followers} label="FOLLOWERS" />
-                  <Counter value={user.following} label="FOLLOWING" />
-                  <Counter value={user.public_repos} label="PUBLIC REPOS" />
-                  <Counter value={langs.length} label="LANGUAGES" />
+                  <Counter value={user.followers} label={t("gh.followers")} />
+                  <Counter value={user.following} label={t("gh.following")} />
+                  <Counter value={user.public_repos} label={t("gh.publicRepos")} />
+                  <Counter value={langs.length} label={t("gh.languages")} />
                 </div>
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {featured.map((r) => (
-                <RepoTablet key={r.id} repo={r} onOpen={() => setActive(r)} />
+                <RepoTablet key={r.id} repo={r} onOpen={() => setActive(r)} fallbackDesc={t("gh.descFallback")} />
               ))}
             </div>
           </>
@@ -289,7 +291,7 @@ export const GithubDashboard = ({ devMode }: { devMode: boolean }) => {
               </a>
             </div>
             <p className="text-foreground/85 leading-relaxed" data-readable>
-              {active.description ?? "نقش بلا وصف — ادخل المعبد لاكتشافه."}
+              {active.description ?? t("gh.modalDescFallback")}
             </p>
             <div className="flex items-center gap-4 mt-6 text-sm text-foreground/80">
               <span className="flex items-center gap-1" data-readable>
@@ -299,7 +301,7 @@ export const GithubDashboard = ({ devMode }: { devMode: boolean }) => {
                 <GitFork className="w-4 h-4 text-primary" /> {active.forks_count}
               </span>
               <span className="text-xs tracking-widest text-foreground/60 ml-auto" data-readable>
-                UPDATED {new Date(active.updated_at).toLocaleDateString()}
+                {t("gh.updated")} {new Date(active.updated_at).toLocaleDateString()}
               </span>
             </div>
           </div>
