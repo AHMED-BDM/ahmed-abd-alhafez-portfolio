@@ -3,6 +3,7 @@ const links = [
   { id: "skills", label: "Skills" },
   { id: "certificates", label: "Certificates" },
   { id: "projects", label: "Projects" },
+  { id: "github", label: "GitHub" },
   { id: "contact", label: "Contact" },
 ];
 export const Navbar = () => (

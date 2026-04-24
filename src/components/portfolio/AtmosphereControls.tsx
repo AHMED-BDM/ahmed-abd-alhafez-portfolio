@@ -1,12 +1,19 @@
-import { SlidersHorizontal, Volume2, VolumeX } from "lucide-react";
+import { Eye, EyeOff, SlidersHorizontal, Volume2, VolumeX } from "lucide-react";
 import { useSound } from "./SoundContext";
 
 type AtmosphereControlsProps = {
   intensity: "subtle" | "immersive";
   onIntensityToggle: () => void;
+  readability: boolean;
+  onReadabilityToggle: () => void;
 };
 
-export const AtmosphereControls = ({ intensity, onIntensityToggle }: AtmosphereControlsProps) => {
+export const AtmosphereControls = ({
+  intensity,
+  onIntensityToggle,
+  readability,
+  onReadabilityToggle,
+}: AtmosphereControlsProps) => {
   const { initialized, enabled, toggle, enableSound, play, masterVolume, setMasterVolume } = useSound();
 
   return (
@@ -55,6 +62,17 @@ export const AtmosphereControls = ({ intensity, onIntensityToggle }: AtmosphereC
       >
         <SlidersHorizontal className="h-4 w-4 text-primary" />
         <span>{intensity === "immersive" ? "IMMERSIVE" : "SUBTLE"}</span>
+      </button>
+
+      <button
+        type="button"
+        onClick={onReadabilityToggle}
+        className="flex items-center gap-2 rounded-md border border-primary/30 bg-background/40 px-3 py-2 text-xs font-display tracking-[0.2em] text-foreground/80 transition hover:border-primary hover:text-primary cursor-pointer"
+        aria-label="Toggle readability vision zone"
+        data-cursor="native"
+      >
+        {readability ? <Eye className="h-4 w-4 text-primary" /> : <EyeOff className="h-4 w-4 text-primary" />}
+        <span>{readability ? "تحسين الرؤية" : "VISION OFF"}</span>
       </button>
     </div>
   );

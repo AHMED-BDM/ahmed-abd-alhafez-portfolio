@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EntryGate } from "@/components/portfolio/EntryGate";
 import { CustomCursor } from "@/components/portfolio/CustomCursor";
 import { ModeToggle } from "@/components/portfolio/ModeToggle";
@@ -19,13 +19,23 @@ import { PharaohChat } from "@/components/portfolio/PharaohChat";
 import { AtmosphereControls } from "@/components/portfolio/AtmosphereControls";
 import { FourthWall } from "@/components/portfolio/FourthWall";
 import { HiddenChamber } from "@/components/portfolio/HiddenChamber";
+import { GithubDashboard } from "@/components/portfolio/GithubDashboard";
+import { DevModeToggle } from "@/components/portfolio/DevModeToggle";
+import { VisionZone } from "@/components/portfolio/VisionZone";
 import { usePerformanceMode } from "@/hooks/usePerformanceMode";
 
 const Index = () => {
   const [entered, setEntered] = useState(false);
   const [mode, setMode] = useState<"night" | "day">("night");
   const [intensity, setIntensity] = useState<"subtle" | "immersive">("immersive");
+  const [devMode, setDevMode] = useState(false);
+  const [readability, setReadability] = useState(true);
   const { reducedEffects } = usePerformanceMode();
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dev-mode", devMode);
+    return () => document.documentElement.classList.remove("dev-mode");
+  }, [devMode]);
 
   return (
     <SoundProvider mode={mode} intensity={intensity} reducedEffects={reducedEffects}>
@@ -33,11 +43,15 @@ const Index = () => {
         {!entered && <EntryGate onEnter={() => setEntered(true)} />}
         <CustomCursor mode={mode} />
         <TempleAtmosphere mode={mode} intensity={intensity} reducedEffects={reducedEffects} />
+        <VisionZone enabled={readability} mode={mode} />
         <Navbar />
         <ModeToggle mode={mode} onToggle={() => setMode(m => m === "night" ? "day" : "night")} />
+        <DevModeToggle devMode={devMode} onToggle={() => setDevMode((v) => !v)} />
         <AtmosphereControls
           intensity={intensity}
           onIntensityToggle={() => setIntensity((value) => (value === "immersive" ? "subtle" : "immersive"))}
+          readability={readability}
+          onReadabilityToggle={() => setReadability((v) => !v)}
         />
         <Mummies mode={mode} />
         <Curse reducedEffects={reducedEffects} />
@@ -51,6 +65,7 @@ const Index = () => {
           <Skills />
           <Certificates />
           <Projects />
+          <GithubDashboard devMode={devMode} />
           <Contact />
         </main>
         <PharaohChat mode={mode} />
