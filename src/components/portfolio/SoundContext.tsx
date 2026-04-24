@@ -9,9 +9,19 @@ type Ctx = {
   toggle: () => void;
   enableSound: () => void;
   play: (kind: SoundKind, options?: { pan?: number; volume?: number }) => void;
+  masterVolume: number;
+  setMasterVolume: (value: number) => void;
 };
 
-const SoundCtx = createContext<Ctx>({ initialized: false, enabled: false, toggle: () => {}, enableSound: () => {}, play: () => {} });
+const SoundCtx = createContext<Ctx>({
+  initialized: false,
+  enabled: false,
+  toggle: () => {},
+  enableSound: () => {},
+  play: () => {},
+  masterVolume: 0.6,
+  setMasterVolume: () => {},
+});
 export const useSound = () => useContext(SoundCtx);
 
 const useSynth = () => {
