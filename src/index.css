@@ -235,3 +235,22 @@
   animation: templeFlicker 0.28s ease-in-out 1;
 }
 @media (hover: none) { .has-custom-cursor, .has-custom-cursor * { cursor: auto !important; } }
+
+/* Developer mode — clean modern look */
+.dev-mode body {
+  font-family: 'Inter', 'Cormorant Garamond', system-ui, sans-serif;
+}
+.dev-mode .gold-frame::before,
+.dev-mode .gold-frame::after {
+  display: none;
+}
+.dev-mode .gold-frame {
+  border-color: hsl(var(--primary) / 0.35);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px -12px hsl(0 0% 0% / 0.4);
+}
+.dev-mode .torch-flicker { animation: none; }
+.dev-mode .bg-stone {
+  background: hsl(var(--card));
+  background-image: none;
+}
