@@ -22,6 +22,8 @@ import { HiddenChamber } from "@/components/portfolio/HiddenChamber";
 import { GithubDashboard } from "@/components/portfolio/GithubDashboard";
 import { DevModeToggle } from "@/components/portfolio/DevModeToggle";
 import { VisionZone } from "@/components/portfolio/VisionZone";
+import { LanguageToggle } from "@/components/portfolio/LanguageToggle";
+import { LanguageProvider } from "@/i18n/LanguageContext";
 import { usePerformanceMode } from "@/hooks/usePerformanceMode";
 
 const Index = () => {
@@ -29,7 +31,6 @@ const Index = () => {
   const [mode, setMode] = useState<"night" | "day">("night");
   const [intensity, setIntensity] = useState<"subtle" | "immersive">("immersive");
   const [devMode, setDevMode] = useState(false);
-  const [readability, setReadability] = useState(true);
   const { reducedEffects } = usePerformanceMode();
 
   useEffect(() => {
@@ -38,20 +39,20 @@ const Index = () => {
   }, [devMode]);
 
   return (
+    <LanguageProvider>
     <SoundProvider mode={mode} intensity={intensity} reducedEffects={reducedEffects}>
       <div className={mode === "day" ? "day min-h-screen" : "min-h-screen"}>
         {!entered && <EntryGate onEnter={() => setEntered(true)} />}
         <CustomCursor mode={mode} />
         <TempleAtmosphere mode={mode} intensity={intensity} reducedEffects={reducedEffects} />
-        <VisionZone enabled={readability} mode={mode} />
+        <VisionZone mode={mode} />
         <Navbar />
+        <LanguageToggle />
         <ModeToggle mode={mode} onToggle={() => setMode(m => m === "night" ? "day" : "night")} />
         <DevModeToggle devMode={devMode} onToggle={() => setDevMode((v) => !v)} />
         <AtmosphereControls
           intensity={intensity}
           onIntensityToggle={() => setIntensity((value) => (value === "immersive" ? "subtle" : "immersive"))}
-          readability={readability}
-          onReadabilityToggle={() => setReadability((v) => !v)}
         />
         <Mummies mode={mode} />
         <Curse reducedEffects={reducedEffects} />
@@ -71,6 +72,7 @@ const Index = () => {
         <PharaohChat mode={mode} />
       </div>
     </SoundProvider>
+    </LanguageProvider>
   );
 };
 
