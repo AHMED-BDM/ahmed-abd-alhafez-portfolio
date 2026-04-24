@@ -141,6 +141,7 @@ export const SoundProvider = ({
 }) => {
   const [initialized, setInitialized] = useState(false);
   const [enabled, setEnabled] = useState(false);
+  const [masterVolume, setMasterVolume] = useState(0.6);
   const synth = useSynth();
   const enabledAtRef = useRef<number | null>(null);
   const initSourceRef = useRef<string | null>(null);
@@ -154,9 +155,9 @@ export const SoundProvider = ({
     (volume = 1) => {
       const sessionMinutes = enabledAtRef.current ? (Date.now() - enabledAtRef.current) / 60000 : 0;
       const fatigueScale = Math.max(0.55, 1 - sessionMinutes * 0.045);
-      return volume * intensityScale * fatigueScale;
+      return volume * intensityScale * fatigueScale * masterVolume;
     },
-    [intensityScale],
+    [intensityScale, masterVolume],
   );
 
   const initializeAudio = useCallback(async (source: "button" | "click" | "scroll" | "mousemove") => {
