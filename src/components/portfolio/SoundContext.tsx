@@ -295,7 +295,11 @@ export const SoundProvider = ({
     void initializeAudio("button");
   }, [initializeAudio]);
 
-  return <SoundCtx.Provider value={{ initialized, enabled, toggle, enableSound, play }}>{children}</SoundCtx.Provider>;
+  return (
+    <SoundCtx.Provider value={{ initialized, enabled, toggle, enableSound, play, masterVolume, setMasterVolume }}>
+      {children}
+    </SoundCtx.Provider>
+  );
 };
 
 export const SoundToggle = () => {
