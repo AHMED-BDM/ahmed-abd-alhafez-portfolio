@@ -3,6 +3,44 @@
 @tailwind utilities;
 
 @layer base {
+  /* Day mode readability boost — light text-shadow so text stays
+     legible through the sandstorm even before the cursor torch reveals it. */
+  .day p,
+  .day h1,
+  .day h2,
+  .day h3,
+  .day h4,
+  .day h5,
+  .day h6,
+  .day li,
+  .day a,
+  .day button,
+  .day label,
+  .day [data-readable] {
+    text-shadow: 0 1px 2px hsl(38 50% 95% / 0.65), 0 0 6px hsl(38 50% 95% / 0.35);
+  }
+
+  /* Subtle hover/focus glow — like a torch lighting the inscription */
+  .day p:hover,
+  .day h1:hover,
+  .day h2:hover,
+  .day h3:hover,
+  .day h4:hover,
+  .day h5:hover,
+  .day h6:hover,
+  .day li:hover,
+  .day a:hover,
+  .day button:hover,
+  .day [data-readable]:hover {
+    text-shadow:
+      0 0 10px hsl(var(--primary) / 0.55),
+      0 0 22px hsl(var(--primary-glow) / 0.35),
+      0 1px 2px hsl(38 60% 98% / 0.9);
+    transition: text-shadow 0.25s ease-out;
+  }
+}
+
+@layer base {
   :root {
     /* NIGHT MODE — Temple interior */
     --background: 30 25% 6%;

@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useSound } from "./SoundContext";
+import { useLang } from "@/i18n/LanguageContext";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -31,6 +32,7 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([starterMessage]);
   const { play } = useSound();
+  const { t } = useLang();
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const greetedRef = useRef(false);
 
@@ -50,14 +52,15 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
     if (open && !greetedRef.current) {
       greetedRef.current = true;
       console.log("[PharaohChat] First open — fourth-wall greeting");
+      const greet = t("chat.greet");
       window.setTimeout(() => {
         setMessages((current) => [
           ...current,
-          { role: "assistant", content: "*كنت أعلم أنك ستتحدث معي.*" },
+          { role: "assistant", content: greet },
         ]);
       }, 700);
     }
-  }, [open]);
+  }, [open, t]);
 
   const sendMessage = async (prefill?: string) => {
     const content = (prefill ?? input).trim();

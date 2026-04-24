@@ -1,23 +1,21 @@
-import { Eye, EyeOff, SlidersHorizontal, Volume2, VolumeX } from "lucide-react";
+import { SlidersHorizontal, Volume2, VolumeX } from "lucide-react";
 import { useSound } from "./SoundContext";
+import { useLang } from "@/i18n/LanguageContext";
 
 type AtmosphereControlsProps = {
   intensity: "subtle" | "immersive";
   onIntensityToggle: () => void;
-  readability: boolean;
-  onReadabilityToggle: () => void;
 };
 
 export const AtmosphereControls = ({
   intensity,
   onIntensityToggle,
-  readability,
-  onReadabilityToggle,
 }: AtmosphereControlsProps) => {
   const { initialized, enabled, toggle, enableSound, play, masterVolume, setMasterVolume } = useSound();
+  const { t } = useLang();
 
   return (
-    <div className="fixed bottom-5 left-5 z-[85] flex flex-wrap items-center gap-2 rounded-md border border-primary/30 bg-card/85 px-3 py-2 backdrop-blur-md shadow-deep cursor-auto pointer-events-auto" data-cursor="native">
+    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[85] flex flex-wrap items-center justify-center gap-2 rounded-md border border-primary/30 bg-card/85 px-3 py-2 backdrop-blur-md shadow-deep cursor-auto pointer-events-auto" data-cursor="native">
       <button
         type="button"
         onClick={() => {
@@ -33,7 +31,7 @@ export const AtmosphereControls = ({
         aria-label={!initialized ? "Enable ambient sound" : enabled ? "Mute ambient sound" : "Enable ambient sound"}
       >
         {enabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-        <span className="text-[11px] font-display tracking-[0.18em]">{!initialized ? "ENABLE SOUND" : enabled ? "MUTE" : "UNMUTE"}</span>
+        <span className="text-[11px] font-display tracking-[0.18em]">{!initialized ? t("controls.enableSound") : enabled ? t("controls.mute") : t("controls.unmute")}</span>
       </button>
 
       {initialized && enabled && (
@@ -61,18 +59,7 @@ export const AtmosphereControls = ({
         aria-label={`Effects intensity is ${intensity}`}
       >
         <SlidersHorizontal className="h-4 w-4 text-primary" />
-        <span>{intensity === "immersive" ? "IMMERSIVE" : "SUBTLE"}</span>
-      </button>
-
-      <button
-        type="button"
-        onClick={onReadabilityToggle}
-        className="flex items-center gap-2 rounded-md border border-primary/30 bg-background/40 px-3 py-2 text-xs font-display tracking-[0.2em] text-foreground/80 transition hover:border-primary hover:text-primary cursor-pointer"
-        aria-label="Toggle readability vision zone"
-        data-cursor="native"
-      >
-        {readability ? <Eye className="h-4 w-4 text-primary" /> : <EyeOff className="h-4 w-4 text-primary" />}
-        <span>{readability ? "تحسين الرؤية" : "VISION OFF"}</span>
+        <span>{intensity === "immersive" ? t("controls.immersive") : t("controls.subtle")}</span>
       </button>
     </div>
   );

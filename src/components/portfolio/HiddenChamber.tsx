@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { useSound } from "./SoundContext";
+import { useLang } from "@/i18n/LanguageContext";
 
 export const HiddenChamber = () => {
   const [unlocked, setUnlocked] = useState(false);
   const [open, setOpen] = useState(false);
   const clicksRef = useRef<number[]>([]);
   const { play } = useSound();
+  const { t } = useLang();
 
   useEffect(() => {
     const onScroll = () => {
@@ -80,15 +82,10 @@ export const HiddenChamber = () => {
             style={{ animation: "scale-in 0.6s ease-out" }}
             data-cursor="native"
           >
-            <p className="font-display text-primary text-xs tracking-[0.4em] mb-4">𓋹 HIDDEN CHAMBER 𓋹</p>
-            <h3 className="font-display text-2xl md:text-3xl text-gold mb-4">A Secret Forged in Silence</h3>
-            <p className="text-foreground/80 italic leading-7 mb-6">
-              "Beyond the recorded scrolls lies an unfinished work — a neural oracle trained on
-              forgotten dialects. Its name is yet unspoken, its weights yet unsealed."
-            </p>
-            <p className="text-sm text-foreground/60">
-              You found this chamber because you looked closer than most. The Pharaoh remembers.
-            </p>
+            <p className="font-display text-primary text-xs tracking-[0.4em] mb-4">{t("hc.label")}</p>
+            <h3 className="font-display text-2xl md:text-3xl text-gold mb-4">{t("hc.title")}</h3>
+            <p className="text-foreground/80 italic leading-7 mb-6">{t("hc.body")}</p>
+            <p className="text-sm text-foreground/60">{t("hc.foot")}</p>
             <p className="mt-6 text-[10px] tracking-[0.3em] text-primary/70">— 𓂀 SEALED · STAGE · IV 𓂀 —</p>
           </div>
         </div>

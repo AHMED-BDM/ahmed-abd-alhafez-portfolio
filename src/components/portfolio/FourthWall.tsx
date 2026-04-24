@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useCurseStage } from "@/hooks/useCurseStage";
-
-const RETURNING_MESSAGES = ["عدت مرة أخرى...", "لقد تأخرت...", "كنت أنتظرك."];
-const LONG_STAY_MESSAGES = ["لقد بقيت طويلاً...", "لماذا تراقب هذا المكان؟"];
-const STAGE4_MESSAGES = ["أراك.", "لا تستطيع المغادرة.", "لماذا تراقب هذا المكان؟"];
+import { useLang } from "@/i18n/LanguageContext";
 
 export const FourthWall = ({ reducedEffects }: { reducedEffects: boolean }) => {
   const { stage, isReturning } = useCurseStage();
+  const { t } = useLang();
+  const RETURNING_MESSAGES = useMemo(() => [t("fw.return1"), t("fw.return2"), t("fw.return3")], [t]);
+  const LONG_STAY_MESSAGES = useMemo(() => [t("fw.long1"), t("fw.long2")], [t]);
+  const STAGE4_MESSAGES = useMemo(() => [t("fw.s4_1"), t("fw.s4_2"), t("fw.long2")], [t]);
   const [message, setMessage] = useState<string | null>(null);
   const lastShownRef = useRef(0);
   const moveCountRef = useRef(0);
