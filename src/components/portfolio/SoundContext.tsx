@@ -9,9 +9,19 @@ type Ctx = {
   toggle: () => void;
   enableSound: () => void;
   play: (kind: SoundKind, options?: { pan?: number; volume?: number }) => void;
+  masterVolume: number;
+  setMasterVolume: (value: number) => void;
 };
 
-const SoundCtx = createContext<Ctx>({ initialized: false, enabled: false, toggle: () => {}, enableSound: () => {}, play: () => {} });
+const SoundCtx = createContext<Ctx>({
+  initialized: false,
+  enabled: false,
+  toggle: () => {},
+  enableSound: () => {},
+  play: () => {},
+  masterVolume: 0.6,
+  setMasterVolume: () => {},
+});
 export const useSound = () => useContext(SoundCtx);
 
 const useSynth = () => {
@@ -131,6 +141,7 @@ export const SoundProvider = ({
 }) => {
   const [initialized, setInitialized] = useState(false);
   const [enabled, setEnabled] = useState(false);
+  const [masterVolume, setMasterVolume] = useState(0.6);
   const synth = useSynth();
   const enabledAtRef = useRef<number | null>(null);
   const initSourceRef = useRef<string | null>(null);
@@ -144,9 +155,9 @@ export const SoundProvider = ({
     (volume = 1) => {
       const sessionMinutes = enabledAtRef.current ? (Date.now() - enabledAtRef.current) / 60000 : 0;
       const fatigueScale = Math.max(0.55, 1 - sessionMinutes * 0.045);
-      return volume * intensityScale * fatigueScale;
+      return volume * intensityScale * fatigueScale * masterVolume;
     },
-    [intensityScale],
+    [intensityScale, masterVolume],
   );
 
   const initializeAudio = useCallback(async (source: "button" | "click" | "scroll" | "mousemove") => {
@@ -284,7 +295,11 @@ export const SoundProvider = ({
     void initializeAudio("button");
   }, [initializeAudio]);
 
-  return <SoundCtx.Provider value={{ initialized, enabled, toggle, enableSound, play }}>{children}</SoundCtx.Provider>;
+  return (
+    <SoundCtx.Provider value={{ initialized, enabled, toggle, enableSound, play, masterVolume, setMasterVolume }}>
+      {children}
+    </SoundCtx.Provider>
+  );
 };
 
 export const SoundToggle = () => {

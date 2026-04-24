@@ -17,6 +17,8 @@ import { SecretPapyrus } from "@/components/portfolio/SecretPapyrus";
 import { TempleAtmosphere } from "@/components/portfolio/TempleAtmosphere";
 import { PharaohChat } from "@/components/portfolio/PharaohChat";
 import { AtmosphereControls } from "@/components/portfolio/AtmosphereControls";
+import { FourthWall } from "@/components/portfolio/FourthWall";
+import { HiddenChamber } from "@/components/portfolio/HiddenChamber";
 import { usePerformanceMode } from "@/hooks/usePerformanceMode";
 
 const Index = () => {
@@ -41,6 +43,8 @@ const Index = () => {
         <Curse reducedEffects={reducedEffects} />
         <Whispers />
         <SecretPapyrus />
+        <HiddenChamber />
+        <FourthWall reducedEffects={reducedEffects} />
         <main>
           <Hero mode={mode} />
           <About />
