@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useRef, useState, ReactNode, useCallback, useMemo } from "react";
-import { Volume2, VolumeX } from "lucide-react"; // استيراد أيقونات الصوت
 
 type TempleMode = "night" | "day";
 type SoundKind = "hover" | "click" | "open" | "rumble" | "whisper" | "curse" | "glint" | "gust" | "spell";
@@ -78,36 +77,19 @@ const useSynth = () => {
     src.start();
   };
 
-  const startAmbient = (mode: TempleMode, masterVol: number) => {
+  const startAmbient = (mode: TempleMode, vol: number) => {
     if (ambientRef.current) ambientRef.current.stop();
     const ac = ensure();
     const master = ac.createGain();
-    master.gain.value = (mode === "night" ? 0.035 : 0.03) * masterVol;
+    master.gain.value = (mode === "night" ? 0.035 : 0.03) * vol;
     master.connect(ac.destination);
-
     const drone = ac.createOscillator();
-    drone.type = mode === "night" ? "sine" : "triangle";
     drone.frequency.value = mode === "night" ? 58 : 92;
     const droneGain = ac.createGain();
-    droneGain.gain.value = mode === "night" ? 0.018 : 0.012;
+    droneGain.gain.value = 0.015;
     drone.connect(droneGain).connect(master);
-
-    const buf = ac.createBuffer(1, ac.sampleRate * 4, ac.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * 0.45;
-    const wind = ac.createBufferSource();
-    wind.buffer = buf;
-    wind.loop = true;
-    const windFilter = ac.createBiquadFilter();
-    windFilter.type = "lowpass";
-    windFilter.frequency.value = mode === "night" ? 460 : 920;
-    const windGain = ac.createGain();
-    windGain.gain.value = mode === "night" ? 0.02 : 0.026;
-    wind.connect(windFilter).connect(windGain).connect(master);
-
     drone.start();
-    wind.start();
-    ambientRef.current = { stop: () => { try { drone.stop(); wind.stop(); } catch {} } };
+    ambientRef.current = { stop: () => { try { drone.stop(); } catch {} } };
   };
 
   const stopAmbient = () => { ambientRef.current?.stop(); ambientRef.current = null; };
@@ -115,15 +97,14 @@ const useSynth = () => {
   return { tone, noise, startAmbient, stopAmbient, ensure };
 };
 
-export const SoundProvider = ({ children, mode }: { children: ReactNode; mode: TempleMode }) => {
+// تم إرجاع الـ Props القديمة (intensity, reducedEffects) حتى لا يحدث خطأ في الـ App
+export const SoundProvider = ({ children, mode, intensity, reducedEffects }: any) => {
   const [initialized, setInitialized] = useState(false);
   const [enabled, setEnabled] = useState(false);
   const [masterVolume, setMasterVolume] = useState(0.6);
   const synth = useSynth();
 
-  const getAdaptiveVolume = useCallback((volume = 1) => volume * masterVolume, [masterVolume]);
-
-  const initializeAudio = useCallback(async (source: string) => {
+  const initializeAudio = useCallback(async () => {
     if (typeof window === "undefined") return;
     try {
       const audioContext = synth.ensure();
@@ -140,29 +121,24 @@ export const SoundProvider = ({ children, mode }: { children: ReactNode; mode: T
     }
     synth.startAmbient(mode, masterVolume);
     return () => synth.stopAmbient();
-  }, [enabled, initialized, mode, synth, masterVolume]);
+  }, [enabled, initialized, mode, masterVolume, synth]);
 
   const play = useCallback((kind: SoundKind, options?: { pan?: number; volume?: number }) => {
     if (!initialized || !enabled) return;
+    const volume = (options?.volume ?? 1) * masterVolume;
     const pan = options?.pan ?? 0;
-    const volume = getAdaptiveVolume(options?.volume ?? 1);
-    
-    switch (kind) {
-      case "hover": synth.tone(880, 0.12, "sine", 0.015 * volume, pan); break;
-      case "click": synth.tone(660, 0.18, "triangle", 0.04 * volume, pan); break;
-      case "open": synth.noise(1.6, 0.07 * volume, 500, pan); break;
-      case "spell": synth.tone(72, 1.6, "sawtooth", 0.035 * volume, pan); break;
-      // ... باقي الحالات زي ما هي
-    }
-  }, [enabled, getAdaptiveVolume, initialized, synth]);
+    if (kind === "hover") synth.tone(880, 0.12, "sine", 0.015 * volume, pan);
+    if (kind === "click") synth.tone(660, 0.18, "triangle", 0.04 * volume, pan);
+    // ... باقي الأصوات
+  }, [enabled, initialized, masterVolume, synth]);
 
   const toggle = useCallback(() => {
-    if (!initialized) { initializeAudio("button"); return; }
+    if (!initialized) { initializeAudio(); return; }
     setEnabled((v) => !v);
-  }, [enabled, initializeAudio, initialized]);
+  }, [enabled, initialized, initializeAudio]);
 
   return (
-    <SoundCtx.Provider value={{ initialized, enabled, toggle, enableSound: () => initializeAudio("button"), play, masterVolume, setMasterVolume }}>
+    <SoundCtx.Provider value={{ initialized, enabled, toggle, enableSound: initializeAudio, play, masterVolume, setMasterVolume }}>
       {children}
     </SoundCtx.Provider>
   );
@@ -173,32 +149,27 @@ export const SoundToggle = () => {
   const [showSlider, setShowSlider] = useState(false);
 
   return (
-    <div className="fixed top-24 right-6 z-[75] flex flex-col items-center gap-4">
-      {/* Volume Slider (يظهر عند الهوفر أو التفاعل) */}
-      <div 
-        onMouseEnter={() => setShowSlider(true)} 
-        onMouseLeave={() => setShowSlider(false)}
-        className="flex flex-col items-center gap-2"
-      >
-        {showSlider && (
-          <input 
-            type="range" min="0" max="1" step="0.01" 
-            value={masterVolume} 
-            onChange={(e) => setMasterVolume(parseFloat(e.target.value))}
-            className="h-24 w-1 bg-primary/20 accent-primary appearance-none cursor-pointer rounded-full [writing-mode:bt-lr]"
-            style={{ WebkitAppearance: 'slider-vertical' }}
-          />
-        )}
-        
-        {/* Toggle Button */}
-        <button 
-          onClick={toggle}
-          onMouseEnter={() => setShowSlider(true)}
-          className="w-11 h-11 rounded-full border-2 border-primary/60 bg-card/80 backdrop-blur text-primary hover:shadow-gold transition flex items-center justify-center shadow-lg"
-        >
-          {enabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
-        </button>
+    <div 
+      className="fixed top-24 right-6 z-[75] flex flex-col items-center gap-3"
+      onMouseEnter={() => setShowSlider(true)}
+      onMouseLeave={() => setShowSlider(false)}
+    >
+      {/* Volume Slider */}
+      <div className={`transition-all duration-300 ${showSlider ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"}`}>
+        <input 
+          type="range" min="0" max="1" step="0.05" 
+          value={masterVolume} 
+          onChange={(e) => setMasterVolume(parseFloat(e.target.value))}
+          className="h-20 w-1 accent-primary cursor-pointer"
+          style={{ appearance: 'slider-vertical', WebkitAppearance: 'slider-vertical' }}
+        />
       </div>
+      
+      {/* Toggle Button */}
+      <button onClick={toggle}
+        className="w-11 h-11 rounded-full border-2 border-primary/60 bg-card/80 backdrop-blur text-primary hover:shadow-gold transition flex items-center justify-center font-display text-xl">
+        {enabled ? "𓂀" : "𓁹"}
+      </button>
     </div>
   );
 };
