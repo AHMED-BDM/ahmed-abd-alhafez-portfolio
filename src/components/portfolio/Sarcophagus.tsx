@@ -18,6 +18,7 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
     if (opening) return;
     setOpening(true);
     const pan = getPan(event);
+    play("spell", { pan, volume: 1 });
     play("open", { pan, volume: 1 });
     if (intensity === "strong") play("rumble", { pan, volume: 1 });
     setTimeout(onOpen, intensity === "strong" ? 1500 : 1200);
