@@ -9,8 +9,8 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
   // Trigger gate open + horror sound only after a user gesture (browsers block autoplay otherwise)
   const playGateSound = () => {
     try {
-      const AC = (window as Window & { webkitAudioContext?: typeof AudioContext }).AudioContext
-        || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      const w = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
+      const AC = w.AudioContext || w.webkitAudioContext;
       if (!AC) return;
       const ac = new AC();
       const now = ac.currentTime;
