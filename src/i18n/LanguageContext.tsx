@@ -124,6 +124,40 @@ export const T: Dict = {
   "gate.open": { en: "𓂀 OPEN · THE · GATE 𓂀", ar: "𓂀 افتح · البوابة 𓂀" },
   "gate.enter": { en: "ENTER · THE · TEMPLE", ar: "ادخل · المعبد" },
   "gate.skip": { en: "SKIP ›", ar: "تخطّى ›" },
+
+  // Certificate items
+  "ci.0.title": { en: "Google Data Analytics", ar: "تحليلات البيانات من Google" },
+  "ci.1.title": { en: "AI Fundamentals", ar: "أساسيات الذكاء الاصطناعي" },
+  "ci.2.title": { en: "Deep Learning for NLP", ar: "التعلّم العميق لمعالجة اللغة" },
+  "ci.3.title": { en: "Decision Making in the Business World", ar: "اتخاذ القرار في عالم الأعمال" },
+  "ci.4.title": { en: "Canva Essentials", ar: "أساسيات Canva" },
+  "ci.5.title": { en: "Write DAX Formulas for Semantic Models", ar: "كتابة صيغ DAX للنماذج الدلالية" },
+  "ci.0.issuer": { en: "Google · Coursera", ar: "جوجل · كورسيرا" },
+  "ci.1.issuer": { en: "IBM SkillsBuild", ar: "IBM SkillsBuild" },
+  "ci.2.issuer": { en: "Mahara-Tech · ITI", ar: "مهارة-تك · ITI" },
+  "ci.3.issuer": { en: "Edraak · Arab Bank", ar: "إدراك · البنك العربي" },
+  "ci.4.issuer": { en: "Canva Design School", ar: "مدرسة Canva للتصميم" },
+  "ci.5.issuer": { en: "Microsoft Learn", ar: "Microsoft Learn" },
+  "ci.0.date": { en: "Feb 2026", ar: "فبراير ٢٠٢٦" },
+  "ci.1.date": { en: "Sep 2025", ar: "سبتمبر ٢٠٢٥" },
+  "ci.2.date": { en: "Oct 2025", ar: "أكتوبر ٢٠٢٥" },
+  "ci.3.date": { en: "Mar 2026", ar: "مارس ٢٠٢٦" },
+  "ci.4.date": { en: "Mar 2026", ar: "مارس ٢٠٢٦" },
+  "ci.5.date": { en: "Apr 2026", ar: "أبريل ٢٠٢٦" },
+
+  // Project items
+  "pi.0.title": { en: "Fleet Performance Dashboard", ar: "لوحة أداء الأسطول" },
+  "pi.1.title": { en: "Employee Report & Workforce Analysis", ar: "تقرير الموظفين وتحليل القوى العاملة" },
+  "pi.2.title": { en: "Sales Performance Dashboard", ar: "لوحة أداء المبيعات" },
+  "pi.3.title": { en: "Regional Workforce Insights", ar: "رؤى القوى العاملة الإقليمية" },
+  "pi.4.title": { en: "Shipping & Logistics Intelligence", ar: "ذكاء الشحن والخدمات اللوجستية" },
+  "pi.5.title": { en: "Neural Body Analyzer", ar: "محلّل الجسم العصبي" },
+  "pi.0.desc": { en: "Interactive Power BI dashboard tracking fleet costs, distances and driver spending patterns with KPI cards.", ar: "لوحة Power BI تفاعلية لتتبّع تكاليف الأسطول والمسافات وأنماط إنفاق السائقين عبر بطاقات مؤشرات الأداء." },
+  "pi.1.desc": { en: "HR analytics dashboard visualizing employee distribution by department, gender, country and salary brackets.", ar: "لوحة تحليلات الموارد البشرية تعرض توزيع الموظفين حسب القسم والجنس والدولة وفئات الرواتب." },
+  "pi.2.desc": { en: "Global sales intelligence dashboard with profit margin gauges, geographic sales and category breakdowns.", ar: "لوحة ذكاء مبيعات عالمية مع مؤشرات هامش الربح والمبيعات الجغرافية وتفصيل الفئات." },
+  "pi.3.desc": { en: "Multi-country HR dashboard breaking down employees by department, gender, salary and tenure across MENA centers.", ar: "لوحة موارد بشرية متعددة الدول تفصّل الموظفين حسب القسم والجنس والراتب والأقدمية في مراكز MENA." },
+  "pi.4.desc": { en: "Dark-themed BI dashboard analysing invoices, shipping status and delivery moods across European countries.", ar: "لوحة BI داكنة لتحليل الفواتير وحالات الشحن وأنماط التسليم عبر الدول الأوروبية." },
+  "pi.5.desc": { en: "AI-powered biometrics web app running neural inference over body composition, capacity and flexibility metrics.", ar: "تطبيق ويب لقياسات حيوية مدعوم بالذكاء الاصطناعي يجري استدلالاً عصبياً على مقاييس تركيب الجسم والسعة والمرونة." },
 };
 
 type Ctx = {
