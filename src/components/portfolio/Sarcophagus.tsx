@@ -1,6 +1,7 @@
 import { useState } from "react";
 import sarc from "@/assets/sarcophagus.png";
 import { useSound } from "./SoundContext";
+import { sounds } from "../../audio"; // ✅ استيراد ملف الأصوات بتاعك
 
 export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
   label: string; onOpen: () => void; intensity?: "normal" | "strong";
@@ -18,16 +19,27 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
     if (opening) return;
     setOpening(true);
     const pan = getPan(event);
+
+    // 🔊 ✅ تشغيل صوت فتح التابوت (box.mp3) الخاص بيك
+    try {
+      sounds.box.currentTime = 0;
+      sounds.box.play().catch(e => console.log("Audio play blocked by browser"));
+    } catch (err) {
+      console.log("Audio object not ready");
+    }
+
+    // الأصوات الافتراضية اللي كانت موجودة في الكود (ممكن تسيبها بتعمل ميكس حلو أو تمسحها لو مش عايزها)
     play("spell", { pan, volume: 1 });
     play("open", { pan, volume: 1 });
     if (intensity === "strong") play("rumble", { pan, volume: 1 });
+    
     setTimeout(onOpen, intensity === "strong" ? 1500 : 1200);
   };
 
   return (
     <div className="relative max-w-md mx-auto select-none">
       <div
-          onMouseEnter={(event) => play("hover", { pan: getPan(event), volume: 0.9 })}
+        onMouseEnter={(event) => play("hover", { pan: getPan(event), volume: 0.9 })}
         onClick={handleClick}
         className={`group relative cursor-pointer ${opening ? "" : "hover:scale-[1.02]"} transition-transform duration-500`}
         style={{ filter: opening ? "drop-shadow(0 0 60px hsl(var(--primary)/0.8))" : "drop-shadow(0 30px 40px rgba(0,0,0,0.6))" }}
