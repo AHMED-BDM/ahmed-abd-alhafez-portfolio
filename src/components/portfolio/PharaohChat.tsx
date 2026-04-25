@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useSound } from "./SoundContext";
 import { useLang } from "@/i18n/LanguageContext";
+import { sounds } from "../../audio"; // ✅ استيراد ملف الأصوات الخاص بك
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -205,7 +206,16 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
         onClick={() => {
           setOpen((current) => {
             const next = !current;
-            if (next) play("spell", { pan: 0.45, volume: 0.9 });
+            // 🔊 ✅ تشغيل صوت I See You عند فتح الشات
+            if (next) {
+              try {
+                sounds.iseeyou.currentTime = 0;
+                sounds.iseeyou.play().catch(e => console.log("Audio blocked"));
+                play("spell", { pan: 0.45, volume: 0.9 });
+              } catch (err) {
+                console.log("Audio error");
+              }
+            }
             return next;
           });
           play("click", { pan: 0.45, volume: 0.65 });
