@@ -63,6 +63,67 @@ export const T: Dict = {
     en: "You found this chamber because you looked closer than most. The Pharaoh remembers.",
     ar: "وجدت هذه الحجرة لأنك دققت النظر أكثر من غيرك. الفرعون يتذكر."
   },
+
+  // Hero
+  "hero.eyebrow": { en: "𓂀 · WELCOME · TRAVELER · 𓋹", ar: "𓂀 · أهلاً · أيها · المسافر · 𓋹" },
+  "hero.name1": { en: "AHMED", ar: "أحمد" },
+  "hero.name2": { en: "ABD AL-HAFEZ", ar: "عبد الحافظ" },
+  "hero.role": { en: "Machine Learning Engineer · Data Analyst · AI Specialist", ar: "مهندس تعلّم آلي · محلل بيانات · أخصائي ذكاء اصطناعي" },
+  "hero.tagline": { en: "Decoding the hieroglyphs of modern data. 20+ projects across predictive modeling, interactive dashboards and AI — forged with military discipline.", ar: "أفكّ شيفرة هيروغليفيات البيانات الحديثة. أكثر من 20 مشروعًا في النمذجة التنبؤية ولوحات المعلومات التفاعلية والذكاء الاصطناعي — مصاغة بانضباط عسكري." },
+  "hero.cta1": { en: "EXPLORE THE TEMPLE", ar: "استكشف المعبد" },
+  "hero.cta2": { en: "VIEW MY WORK", ar: "شاهد أعمالي" },
+
+  // About
+  "about.eyebrow": { en: "𓋴 · CHAPTER · I", ar: "𓋴 · الفصل · ١" },
+  "about.title": { en: "The Scribe's Tale", ar: "حكاية الكاتب" },
+  "about.p1": { en: "Machine Learning Engineer and Data Analyst with 1+ year of hands-on experience in AI, ML and Data Analytics. Trained under the Egyptian Ministry of Communications & Information Technology (MCIT) — Digilians initiative, mastering Python, SQL, R, Excel, Power BI and Tableau.", ar: "مهندس تعلّم آلي ومحلل بيانات بخبرة تتجاوز عامًا من الممارسة في الذكاء الاصطناعي والتعلّم الآلي وتحليل البيانات. تدرّب ضمن مبادرة Digilians التابعة لوزارة الاتصالات وتكنولوجيا المعلومات المصرية، وأتقن Python وSQL وR وExcel وPower BI وTableau." },
+  "about.p2_a": { en: "Delivered ", ar: "أنجز " },
+  "about.p2_b": { en: "20+ projects", ar: "أكثر من 20 مشروعًا" },
+  "about.p2_c": { en: " across predictive modeling, interactive dashboards, HR analytics and logistics intelligence. Holds ", ar: " في النمذجة التنبؤية ولوحات المعلومات التفاعلية وتحليلات الموارد البشرية وذكاء الخدمات اللوجستية. يحمل " },
+  "about.p2_d": { en: "12 professional certifications", ar: "12 شهادة احترافية" },
+  "about.p2_e": { en: " including Google Data Analytics, IBM AI Fundamentals and Deep Learning for NLP — combining strong mathematical foundations with military-academy discipline.", ar: " من بينها Google Data Analytics وIBM AI Fundamentals وDeep Learning for NLP — مع أسس رياضية قوية وانضباط الكلية العسكرية." },
+  "about.stat1": { en: "Projects", ar: "المشاريع" },
+  "about.stat2": { en: "Certificates", ar: "الشهادات" },
+  "about.stat3": { en: "MCIT Training", ar: "تدريب MCIT" },
+  "about.stat3_n": { en: "9 mo", ar: "٩ أشهر" },
+
+  // Skills
+  "skills.eyebrow": { en: "𓊪 · CHAPTER · II", ar: "𓊪 · الفصل · ٢" },
+  "skills.title": { en: "Sacred Crafts", ar: "الحِرَف المقدّسة" },
+  "skills.g1": { en: "Data & Analysis", ar: "البيانات والتحليل" },
+  "skills.g2": { en: "Programming", ar: "البرمجة" },
+  "skills.g3": { en: "Machine Learning & AI", ar: "التعلّم الآلي والذكاء الاصطناعي" },
+
+  // Certificates
+  "cert.eyebrow": { en: "𓋹 · CHAPTER · III", ar: "𓋹 · الفصل · ٣" },
+  "cert.title": { en: "Hall of Sacred Tablets", ar: "قاعة الألواح المقدّسة" },
+  "cert.intro": { en: "Move your light across the chamber to reveal the engraved tablets of knowledge.", ar: "حرّك ضوءك عبر الحجرة لتكشف ألواح المعرفة المنقوشة." },
+  "cert.hidden": { en: "⟡ HIDDEN ⟡", ar: "⟡ مخفي ⟡" },
+  "cert.verify": { en: "VERIFY ↗", ar: "تحقّق ↗" },
+  "cert.sealLabel": { en: "𓋹 · SACRED · TABLETS · WITHIN · 𓋹", ar: "𓋹 · ألواح · مقدسة · بالداخل · 𓋹" },
+
+  // Projects
+  "proj.eyebrow": { en: "𓍢 · CHAPTER · IV", ar: "𓍢 · الفصل · ٤" },
+  "proj.title": { en: "Treasure Chamber", ar: "حجرة الكنوز" },
+  "proj.sealLabel": { en: "𓊃 · ROYAL · TREASURE · CHAMBER · 𓊃", ar: "𓊃 · حجرة · الكنز · الملكي · 𓊃" },
+
+  // Contact
+  "contact.eyebrow": { en: "𓅓 · CHAPTER · V", ar: "𓅓 · الفصل · ٥" },
+  "contact.title": { en: "Royal Decree", ar: "المرسوم الملكي" },
+  "contact.send": { en: "Send a Message", ar: "أرسل رسالة" },
+  "contact.name": { en: "Your Name", ar: "اسمك" },
+  "contact.email": { en: "Your Email", ar: "بريدك الإلكتروني" },
+  "contact.message": { en: "Your Message", ar: "رسالتك" },
+  "contact.submit": { en: "SEAL & SEND", ar: "اختم وأرسل" },
+  "contact.direct": { en: "Direct Channels", ar: "قنوات مباشرة" },
+  "contact.location": { en: "CAIRO · EGYPT", ar: "القاهرة · مصر" },
+  "contact.footer": { en: "BUILT IN THE TEMPLE OF DATA", ar: "صُنع في معبد البيانات" },
+  "contact.toast": { en: "Opening your scribe (email client)...", ar: "جاري فتح الكاتب (تطبيق البريد)..." },
+
+  // Entry gate
+  "gate.open": { en: "𓂀 OPEN · THE · GATE 𓂀", ar: "𓂀 افتح · البوابة 𓂀" },
+  "gate.enter": { en: "ENTER · THE · TEMPLE", ar: "ادخل · المعبد" },
+  "gate.skip": { en: "SKIP ›", ar: "تخطّى ›" },
 };
 
 type Ctx = {
