@@ -2,42 +2,44 @@ import { SectionTitle } from "./About";
 import { Mail, Linkedin, Github, Phone } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useLang } from "@/i18n/LanguageContext";
 
 export const Contact = () => {
+  const { t } = useLang();
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const subject = encodeURIComponent(`Message from ${form.name}`);
     const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`);
     window.location.href = `mailto:ahmed.abdalhafez.777@gmail.com?subject=${subject}&body=${body}`;
-    toast.success("Opening your scribe (email client)...");
+    toast.success(t("contact.toast"));
   };
 
   return (
     <section id="contact" className="relative py-28 px-6">
       <div className="container max-w-5xl">
-        <SectionTitle eyebrow="𓅓 · CHAPTER · V" title="Royal Decree" />
+        <SectionTitle eyebrow={t("contact.eyebrow")} title={t("contact.title")} />
         <div className="grid md:grid-cols-2 gap-10">
           <div className="bg-papyrus p-10 shadow-deep relative" style={{ color: "hsl(25 60% 18%)" }}>
-            <h3 className="font-display text-2xl mb-6">Send a Message</h3>
+            <h3 className="font-display text-2xl mb-6">{t("contact.send")}</h3>
             <form onSubmit={submit} className="space-y-4">
               <input required value={form.name} onChange={e => setForm({...form, name: e.target.value})}
-                placeholder="Your Name"
+                placeholder={t("contact.name")}
                 className="w-full bg-transparent border-b-2 border-amber-900/50 focus:border-amber-900 outline-none py-2 placeholder:text-amber-900/50" />
               <input required type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})}
-                placeholder="Your Email"
+                placeholder={t("contact.email")}
                 className="w-full bg-transparent border-b-2 border-amber-900/50 focus:border-amber-900 outline-none py-2 placeholder:text-amber-900/50" />
               <textarea required rows={5} value={form.message} onChange={e => setForm({...form, message: e.target.value})}
-                placeholder="Your Message"
+                placeholder={t("contact.message")}
                 className="w-full bg-transparent border-2 border-amber-900/40 focus:border-amber-900 outline-none p-3 placeholder:text-amber-900/50 resize-none" />
               <button type="submit" className="w-full py-3 bg-amber-900 text-amber-50 font-display tracking-widest hover:bg-amber-800 transition">
-                SEAL & SEND
+                {t("contact.submit")}
               </button>
             </form>
           </div>
 
           <div className="gold-frame bg-card/70 backdrop-blur p-10 shadow-deep">
-            <h3 className="font-display text-2xl text-gold mb-6">Direct Channels</h3>
+            <h3 className="font-display text-2xl text-gold mb-6">{t("contact.direct")}</h3>
             <ul className="space-y-5">
               <ContactLink icon={<Mail/>} label="ahmed.abdalhafez.777@gmail.com" href="mailto:ahmed.abdalhafez.777@gmail.com" />
               <ContactLink icon={<Phone/>} label="+20 1155196833" href="tel:+201155196833" />
@@ -46,13 +48,13 @@ export const Contact = () => {
             </ul>
             <div className="mt-10 pt-6 border-t border-primary/30 text-center">
               <p className="text-primary text-3xl torch-flicker">𓂀 𓋹 𓊪</p>
-              <p className="text-xs text-foreground/60 tracking-widest mt-3">CAIRO · EGYPT</p>
+              <p className="text-xs text-foreground/60 tracking-widest mt-3">{t("contact.location")}</p>
             </div>
           </div>
         </div>
       </div>
       <footer className="text-center text-xs tracking-widest text-foreground/50 mt-20">
-        © {new Date().getFullYear()} AHMED ABD AL-HAFEZ · BUILT IN THE TEMPLE OF DATA
+        © {new Date().getFullYear()} AHMED ABD AL-HAFEZ · {t("contact.footer")}
       </footer>
     </section>
   );
