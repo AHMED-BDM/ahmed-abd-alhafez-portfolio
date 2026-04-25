@@ -1,3 +1,4 @@
+import { sounds } from "../audio";
 import { useEffect, useState } from "react";
 import { EntryGate } from "@/components/portfolio/EntryGate";
 import { CustomCursor } from "@/components/portfolio/CustomCursor";
@@ -38,40 +39,71 @@ const Index = () => {
     return () => document.documentElement.classList.remove("dev-mode");
   }, [devMode]);
 
+  // 🔊 دالة تشغيل صوت التابوت
+  const openSarcophagus = () => {
+    try {
+      const audio = sounds.box;
+      audio.currentTime = 0;
+      audio.play();
+    } catch (err) {
+      console.log("Audio not ready yet");
+    }
+  };
+
   return (
     <LanguageProvider>
-    <SoundProvider mode={mode} intensity={intensity} reducedEffects={reducedEffects}>
-      <div className={mode === "day" ? "day min-h-screen" : "min-h-screen"}>
-        {!entered && <EntryGate onEnter={() => setEntered(true)} />}
-        <CustomCursor mode={mode} />
-        <TempleAtmosphere mode={mode} intensity={intensity} reducedEffects={reducedEffects} />
-        <VisionZone mode={mode} />
-        <Navbar />
-        <LanguageToggle />
-        <ModeToggle mode={mode} onToggle={() => setMode(m => m === "night" ? "day" : "night")} />
-        <DevModeToggle devMode={devMode} onToggle={() => setDevMode((v) => !v)} />
-        <AtmosphereControls
-          intensity={intensity}
-          onIntensityToggle={() => setIntensity((value) => (value === "immersive" ? "subtle" : "immersive"))}
-        />
-        <Mummies mode={mode} />
-        <Curse reducedEffects={reducedEffects} />
-        <Whispers />
-        <SecretPapyrus />
-        <HiddenChamber />
-        <FourthWall reducedEffects={reducedEffects} />
-        <main>
-          <Hero mode={mode} />
-          <About />
-          <Skills />
-          <Certificates />
-          <Projects />
-          <GithubDashboard devMode={devMode} />
-          <Contact />
-        </main>
-        <PharaohChat mode={mode} />
-      </div>
-    </SoundProvider>
+      <SoundProvider mode={mode} intensity={intensity} reducedEffects={reducedEffects}>
+        <div className={mode === "day" ? "day min-h-screen" : "min-h-screen"}>
+          {!entered && <EntryGate onEnter={() => setEntered(true)} />}
+
+          <CustomCursor mode={mode} />
+          <TempleAtmosphere mode={mode} intensity={intensity} reducedEffects={reducedEffects} />
+          <VisionZone mode={mode} />
+
+          <Navbar />
+          <LanguageToggle />
+
+          <ModeToggle
+            mode={mode}
+            onToggle={() => setMode(m => m === "night" ? "day" : "night")}
+          />
+
+          <DevModeToggle
+            devMode={devMode}
+            onToggle={() => setDevMode(v => !v)}
+          />
+
+          <AtmosphereControls
+            intensity={intensity}
+            onIntensityToggle={() =>
+              setIntensity(v => (v === "immersive" ? "subtle" : "immersive"))
+            }
+          />
+
+          <Mummies mode={mode} />
+          <Curse reducedEffects={reducedEffects} />
+          <Whispers />
+          <SecretPapyrus />
+          <HiddenChamber />
+          <FourthWall reducedEffects={reducedEffects} />
+
+          {/* 👇 هنا المكان اللي لازم تربط فيه التابوت */}
+          {/* مثال: لو في أي عنصر تابوت داخل Hero أو أي component */}
+          {/* onClick={openSarcophagus} */}
+
+          <main>
+            <Hero mode={mode} />
+            <About />
+            <Skills />
+            <Certificates />
+            <Projects />
+            <GithubDashboard devMode={devMode} />
+            <Contact />
+          </main>
+
+          <PharaohChat mode={mode} />
+        </div>
+      </SoundProvider>
     </LanguageProvider>
   );
 };
