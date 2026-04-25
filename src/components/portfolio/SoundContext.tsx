@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState, ReactNode, useCallback, useMemo } from "react";
 
 type TempleMode = "night" | "day";
-type SoundKind = "hover" | "click" | "open" | "rumble" | "whisper" | "curse" | "glint" | "gust";
+type SoundKind = "hover" | "click" | "open" | "rumble" | "whisper" | "curse" | "glint" | "gust" | "spell";
 
 type Ctx = {
   initialized: boolean;
@@ -272,6 +272,45 @@ export const SoundProvider = ({
       case "gust":
         synth.noise(2.2, 0.024 * volume, 900, pan);
         break;
+      case "spell": {
+        // Eerie incantation: layered detuned voices muttering an unintelligible chant
+        const ac = synth.ensure();
+        const base = ac.currentTime;
+        const freqs = [138.6, 174.6, 207.6, 261.6];
+        const syllables = 7;
+        for (let s = 0; s < syllables; s++) {
+          const t0 = s * 0.18;
+          const f = freqs[s % freqs.length] * (1 + (Math.random() - 0.5) * 0.04);
+          [0, -7, 12].forEach((semi, idx) => {
+            const o = ac.createOscillator();
+            o.type = idx === 0 ? "sawtooth" : "triangle";
+            o.frequency.setValueAtTime(f * Math.pow(2, semi / 12), base + t0);
+            o.frequency.linearRampToValueAtTime(
+              f * Math.pow(2, semi / 12) * 0.92,
+              base + t0 + 0.22,
+            );
+            const g = ac.createGain();
+            g.gain.setValueAtTime(0.0001, base + t0);
+            g.gain.exponentialRampToValueAtTime(0.05 * volume * (idx === 0 ? 1 : 0.5), base + t0 + 0.04);
+            g.gain.exponentialRampToValueAtTime(0.0001, base + t0 + 0.26);
+            const lp = ac.createBiquadFilter();
+            lp.type = "bandpass";
+            lp.frequency.value = 700 + Math.random() * 600;
+            lp.Q.value = 6;
+            const p = typeof ac.createStereoPanner === "function" ? ac.createStereoPanner() : null;
+            if (p) p.pan.value = pan + (Math.random() - 0.5) * 0.6;
+            if (p) o.connect(lp).connect(g).connect(p).connect(ac.destination);
+            else o.connect(lp).connect(g).connect(ac.destination);
+            o.start(base + t0);
+            o.stop(base + t0 + 0.3);
+          });
+        }
+        // breathy whisper bed underneath
+        synth.noise(syllables * 0.18 + 0.4, 0.02 * volume, 1800, pan);
+        // low ominous tail
+        synth.tone(72, 1.6, "sawtooth", 0.035 * volume, pan);
+        break;
+      }
     }
   }, [enabled, getAdaptiveVolume, initialized, synth]);
 

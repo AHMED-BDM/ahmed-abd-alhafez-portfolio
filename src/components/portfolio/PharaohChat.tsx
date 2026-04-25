@@ -203,7 +203,11 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
         className="gold-frame h-14 rounded-full px-5 shadow-gold"
         onMouseEnter={() => play("hover", { pan: 0.45, volume: 0.8 })}
         onClick={() => {
-          setOpen((current) => !current);
+          setOpen((current) => {
+            const next = !current;
+            if (next) play("spell", { pan: 0.45, volume: 0.9 });
+            return next;
+          });
           play("click", { pan: 0.45, volume: 0.65 });
         }}
       >
