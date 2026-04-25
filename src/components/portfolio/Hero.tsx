@@ -50,7 +50,7 @@ export const Hero = ({ mode }: { mode: "night" | "day" }) => (
             </div>
             {/* Bottom hieroglyph band */}
             <div className="absolute bottom-0 left-0 right-0 h-7 flex items-center justify-around px-3 text-primary/80 font-display text-sm tracking-widest bg-gradient-to-t from-background/80 to-transparent border-t border-primary/40">
-              <span>𓋴</span><span>𓎟</span><span>𓊃</span><span>𓍿</span><span>𓊃</math></span><span>𓎟</span><span>𓋴</span>
+              <span>𓋴</span><span>𓎟</span><span>𓊃</span><span>𓍿</span><span>𓊃</span><span>𓎟</span><span>𓋴</span>
             </div>
             {/* Side wing ornaments */}
             <div className="absolute top-1/2 -left-2 -translate-y-1/2 text-primary/70 text-2xl torch-flicker pointer-events-none">𓅓</div>
