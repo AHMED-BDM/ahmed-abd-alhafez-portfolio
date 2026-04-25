@@ -3,6 +3,9 @@ import { SectionTitle } from "./About";
 import p1 from "@/assets/project-fleet.png";
 import p2 from "@/assets/project-hr-dashboard.png";
 import p3 from "@/assets/project-sales.png";
+import p4 from "@/assets/project-employee-report.png";
+import p5 from "@/assets/project-shipping.png";
+import p6 from "@/assets/project-neural-body.png";
 import { ExternalLink, X } from "lucide-react";
 import { Sarcophagus } from "./Sarcophagus";
 
@@ -10,6 +13,9 @@ const projects = [
   { img: p1, title: "Fleet Performance Dashboard", desc: "Interactive Power BI dashboard tracking fleet costs, distances and driver spending patterns with KPI cards.", tags: ["Power BI", "KPI", "Analytics"], link: "#" },
   { img: p2, title: "Employee Report & Workforce Analysis", desc: "HR analytics dashboard visualizing employee distribution by department, gender, country and salary brackets.", tags: ["Power BI", "HR Analytics", "BI"], link: "#" },
   { img: p3, title: "Sales Performance Dashboard", desc: "Global sales intelligence dashboard with profit margin gauges, geographic sales and category breakdowns.", tags: ["Power BI", "Sales", "Geo"], link: "#" },
+  { img: p4, title: "Regional Workforce Insights", desc: "Multi-country HR dashboard breaking down employees by department, gender, salary and tenure across MENA centers.", tags: ["Power BI", "HR", "Dashboard"], link: "#" },
+  { img: p5, title: "Shipping & Logistics Intelligence", desc: "Dark-themed BI dashboard analysing invoices, shipping status and delivery moods across European countries.", tags: ["Power BI", "Logistics", "DAX"], link: "#" },
+  { img: p6, title: "Neural Body Analyzer", desc: "AI-powered biometrics web app running neural inference over body composition, capacity and flexibility metrics.", tags: ["AI", "React", "Biometrics"], link: "#" },
 ];
 
 export const Projects = () => {
