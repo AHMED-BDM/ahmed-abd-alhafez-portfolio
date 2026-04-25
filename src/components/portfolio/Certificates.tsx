@@ -3,6 +3,9 @@ import { SectionTitle } from "./About";
 import cert1 from "@/assets/cert-google-data.png";
 import cert2 from "@/assets/cert-ibm-ai.jpg";
 import cert3 from "@/assets/cert-deep-learning.jpg";
+import cert4 from "@/assets/cert-edraak-decision.png";
+import cert5 from "@/assets/cert-canva-essentials.png";
+import cert6 from "@/assets/cert-microsoft-dax.png";
 import { X } from "lucide-react";
 import { Sarcophagus } from "./Sarcophagus";
 
@@ -10,6 +13,9 @@ const certs = [
   { img: cert1, title: "Google Data Analytics", issuer: "Google · Coursera", date: "Feb 2026", link: "https://coursera.org/verify/professional-cert/4V3WLQA2B3PL" },
   { img: cert2, title: "AI Fundamentals", issuer: "IBM SkillsBuild", date: "Sep 2025", link: "https://www.credly.com/badges/10d8a0f5-6fdc-44e2-a2e6-195c5c1e398f" },
   { img: cert3, title: "Deep Learning for NLP", issuer: "Mahara-Tech · ITI", date: "Oct 2025", link: "#" },
+  { img: cert4, title: "Decision Making in the Business World", issuer: "Edraak · Arab Bank", date: "Mar 2026", link: "#" },
+  { img: cert5, title: "Canva Essentials", issuer: "Canva Design School", date: "Mar 2026", link: "#" },
+  { img: cert6, title: "Write DAX Formulas for Semantic Models", issuer: "Microsoft Learn", date: "Apr 2026", link: "#" },
 ];
 
 export const Certificates = () => {
