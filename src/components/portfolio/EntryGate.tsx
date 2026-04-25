@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import gateImg from "@/assets/gate-door.jpg";
+import { useLang } from "@/i18n/LanguageContext";
 
 export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
+  const { t } = useLang();
   const [opening, setOpening] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [armed, setArmed] = useState(false);
@@ -114,17 +116,17 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
 
       <button onClick={() => { setHidden(true); onEnter(); }}
         className="absolute bottom-8 right-8 z-10 text-xs font-display tracking-widest text-primary/70 hover:text-primary transition">
-        SKIP ›
+        {t("gate.skip")}
       </button>
 
       <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-10 text-center flex flex-col items-center gap-4">
         {!armed ? (
           <button onClick={beginEntry}
             className="group px-8 py-3 border-2 border-primary bg-background/80 backdrop-blur text-primary font-display text-sm tracking-[0.4em] hover:bg-primary hover:text-primary-foreground transition shadow-gold torch-flicker">
-            𓂀 OPEN · THE · GATE 𓂀
+            {t("gate.open")}
           </button>
         ) : (
-          <p className="font-display text-primary text-sm tracking-[0.4em] torch-flicker">ENTER · THE · TEMPLE</p>
+          <p className="font-display text-primary text-sm tracking-[0.4em] torch-flicker">{t("gate.enter")}</p>
         )}
       </div>
     </div>
