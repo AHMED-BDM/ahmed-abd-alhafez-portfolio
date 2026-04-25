@@ -1,8 +1,11 @@
 import heroNight from "@/assets/hero-temple-night.jpg";
 import heroDay from "@/assets/hero-temple-day.jpg";
 import profile from "@/assets/profile-real.jpg";
+import { useLang } from "@/i18n/LanguageContext";
 
-export const Hero = ({ mode }: { mode: "night" | "day" }) => (
+export const Hero = ({ mode }: { mode: "night" | "day" }) => {
+  const { t } = useLang();
+  return (
   <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24">
     <img
       src={mode === "night" ? heroNight : heroDay}
@@ -14,26 +17,25 @@ export const Hero = ({ mode }: { mode: "night" | "day" }) => (
 
     <div className="relative z-10 container grid md:grid-cols-2 gap-12 items-center py-20">
       <div className="reveal-up">
-        <p className="font-display text-primary tracking-[0.5em] text-xs mb-6">𓂀 · WELCOME · TRAVELER · 𓋹</p>
+        <p className="font-display text-primary tracking-[0.5em] text-xs mb-6">{t("hero.eyebrow")}</p>
         <h1 className="font-display text-5xl md:text-7xl font-black leading-[1.05] mb-6">
-          <span className="text-gold block">AHMED</span>
-          <span className="text-gold block">ABD AL-HAFEZ</span>
+          <span className="text-gold block">{t("hero.name1")}</span>
+          <span className="text-gold block">{t("hero.name2")}</span>
         </h1>
         <p className="text-xl md:text-2xl text-foreground/90 italic mb-3 max-w-xl">
-          Machine Learning Engineer · Data Analyst · AI Specialist
+          {t("hero.role")}
         </p>
         <p className="text-foreground/70 max-w-lg mb-10">
-          Decoding the hieroglyphs of modern data. 20+ projects across predictive modeling,
-          interactive dashboards and AI — forged with military discipline.
+          {t("hero.tagline")}
         </p>
         <div className="flex flex-wrap gap-4">
           <a href="#about"
             className="group relative px-8 py-3 font-display tracking-widest text-sm bg-primary text-primary-foreground gold-frame hover:shadow-gold transition-all">
-            EXPLORE THE TEMPLE
+            {t("hero.cta1")}
           </a>
           <a href="#projects"
             className="px-8 py-3 font-display tracking-widest text-sm border-2 border-primary/50 text-primary hover:bg-primary/10 transition-all">
-            VIEW MY WORK
+            {t("hero.cta2")}
           </a>
         </div>
       </div>
@@ -80,4 +82,5 @@ export const Hero = ({ mode }: { mode: "night" | "day" }) => (
 
     <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-primary text-2xl torch-flicker">𓂀</div>
   </section>
-);
+  );
+};
