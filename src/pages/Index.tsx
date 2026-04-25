@@ -63,9 +63,23 @@ const Index = () => {
           <Navbar />
           <LanguageToggle />
 
+          {/* ✅ تم تعديل زرار النهار والليل لتشغيل وإيقاف الأصوات */}
           <ModeToggle
             mode={mode}
-            onToggle={() => setMode(m => m === "night" ? "day" : "night")}
+            onToggle={() => {
+              const nextMode = mode === "night" ? "day" : "night";
+              setMode(nextMode);
+
+              if (nextMode === "day") {
+                sounds.night.pause();
+                sounds.day.currentTime = 0;
+                sounds.day.play().catch(e => console.log("Audio play blocked"));
+              } else {
+                sounds.day.pause();
+                sounds.night.currentTime = 0;
+                sounds.night.play().catch(e => console.log("Audio play blocked"));
+              }
+            }}
           />
 
           <DevModeToggle
@@ -84,15 +98,15 @@ const Index = () => {
           <Curse reducedEffects={reducedEffects} />
           <Whispers />
           <SecretPapyrus />
-          <HiddenChamber />
+          
+          {/* ✅ تمرير دالة الصوت هنا في حال كان التابوت داخل الغرفة السرية */}
+          <HiddenChamber onOpenBox={openSarcophagus} />
+          
           <FourthWall reducedEffects={reducedEffects} />
 
-          {/* 👇 هنا المكان اللي لازم تربط فيه التابوت */}
-          {/* مثال: لو في أي عنصر تابوت داخل Hero أو أي component */}
-          {/* onClick={openSarcophagus} */}
-
           <main>
-            <Hero mode={mode} />
+            {/* ✅ تمرير دالة الصوت هنا في حال كان التابوت في واجهة الموقع */}
+            <Hero mode={mode} onOpenBox={openSarcophagus} />
             <About />
             <Skills />
             <Certificates />
