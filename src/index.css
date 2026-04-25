@@ -253,21 +253,13 @@
   to { stroke-dashoffset: 0; }
 }
 
-/* Custom cursor */
+/* Custom cursor — hidden everywhere so the ankh shows in dialogs, chat, and the gate too.
+   Inputs/textarea/contenteditable keep a text caret for usability. */
 .has-custom-cursor, .has-custom-cursor * { cursor: none !important; }
-.has-custom-cursor a,
-.has-custom-cursor button,
 .has-custom-cursor input,
 .has-custom-cursor textarea,
-.has-custom-cursor select,
-.has-custom-cursor label,
-.has-custom-cursor [role='button'],
-.has-custom-cursor [role='dialog'],
-.has-custom-cursor [role='dialog'] *,
-.has-custom-cursor [contenteditable='true'],
-.has-custom-cursor [data-cursor='native'] *,
-.has-custom-cursor [data-cursor='native'] {
-  cursor: auto !important;
+.has-custom-cursor [contenteditable='true'] {
+  cursor: text !important;
 }
 .temple-flicker {
   animation: templeFlicker 0.28s ease-in-out 1;
