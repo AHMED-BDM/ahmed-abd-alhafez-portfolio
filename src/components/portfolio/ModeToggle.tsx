@@ -1,5 +1,5 @@
 import { Moon, Sun } from "lucide-react";
-import { sounds } from "@/audio"; // تأكد من مسار الاستيراد
+import { sounds } from "src/audio.js"; // تأكد من مسار الاستيراد
 
 export const ModeToggle = ({ mode, onToggle }: { mode: "night" | "day"; onToggle: () => void }) => {
   
