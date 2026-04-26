@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { useSound } from "./SoundContext";
 import { useLang } from "@/i18n/LanguageContext";
+import { sounds } from "../../audio"; // ✅ استدعاء ملف الصوت
 
 export const HiddenChamber = () => {
   const [unlocked, setUnlocked] = useState(false);
@@ -32,6 +33,11 @@ export const HiddenChamber = () => {
       setUnlocked(true);
       setOpen(true);
       play("open", { pan: 0, volume: 0.7 });
+      
+      // ✅ تشغيل صوت اللغة المصرية القديمة
+      sounds.ancient.currentTime = 0;
+      sounds.ancient.play().catch(e => console.log(e));
+
       console.log("[HiddenChamber] Unlocked via sigil triple-click");
     }
   };
@@ -54,6 +60,10 @@ export const HiddenChamber = () => {
           onClick={() => {
             setOpen(true);
             play("open", { pan: 0, volume: 0.7 });
+            
+            // ✅ تشغيل صوت اللغة المصرية القديمة عند الدخول للغرفة
+            sounds.ancient.currentTime = 0;
+            sounds.ancient.play().catch(e => console.log(e));
           }}
           className="fixed bottom-32 left-6 z-[55] rounded border border-primary/50 bg-card/85 px-3 py-1.5 font-display text-[10px] tracking-[0.25em] text-primary backdrop-blur-md hover:shadow-gold cursor-pointer pointer-events-auto"
         >
@@ -63,7 +73,12 @@ export const HiddenChamber = () => {
 
       {open && (
         <div
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setOpen(false);
+            // ✅ اختياري: إيقاف الصوت لو قفل الغرفة (لو مش عايزها شيل السطرين دول)
+            sounds.ancient.pause();
+            sounds.ancient.currentTime = 0;
+          }}
           className="fixed inset-0 z-[96] flex items-center justify-center bg-background/95 p-4 backdrop-blur-md cursor-auto pointer-events-auto"
           style={{ animation: "fadeIn 0.5s ease-out" }}
           data-cursor="native"
@@ -71,7 +86,12 @@ export const HiddenChamber = () => {
           <button
             className="absolute top-6 right-6 z-10 text-primary cursor-pointer"
             aria-label="Close hidden chamber"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              setOpen(false);
+              // ✅ اختياري: إيقاف الصوت لو قفل الغرفة (لو مش عايزها شيل السطرين دول)
+              sounds.ancient.pause();
+              sounds.ancient.currentTime = 0;
+            }}
             data-cursor="native"
           >
             <X className="h-7 w-7" />
