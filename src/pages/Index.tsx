@@ -87,12 +87,14 @@ const Index = () => {
             onToggle={() => setDevMode(v => !v)}
           />
 
-          <AtmosphereControls
-            intensity={intensity}
-            onIntensityToggle={() =>
-              setIntensity(v => (v === "immersive" ? "subtle" : "immersive"))
-            }
-          />
+          <div className="hidden pointer-events-none opacity-0">
+            <AtmosphereControls
+              intensity={intensity}
+              onIntensityToggle={() =>
+                setIntensity(v => (v === "immersive" ? "subtle" : "immersive"))
+              }
+            />
+          </div>
 
           <Mummies mode={mode} />
           <Curse reducedEffects={reducedEffects} />
