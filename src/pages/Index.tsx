@@ -30,6 +30,7 @@ import { usePerformanceMode } from "@/hooks/usePerformanceMode";
 const Index = () => {
   const [entered, setEntered] = useState(false);
   const [mode, setMode] = useState<"night" | "day">("night");
+  const [intensity, setIntensity] = useState<"subtle" | "immersive">("immersive");
   const [devMode, setDevMode] = useState(false);
   const { reducedEffects } = usePerformanceMode();
 
@@ -38,6 +39,7 @@ const Index = () => {
     return () => document.documentElement.classList.remove("dev-mode");
   }, [devMode]);
 
+  // 🔊 دالة تشغيل صوت التابوت
   const openSarcophagus = () => {
     try {
       const audio = sounds.box;
@@ -50,19 +52,18 @@ const Index = () => {
 
   return (
     <LanguageProvider>
-      {/* تم حذف intensity من هنا */}
-      <SoundProvider mode={mode} reducedEffects={reducedEffects}>
+      <SoundProvider mode={mode} intensity={intensity} reducedEffects={reducedEffects}>
         <div className={mode === "day" ? "day min-h-screen" : "min-h-screen"}>
           {!entered && <EntryGate onEnter={() => setEntered(true)} />}
 
           <CustomCursor mode={mode} />
-          {/* تم حذف intensity من هنا */}
-          <TempleAtmosphere mode={mode} reducedEffects={reducedEffects} />
+          <TempleAtmosphere mode={mode} intensity={intensity} reducedEffects={reducedEffects} />
           <VisionZone mode={mode} />
 
           <Navbar />
           <LanguageToggle />
 
+          {/* ✅ تم تعديل زرار النهار والليل لتشغيل وإيقاف الأصوات */}
           <ModeToggle
             mode={mode}
             onToggle={() => {
@@ -86,19 +87,25 @@ const Index = () => {
             onToggle={() => setDevMode(v => !v)}
           />
 
-          {/* تم تبسيط هذا المكون ليحتوي على زر الميوت فقط */}
-          <AtmosphereControls />
+          <AtmosphereControls
+            intensity={intensity}
+            onIntensityToggle={() =>
+              setIntensity(v => (v === "immersive" ? "subtle" : "immersive"))
+            }
+          />
 
           <Mummies mode={mode} />
           <Curse reducedEffects={reducedEffects} />
           <Whispers />
           <SecretPapyrus />
           
+          {/* ✅ تمرير دالة الصوت هنا في حال كان التابوت داخل الغرفة السرية */}
           <HiddenChamber onOpenBox={openSarcophagus} />
           
           <FourthWall reducedEffects={reducedEffects} />
 
           <main>
+            {/* ✅ تمرير دالة الصوت هنا في حال كان التابوت في واجهة الموقع */}
             <Hero mode={mode} onOpenBox={openSarcophagus} />
             <About />
             <Skills />
