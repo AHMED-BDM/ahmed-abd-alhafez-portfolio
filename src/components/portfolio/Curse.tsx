@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSound } from "./SoundContext";
+import { sounds } from "../../audio"; // ✅ استدعاء ملف الصوت
 
 const STORAGE_KEY = "temple-return-count";
 
@@ -39,16 +40,24 @@ export const Curse = ({ reducedEffects }: { reducedEffects: boolean }) => {
       const target = e.target as HTMLElement;
       const isInteractive = target.closest("a,button,input,textarea,[role='button'],label,select");
       if (isInteractive) { clicks.current = []; return; }
+      
       const now = Date.now();
       if (now - lastTrigger.current < 25000) return;
+      
       clicks.current = clicks.current.filter(t => now - t < 4000);
       clicks.current.push(now);
+      
       if (clicks.current.length >= 4) {
         clicks.current = [];
         lastTrigger.current = now;
         setActive(true);
         setMessage("YOU DISTURB WHAT SHOULD REMAIN HIDDEN…");
         play("curse");
+        
+        // ✅ تشغيل صوت الانفجار عند تفعيل اللعنة وظهور الرسالة
+        sounds.explosion.currentTime = 0;
+        sounds.explosion.play().catch(err => console.log(err));
+
         document.body.style.animation = "shake 0.4s ease-in-out";
         setTimeout(() => { document.body.style.animation = ""; }, 500);
         setTimeout(() => setActive(false), 3500);
