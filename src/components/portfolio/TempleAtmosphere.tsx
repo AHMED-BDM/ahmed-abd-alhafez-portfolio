@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useSound } from "./SoundContext";
 
 const createParticles = (count: number, speed: [number, number]) =>
@@ -23,7 +23,12 @@ export const TempleAtmosphere = ({
   reducedEffects: boolean;
 }) => {
   const { enabled, play } = useSound();
-  const [scrollProgress, setScrollProgress] = useState(0);
+  
+  // Refs للتحكم في العناصر المعتمدة على الـ Scroll بدون Re-render
+  const skyRef = useRef<HTMLDivElement>(null);
+  const hazeRef = useRef<HTMLDivElement>(null);
+  const glyphsRef = useRef<HTMLDivElement>(null);
+
   const goldMotes = useMemo(() => createParticles(reducedEffects ? 10 : 22, [9, 18]), [reducedEffects]);
   const dustMotes = useMemo(() => createParticles(reducedEffects ? 30 : 80, [6, 14]), [reducedEffects]);
   const sandStreaks = useMemo(() => createParticles(reducedEffects ? 8 : 18, [4, 9]), [reducedEffects]);
@@ -31,14 +36,21 @@ export const TempleAtmosphere = ({
 
   useEffect(() => {
     const onScroll = () => {
-      const max = Math.max(document.body.scrollHeight - window.innerHeight, 1);
-      setScrollProgress(Math.min(1, window.scrollY / max));
+      requestAnimationFrame(() => {
+        const max = Math.max(document.body.scrollHeight - window.innerHeight, 1);
+        const progress = Math.min(1, window.scrollY / max);
+
+        // تحديث الـ DOM مباشرة
+        if (skyRef.current) skyRef.current.style.opacity = `${0.6 + progress * (intensity === "immersive" ? 0.35 : 0.2)}`;
+        if (hazeRef.current) hazeRef.current.style.opacity = `${0.55 + progress * (intensity === "immersive" ? 0.4 : 0.22)}`;
+        if (glyphsRef.current) glyphsRef.current.style.opacity = `${0.08 + progress * 0.12}`;
+      });
     };
 
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [intensity]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -53,7 +65,7 @@ export const TempleAtmosphere = ({
   }, [enabled, mode, play]);
 
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-[1] overflow-hidden transform-gpu">
       {mode === "night" ? (
         <>
           <div className="night-gold-sheen" />
@@ -63,7 +75,7 @@ export const TempleAtmosphere = ({
           {goldMotes.map((mote) => (
             <span
               key={mote.id}
-              className="night-gold-mote"
+              className="night-gold-mote transform-gpu will-change-transform"
               style={{
                 left: mote.left,
                 top: mote.top,
@@ -85,15 +97,15 @@ export const TempleAtmosphere = ({
         </>
       ) : (
         <>
-          <div className="day-sand-sky" style={{ opacity: 0.6 + scrollProgress * (intensity === "immersive" ? 0.35 : 0.2) }} />
-          <div className="day-storm-haze" style={{ opacity: 0.55 + scrollProgress * (intensity === "immersive" ? 0.4 : 0.22) }} />
+          <div ref={skyRef} className="day-sand-sky transform-gpu will-change-[opacity]" />
+          <div ref={hazeRef} className="day-storm-haze transform-gpu will-change-[opacity]" />
           <div className="day-dust-band day-dust-band-a" />
           <div className="day-dust-band day-dust-band-b" />
           <div className="day-dust-band day-dust-band-c" />
           <div className="day-sand-sweep" />
           <div className="day-light-bloom" />
           {!reducedEffects && (
-            <div className="day-hidden-glyphs" style={{ opacity: 0.08 + scrollProgress * 0.12 }}>
+            <div ref={glyphsRef} className="day-hidden-glyphs transform-gpu will-change-[opacity]">
               {glyphs.map((glyph, index) => (
                 <span key={glyph} style={{ left: `${8 + index * 14}%`, top: `${18 + (index % 2) * 22}%` }}>{glyph}</span>
               ))}
@@ -102,7 +114,7 @@ export const TempleAtmosphere = ({
           {dustMotes.map((mote) => (
             <span
               key={mote.id}
-              className="day-dust-mote"
+              className="day-dust-mote transform-gpu will-change-transform"
               style={{
                 left: mote.left,
                 top: mote.top,
@@ -118,7 +130,7 @@ export const TempleAtmosphere = ({
           {sandStreaks.map((streak) => (
             <span
               key={`streak-${streak.id}`}
-              className="day-sand-streak"
+              className="day-sand-streak transform-gpu will-change-transform"
               style={{
                 left: streak.left,
                 top: streak.top,
