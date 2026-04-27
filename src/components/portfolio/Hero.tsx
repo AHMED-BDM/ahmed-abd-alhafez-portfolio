@@ -56,24 +56,43 @@ export const Hero = ({ mode }: { mode: "night" | "day" }) => {
             {/* Side wing ornaments */}
             <div className="absolute top-1/2 -left-2 -translate-y-1/2 text-primary/70 text-2xl torch-flicker pointer-events-none">𓅓</div>
             <div className="absolute top-1/2 -right-2 -translate-y-1/2 text-primary/70 text-2xl torch-flicker pointer-events-none">𓅓</div>
+            
             {/* Inner gold double border */}
             <div className="relative my-7 p-[3px] bg-gradient-to-br from-amber-300 via-yellow-600 to-amber-800 rounded-sm">
               <div className="p-[2px] bg-background/50 rounded-sm">
-                <div className="relative overflow-hidden rounded-sm">
-                  {/* ✅ تم تعديل مسار الصورة لتقرأ من فولدر public */}
-                  <img src="/personal-photo.png" alt="Portrait of Ahmed Abd Al-Hafez" loading="eager" decoding="async" className="w-full h-auto object-cover" width={384} height={384} />
+                
+                {/* ✅ التعديل تم هنا:
+                  1. إضافة aspect-square لجعل الحاوية مربعة تماماً لتناسب صورتك
+                */}
+                <div className="relative overflow-hidden rounded-sm aspect-square">
+                  {/* ✅ التعديل هنا:
+                    2. تغيير h-auto إلى h-full
+                    3. إضافة object-center لضمان توسيط الصورة داخل المربع
+                    4. تعديل الأبعاد لتعكس النسبة المربعة (1024x1024)
+                  */}
+                  <img 
+                    src="/personal-photo.png" 
+                    alt="Portrait of Ahmed Abd Al-Hafez" 
+                    loading="eager" 
+                    decoding="async" 
+                    className="w-full h-full object-cover object-center" 
+                    width={1024} 
+                    height={1024} 
+                  />
                   <div className="pointer-events-none absolute inset-0 shimmer-gold opacity-25" />
+                  
                   {/* Corner ankh medallions */}
                   <span className="absolute top-1 left-1 w-6 h-6 rounded-full bg-background/80 border border-primary/60 flex items-center justify-center text-primary text-xs">𓋹</span>
                   <span className="absolute top-1 right-1 w-6 h-6 rounded-full bg-background/80 border border-primary/60 flex items-center justify-center text-primary text-xs">𓋹</span>
                   <span className="absolute bottom-1 left-1 w-6 h-6 rounded-full bg-background/80 border border-primary/60 flex items-center justify-center text-primary text-xs">𓂀</span>
                   <span className="absolute bottom-1 right-1 w-6 h-6 rounded-full bg-background/80 border border-primary/60 flex items-center justify-center text-primary text-xs">𓂀</span>
                 </div>
+
               </div>
             </div>
           </div>
           {/* Cartouche nameplate */}
-          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 px-6 py-1.5 rounded-full bg-background/90 border-2 border-primary/70 shadow-gold">
+          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 px-6 py-1.5 rounded-full bg-background/90 border-2 border-primary/70 shadow-gold whitespace-nowrap">
             <span className="font-display text-primary text-[10px] tracking-[0.4em]">𓋹 · AHMED · 𓋹</span>
           </div>
         </div>
