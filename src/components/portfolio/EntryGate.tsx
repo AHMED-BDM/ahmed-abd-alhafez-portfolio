@@ -3,6 +3,7 @@ import gateImg from "@/assets/gate-door.jpg";
 import { useLang } from "@/i18n/LanguageContext";
 import { DustEffect } from "./DustEffect";
 import { sounds } from "@/audio";
+
 const GLYPHS = ["𓂀", "𓋹", "𓆣", "𓊪"];
 
 export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
@@ -12,7 +13,6 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
   const [armed, setArmed] = useState(false);
   const [dials, setDials] = useState([0, 1, 2]);
 
-  // دالة تشغيل صوت البوابة الأصلي
   const playGateSound = () => {
     if (sounds.gate) {
       sounds.gate.currentTime = 0;
@@ -21,22 +21,16 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
     }
   };
 
-  // مراقبة حل اللغز
   useEffect(() => {
     const isSolved = dials.every(v => v === dials[0]);
     
     if (isSolved && !armed) {
       setArmed(true);
       
-      // 1. استراحة لمدة ثانية عشان المستخدم يشوف الرموز وهي بتنور
       setTimeout(() => {
-        // 2. تشغيل الأنيميشن
         setOpening(true);
-        
-        // 3. تشغيل الصوت الأصلي فوراً مع بداية حركة الباب
         playGateSound(); 
         
-        // 4. الانتقال للموقع بعد انتهاء الـ 6 ثواني
         setTimeout(() => {
           setHidden(true);
           onEnter();
@@ -47,12 +41,9 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
 
   const handleDialClick = (idx: number) => {
     if (armed) return;
-    
     const newDials = [...dials];
     newDials[idx] = (newDials[idx] + 1) % GLYPHS.length;
     setDials(newDials);
-    
-    // صوت نقرة بسيطة (اختياري لو عندك ملف نقرة ممكن تضيفه هنا)
   };
 
   if (hidden) return null;
@@ -60,6 +51,21 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
   return (
     <div className="fixed inset-0 z-[100] bg-background overflow-hidden flex items-center justify-center">
       
+      {/* الرسالة السرية - تظهر قبل فتح البوابة فقط */}
+      {!armed && !opening && (
+        <div className="absolute top-16 left-1/2 -translate-x-1/2 text-center w-full px-4 z-30 pointer-events-none transition-opacity duration-1000">
+          <p className="font-display text-primary/60 text-xs md:text-sm tracking-[0.2em] mb-2 uppercase drop-shadow-md">
+            Remember this code well, you might need it
+          </p>
+          <p className="font-display text-primary/60 text-xs md:text-sm tracking-[0.2em] mb-4 drop-shadow-md" dir="rtl">
+            تذكر هذا الرمز جيدا، ربما ستحتاجه
+          </p>
+          <p className="font-display text-primary font-bold text-3xl md:text-5xl tracking-[0.5em] drop-shadow-[0_0_20px_var(--primary)]">
+            B D M
+          </p>
+        </div>
+      )}
+
       {/* تأثير الضوء خلف الأبواب */}
       <div 
         className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
@@ -72,7 +78,7 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
 
       <DustEffect isActive={opening} />
 
-      {/* الأبواب الـ 3D - مدة الأنيميشن 6 ثواني */}
+      {/* الأبواب الـ 3D */}
       <div className="absolute inset-0 flex z-10" style={{ perspective: "2000px" }}>
         <div 
           className="w-1/2 h-full bg-cover bg-right border-r border-primary/10"
