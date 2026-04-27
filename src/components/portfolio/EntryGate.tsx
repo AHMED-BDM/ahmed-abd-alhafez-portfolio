@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import gateImg from "@/assets/gate-door.jpg";
 import { useLang } from "@/i18n/LanguageContext";
 import { DustEffect } from "./DustEffect";
-import { sounds } from "./audio"; // استدعاء ملف الأصوات الأصلي بتاعك
-
+import { sounds } from "@/audio";
 const GLYPHS = ["𓂀", "𓋹", "𓆣", "𓊪"];
 
 export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
