@@ -1,14 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 
 export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
-  const [pos, setPos] = useState({ x: -100, y: -100 });
   const [hidden, setHidden] = useState(false);
   const [interactive, setInteractive] = useState(false);
   const [trail, setTrail] = useState<Array<{ x: number; y: number; id: number }>>([]);
+  
+  // استخدام useRef بدل useState لمنع إعادة التحميل (Re-render) مع كل حركة للماوس
+  const posRef = useRef({ x: -100, y: -100 });
   const targetRef = useRef({ x: -100, y: -100 });
   const interactiveRef = useRef(false);
   const rafRef = useRef<number | null>(null);
   const lastTrailRef = useRef(0);
+
+  // Refs للتحكم المباشر في الـ DOM
+  const spotlightRef = useRef<HTMLDivElement>(null);
+  const ankhRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const isTouch = window.matchMedia("(hover: none)").matches;
@@ -26,29 +32,43 @@ export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
     };
 
     const tick = () => {
-      setPos((prev) => {
-        const dx = targetRef.current.x - prev.x;
-        const dy = targetRef.current.y - prev.y;
-        const next = { x: prev.x + dx * 0.35, y: prev.y + dy * 0.35 };
-        const now = performance.now();
-        if (now - lastTrailRef.current > 60 && Math.hypot(dx, dy) > 4) {
-          lastTrailRef.current = now;
-          setTrail((current) => [...current.slice(-3), { ...next, id: now + Math.random() }]);
-        }
-        return next;
-      });
+      const dx = targetRef.current.x - posRef.current.x;
+      const dy = targetRef.current.y - posRef.current.y;
+      
+      posRef.current.x += dx * 0.35;
+      posRef.current.y += dy * 0.35;
+
+      // تحديث العناصر مباشرة في الـ DOM (GPU Accelerated)
+      if (spotlightRef.current) {
+        spotlightRef.current.style.background = mode === "night"
+          ? `radial-gradient(circle 220px at ${posRef.current.x}px ${posRef.current.y}px, transparent 0%, hsl(var(--background)/0.55) 70%)`
+          : `radial-gradient(circle 280px at ${posRef.current.x}px ${posRef.current.y}px, hsl(var(--primary-glow)/0.18) 0%, transparent 60%)`;
+      }
+
+      if (ankhRef.current) {
+        ankhRef.current.style.left = `${posRef.current.x}px`;
+        ankhRef.current.style.top = `${posRef.current.y}px`;
+      }
+
+      const now = performance.now();
+      if (now - lastTrailRef.current > 60 && Math.hypot(dx, dy) > 4) {
+        lastTrailRef.current = now;
+        setTrail((current) => [...current.slice(-3), { x: posRef.current.x, y: posRef.current.y, id: now + Math.random() }]);
+      }
+
       setInteractive(interactiveRef.current);
       rafRef.current = requestAnimationFrame(tick);
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
     rafRef.current = requestAnimationFrame(tick);
+    
     return () => {
       window.removeEventListener("mousemove", onMove);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       document.documentElement.classList.remove("has-custom-cursor");
     };
-  }, []);
+  }, [mode]);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -61,17 +81,18 @@ export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
 
   return (
     <>
-      {/* Spotlight (flashlight at night, sun beam in day) */}
-      <div className="pointer-events-none fixed inset-0 z-[60] will-change-[background]" style={{
-        background: mode === "night"
-          ? `radial-gradient(circle 220px at ${pos.x}px ${pos.y}px, transparent 0%, hsl(var(--background)/0.55) 70%)`
-          : `radial-gradient(circle 280px at ${pos.x}px ${pos.y}px, hsl(var(--primary-glow)/0.18) 0%, transparent 60%)`,
-        mixBlendMode: mode === "night" ? "multiply" : "screen",
-      }} />
+      {/* Spotlight */}
+      <div 
+        ref={spotlightRef}
+        className="pointer-events-none fixed inset-0 z-[60] will-change-[background] transform-gpu" 
+        style={{ mixBlendMode: mode === "night" ? "multiply" : "screen" }} 
+      />
+      
+      {/* Trail */}
       {trail.map((point, index) => (
         <span
           key={point.id}
-          className="pointer-events-none fixed z-[110] block rounded-full bg-primary/40"
+          className="pointer-events-none fixed z-[110] block rounded-full bg-primary/40 transform-gpu will-change-transform"
           style={{
             left: point.x,
             top: point.y,
@@ -84,12 +105,12 @@ export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
           }}
         />
       ))}
-      {/* Ankh cursor — always visible, scales when interactive */}
+      
+      {/* Ankh cursor */}
       <div
-        className="pointer-events-none fixed z-[120] -translate-x-1/2 -translate-y-1/2"
+        ref={ankhRef}
+        className="pointer-events-none fixed z-[120] -translate-x-1/2 -translate-y-1/2 transform-gpu will-change-transform"
         style={{
-          left: pos.x,
-          top: pos.y,
           transform: `translate(-50%, -50%) scale(${interactive ? 1.35 : 1}) rotate(${interactive ? 8 : 0}deg)`,
           transition: "transform 0.18s ease-out",
           filter: `drop-shadow(0 0 6px hsl(var(--primary) / 0.85)) drop-shadow(0 0 14px hsl(var(--primary-glow) / 0.55))`,
