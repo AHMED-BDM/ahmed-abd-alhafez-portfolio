@@ -1,5 +1,5 @@
 import { sounds } from "../audio";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { EntryGate } from "@/components/portfolio/EntryGate";
 import { CustomCursor } from "@/components/portfolio/CustomCursor";
 import { ModeToggle } from "@/components/portfolio/ModeToggle";
@@ -21,7 +21,6 @@ import { AtmosphereControls } from "@/components/portfolio/AtmosphereControls";
 import { FourthWall } from "@/components/portfolio/FourthWall";
 import { HiddenChamber } from "@/components/portfolio/HiddenChamber";
 import { GithubDashboard } from "@/components/portfolio/GithubDashboard";
-import { DevModeToggle } from "@/components/portfolio/DevModeToggle";
 import { VisionZone } from "@/components/portfolio/VisionZone";
 import { LanguageToggle } from "@/components/portfolio/LanguageToggle";
 import { LanguageProvider } from "@/i18n/LanguageContext";
@@ -31,13 +30,7 @@ const Index = () => {
   const [entered, setEntered] = useState(false);
   const [mode, setMode] = useState<"night" | "day">("night");
   const [intensity, setIntensity] = useState<"subtle" | "immersive">("immersive");
-  const [devMode, setDevMode] = useState(false);
   const { reducedEffects } = usePerformanceMode();
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dev-mode", devMode);
-    return () => document.documentElement.classList.remove("dev-mode");
-  }, [devMode]);
 
   // 🔊 دالة تشغيل صوت التابوت
   const openSarcophagus = () => {
@@ -61,31 +54,28 @@ const Index = () => {
           <VisionZone mode={mode} />
 
           <Navbar />
-          <LanguageToggle />
 
-          {/* ✅ تم تعديل زرار النهار والليل لتشغيل وإيقاف الأصوات */}
-          <ModeToggle
-            mode={mode}
-            onToggle={() => {
-              const nextMode = mode === "night" ? "day" : "night";
-              setMode(nextMode);
+          {/* ✅ تجميع أزرار اللغة والمود في مكان واحد متناسق أعلى اليمين */}
+          <div className="fixed top-6 right-6 z-[100] flex items-center gap-3">
+            <LanguageToggle />
+            <ModeToggle
+              mode={mode}
+              onToggle={() => {
+                const nextMode = mode === "night" ? "day" : "night";
+                setMode(nextMode);
 
-              if (nextMode === "day") {
-                sounds.night.pause();
-                sounds.day.currentTime = 0;
-                sounds.day.play().catch(e => console.log("Audio play blocked"));
-              } else {
-                sounds.day.pause();
-                sounds.night.currentTime = 0;
-                sounds.night.play().catch(e => console.log("Audio play blocked"));
-              }
-            }}
-          />
-
-          <DevModeToggle
-            devMode={devMode}
-            onToggle={() => setDevMode(v => !v)}
-          />
+                if (nextMode === "day") {
+                  sounds.night.pause();
+                  sounds.day.currentTime = 0;
+                  sounds.day.play().catch(e => console.log("Audio play blocked"));
+                } else {
+                  sounds.day.pause();
+                  sounds.night.currentTime = 0;
+                  sounds.night.play().catch(e => console.log("Audio play blocked"));
+                }
+              }}
+            />
+          </div>
 
           <div className="hidden pointer-events-none opacity-0">
             <AtmosphereControls
@@ -101,19 +91,17 @@ const Index = () => {
           <Whispers />
           <SecretPapyrus />
           
-          {/* ✅ تمرير دالة الصوت هنا في حال كان التابوت داخل الغرفة السرية */}
           <HiddenChamber onOpenBox={openSarcophagus} />
-          
           <FourthWall reducedEffects={reducedEffects} />
 
           <main>
-            {/* ✅ تمرير دالة الصوت هنا في حال كان التابوت في واجهة الموقع */}
             <Hero mode={mode} onOpenBox={openSarcophagus} />
             <About />
             <Skills />
             <Certificates />
             <Projects />
-            <GithubDashboard devMode={devMode} />
+            {/* ✅ تم إيقاف وضع المطور نهائياً بتمرير false */}
+            <GithubDashboard devMode={false} />
             <Contact />
           </main>
 
