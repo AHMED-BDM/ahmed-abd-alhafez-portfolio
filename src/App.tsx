@@ -13,18 +13,19 @@ const queryClient = new QueryClient();
 
 const App = () => {
 
-  // ✅ تشغيل الصوت بعد أول click (مهم جدًا)
+  // ✅ تشغيل الصوت الخلفي فقط بعد أول click
   useEffect(() => {
     const startAudio = () => {
       setupAudio();
 
-      // صوت البوابة
-      sounds.gate.currentTime = 0;
-      sounds.gate.play();
+      // تم حذف صوت البوابة من هنا لضمان عدم اشتغاله عند أول نقرة عشوائية
+      // sounds.gate.currentTime = 0; // ❌ اتمسح
+      // sounds.gate.play();          // ❌ اتمسح
 
-      // يبدأ بوضع الليل
+      // يبدأ فقط بوضع الليل (Ambience)
       sounds.night.currentTime = 0;
-      sounds.night.play();
+      sounds.night.loop = true; // نخليه شغال في الخلفية على طول
+      sounds.night.play().catch(e => console.log("Audio play blocked"));
 
       document.removeEventListener("click", startAudio);
     };
@@ -37,7 +38,7 @@ const App = () => {
     const whisperInterval = setInterval(() => {
       if (Math.random() < 0.5) {
         sounds.whisper.currentTime = 0;
-        sounds.whisper.play();
+        sounds.whisper.play().catch(e => {});
       }
     }, 30000);
 
@@ -49,7 +50,7 @@ const App = () => {
     const ghostInterval = setInterval(() => {
       if (Math.random() < 0.3) {
         sounds.ghost.currentTime = 0;
-        sounds.ghost.play();
+        sounds.ghost.play().catch(e => {});
       }
     }, 50000);
 
@@ -61,7 +62,6 @@ const App = () => {
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        {/* ✅ تمت إضافة مدير الأشباح هنا ليعمل في كل صفحات الموقع */}
         <GhostManager />
         <Routes>
           <Route path="/" element={<Index />} />
