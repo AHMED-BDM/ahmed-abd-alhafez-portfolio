@@ -6,6 +6,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
+// ✅ استدعاء مدير الأشباح
+import { GhostManager } from "@/components/portfolio/GhostManager";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +61,8 @@ const App = () => {
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        {/* ✅ تمت إضافة مدير الأشباح هنا ليعمل في كل صفحات الموقع */}
+        <GhostManager />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="*" element={<NotFound />} />
