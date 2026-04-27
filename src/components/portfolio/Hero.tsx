@@ -1,6 +1,5 @@
 import heroNight from "@/assets/hero-temple-night.jpg";
 import heroDay from "@/assets/hero-temple-day.jpg";
-import profile from "@/assets/profile-real.jpg";
 import { useLang } from "@/i18n/LanguageContext";
 
 export const Hero = ({ mode }: { mode: "night" | "day" }) => {
@@ -61,7 +60,8 @@ export const Hero = ({ mode }: { mode: "night" | "day" }) => {
             <div className="relative my-7 p-[3px] bg-gradient-to-br from-amber-300 via-yellow-600 to-amber-800 rounded-sm">
               <div className="p-[2px] bg-background/50 rounded-sm">
                 <div className="relative overflow-hidden rounded-sm">
-                  <img src={profile} alt="Portrait of Ahmed Abd Al-Hafez" loading="eager" decoding="async" className="w-full h-auto object-cover" width={384} height={384} />
+                  {/* ✅ تم تعديل مسار الصورة لتقرأ من فولدر public */}
+                  <img src="/personal-photo.png" alt="Portrait of Ahmed Abd Al-Hafez" loading="eager" decoding="async" className="w-full h-auto object-cover" width={384} height={384} />
                   <div className="pointer-events-none absolute inset-0 shimmer-gold opacity-25" />
                   {/* Corner ankh medallions */}
                   <span className="absolute top-1 left-1 w-6 h-6 rounded-full bg-background/80 border border-primary/60 flex items-center justify-center text-primary text-xs">𓋹</span>
