@@ -93,7 +93,7 @@ export const T: Dict = {
   "vol.project1.title": { en: "E-commerce Data Analytics (Team Lead)", ar: "تحليل بيانات التجارة الإلكترونية (قائد فريق)" },
   "vol.project1.desc": {
     en: "Led a team of 3 volunteers to analyze 50K sales records. Cleaned data with Python (pandas), built an interactive Power BI dashboard that increased marketing ROI by 12%, and presented insights to stakeholders.",
-    ar: "قادت فريقاً من 4 متطوعين لتحليل 50 ألف سجل مبيعات. قمنا بتنظيف البيانات باستخدام Python، وبناء لوحة تحكم تفاعلية باستخدام Power BI زادت عائد التسويق بنسبة 12%، وقدمنا التوصيات لأصحاب القرار."
+    ar: "قادت فريقاً من 3 متطوعين لتحليل 50 ألف سجل مبيعات. قمنا بتنظيف البيانات باستخدام Python، وبناء لوحة تحكم تفاعلية باستخدام Power BI زادت عائد التسويق بنسبة 12%، وقدمنا التوصيات لأصحاب القرار."
   },
   "vol.project1.tools": { en: "Python (pandas, matplotlib), SQL, Power BI, Excel", ar: "Python (pandas, matplotlib), SQL, Power BI, Excel" },
   "vol.project2.title": { en: "Fitness Body Performance Analysis (Team Lead)", ar: "تحليل أداء اللياقة البدنية (قائد فريق)" },
@@ -136,7 +136,7 @@ export const T: Dict = {
   "chat.placeholder": { en: "Whisper your question to the Servant of Horus...", ar: "اهمس بسؤالك لخادم حورس..." },
   "chat.button": { en: "Send message", ar: "أرسل الرسالة" },
 
-  // ---------- Sandstorm Warning (العاصفة الرملية) ----------
+  // ---------- Sandstorm Warning ----------
   "sandstorm.title": {
     en: "𓂀 THE CURSE OF THE SANDSTORM 𓂀",
     ar: "𓂀 لعنة العاصفة الرملية 𓂀"
@@ -148,6 +148,14 @@ export const T: Dict = {
   "sandstorm.button": {
     en: "I accept and proceed",
     ar: "أقبل وأمضي"
+  },
+  "sandstorm.accept": {
+    en: "I accept the trial",
+    ar: "أقبل المحنة"
+  },
+  "sandstorm.reject": {
+    en: "I refuse (suffer in the storm)",
+    ar: "أرفض (سأعاني في العاصفة)"
   },
 
   // ---------- Generic ----------
@@ -171,7 +179,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     if (stored) setLangState(stored);
   }, []);
 
-  // 🔹 ضبط اتجاه الصفحة واللغة عند تغيير اللغة
+  // ضبط اتجاه الصفحة واللغة عند تغيير اللغة
   useEffect(() => {
     document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
     document.documentElement.setAttribute("lang", lang);
