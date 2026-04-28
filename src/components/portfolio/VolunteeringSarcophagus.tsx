@@ -1,7 +1,6 @@
 import { useLang } from "@/i18n/LanguageContext";
 import { useState, useEffect, useRef } from "react";
 
-// الرموز المتاحة – ستة رموز فرعونية جميلة
 const SYMBOLS = [
   { sym: "𓋴", name: "Sa (Protection)" },
   { sym: "𓎟", name: "Neb (Lord)" },
@@ -11,7 +10,6 @@ const SYMBOLS = [
   { sym: "𓌙", name: "Maat (Truth)" }
 ];
 
-// التسلسل الصحيح (سهل التذكر: سا → نِب → واز)
 const CORRECT_SEQUENCE = ["𓋴", "𓎟", "𓏙"];
 
 export const VolunteeringSarcophagus = () => {
@@ -20,14 +18,10 @@ export const VolunteeringSarcophagus = () => {
   const [selected, setSelected] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSolved, setIsSolved] = useState(false);
-  
-  // مرجع لصوت الخطأ لإيقافه فوراً
   const errorAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  // تشغيل صوت الفتح عند الحل
   useEffect(() => {
     if (isSolved && !isOpen) {
-      // إيقاف أي صوت خطأ قيد التشغيل
       if (errorAudioRef.current) {
         errorAudioRef.current.pause();
         errorAudioRef.current.currentTime = 0;
@@ -38,14 +32,12 @@ export const VolunteeringSarcophagus = () => {
     }
   }, [isSolved, isOpen]);
 
-  // التعامل مع الضغط على الرمز
   const handleSymbolClick = (sym: string) => {
     if (isSolved || isOpen) return;
 
     const newSeq = [...selected, sym];
     setSelected(newSeq);
 
-    // التحقق من صحة التسلسل حتى الآن
     let valid = true;
     for (let i = 0; i < newSeq.length; i++) {
       if (newSeq[i] !== CORRECT_SEQUENCE[i]) {
@@ -55,7 +47,6 @@ export const VolunteeringSarcophagus = () => {
     }
 
     if (!valid) {
-      // خطأ: تشغيل صوت الخطأ وإظهار رسالة
       if (errorAudioRef.current) {
         errorAudioRef.current.pause();
         errorAudioRef.current.currentTime = 0;
@@ -69,12 +60,9 @@ export const VolunteeringSarcophagus = () => {
       return;
     }
 
-    // إذا كان التسلسل صحيحاً جزئياً
     setErrorMsg(null);
 
-    // إذا اكتمل التسلسل الصحيح
     if (newSeq.length === CORRECT_SEQUENCE.length) {
-      // إيقاف أي صوت خطأ
       if (errorAudioRef.current) {
         errorAudioRef.current.pause();
         errorAudioRef.current.currentTime = 0;
@@ -113,7 +101,6 @@ export const VolunteeringSarcophagus = () => {
                 {t("vol.solve")}
               </p>
               
-              {/* لوحة الرموز - تصميم جذاب وسهل */}
               <div className="flex flex-wrap justify-center gap-5 mb-8">
                 {SYMBOLS.map((item) => (
                   <button
@@ -128,7 +115,6 @@ export const VolunteeringSarcophagus = () => {
                 ))}
               </div>
 
-              {/* عرض التسلسل الحالي */}
               <div className="mb-5">
                 <p className="text-xs text-primary/60 mb-2">
                   {lang === "ar" ? "تسلسلك:" : "Your sequence:"}
@@ -147,14 +133,22 @@ export const VolunteeringSarcophagus = () => {
                 )}
               </div>
 
-              {/* تلميح خفيف (اختياري) */}
-              <div className="mt-4 text-primary/30 text-[11px] italic">
-                {lang === "ar" ? "تلميح: التسلسل الصحيح هو 𓋴 ثم 𓎟 ثم 𓏙" : "Hint: Correct sequence is 𓋴 then 𓎟 then 𓏙"}
+              {/* ✅ تلميح كبير وواضح جدًا */}
+              <div className="mt-6 p-4 bg-black/50 border-2 border-gold rounded-xl shadow-gold animate-pulse">
+                <p className="text-gold font-display text-xl md:text-2xl tracking-wider">
+                  {lang === "ar" ? "🔑 التلميح المقدس:" : "🔑 Sacred Hint:"}
+                </p>
+                <p className="text-primary text-3xl md:text-4xl font-bold mt-2 tracking-widest">
+                  𓋴 ← 𓎟 ← 𓏙
+                </p>
+                <p className="text-primary/80 text-sm mt-2">
+                  {lang === "ar" ? "(اضغط على الرموز بالترتيب من اليسار إلى اليمين)" : "(Tap symbols in order left to right)"}
+                </p>
               </div>
             </div>
           ) : (
             <div className="reveal-up space-y-8 py-6">
-              {/* المشروع التطوعي الأول */}
+              {/* محتوى التطوع */
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <span className="text-gold text-2xl">𓋴</span>
@@ -170,7 +164,6 @@ export const VolunteeringSarcophagus = () => {
                 </p>
               </div>
 
-              {/* المشروع التطوعي الثاني */}
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <span className="text-gold text-2xl">𓎟</span>
@@ -186,7 +179,6 @@ export const VolunteeringSarcophagus = () => {
                 </p>
               </div>
 
-              {/* الخاتمة */}
               <div className="text-center pt-4 text-gold/70 text-sm border-t border-primary/20">
                 𓊗 {t("vol.closing")} 𓊗
               </div>
