@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useLang } from "@/i18n/LanguageContext"; // أضف هذا الاستيراد
 import { sounds, setupAudio } from "./audio";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -6,34 +7,31 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
-// ✅ استدعاء مدير الأشباح
 import { GhostManager } from "@/components/portfolio/GhostManager";
 
 const queryClient = new QueryClient();
 
 const App = () => {
+  const { lang } = useLang(); // الحصول على اللغة الحالية
 
-  // ✅ تشغيل الصوت الخلفي فقط بعد أول click
+  // تحديث اتجاه الصفحة عند تغيير اللغة
+  useEffect(() => {
+    document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+  }, [lang]);
+
+  // تشغيل الصوت الخلفي بعد أول click
   useEffect(() => {
     const startAudio = () => {
       setupAudio();
-
-      // تم حذف صوت البوابة من هنا لضمان عدم اشتغاله عند أول نقرة عشوائية
-      // sounds.gate.currentTime = 0; // ❌ اتمسح
-      // sounds.gate.play();          // ❌ اتمسح
-
-      // يبدأ فقط بوضع الليل (Ambience)
       sounds.night.currentTime = 0;
-      sounds.night.loop = true; // نخليه شغال في الخلفية على طول
+      sounds.night.loop = true;
       sounds.night.play().catch(e => console.log("Audio play blocked"));
-
       document.removeEventListener("click", startAudio);
     };
-
     document.addEventListener("click", startAudio);
   }, []);
 
-  // ✅ الهمسات كل 30 ثانية (بشكل عشوائي)
+  // الهمسات كل 30 ثانية
   useEffect(() => {
     const whisperInterval = setInterval(() => {
       if (Math.random() < 0.5) {
@@ -41,11 +39,10 @@ const App = () => {
         sounds.whisper.play().catch(e => {});
       }
     }, 30000);
-
     return () => clearInterval(whisperInterval);
   }, []);
 
-  // ✅ صوت الشبح كل 50 ثانية (نادر)
+  // صوت الشبح كل 50 ثانية
   useEffect(() => {
     const ghostInterval = setInterval(() => {
       if (Math.random() < 0.3) {
@@ -53,7 +50,6 @@ const App = () => {
         sounds.ghost.play().catch(e => {});
       }
     }, 50000);
-
     return () => clearInterval(ghostInterval);
   }, []);
 
