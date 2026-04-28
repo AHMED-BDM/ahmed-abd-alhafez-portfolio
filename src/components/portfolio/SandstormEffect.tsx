@@ -1,83 +1,110 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
-interface SandstormEffectProps {
-  mode: "day" | "night";
-}
-
-export const SandstormEffect = ({ mode }: SandstormEffectProps) => {
+export const SandstormEffect = ({ mode }: { mode: "day" | "night" }) => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isMoving, setIsMoving] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // لو مش مود النهار، مش محتاجين نسمع لحركة الماوس أصلاً
     if (mode !== "day") return;
 
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
-      setIsMoving(true);
-
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      
-      timeoutRef.current = setTimeout(() => {
-        setIsMoving(false);
-      }, 150); // زودنا الوقت شوية عشان الحركة تبقى أنعم
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mode]);
 
-  // الـ Return المشروط يكون هنا (بعد الـ Hooks)
   if (mode !== "day") return null;
 
   return (
     <>
-      {/* طبقة الضباب الرملي المشرق - معدلة لتناسب النهار */}
-      <div
-        className="fixed inset-0 pointer-events-none z-[40]"
-        style={{
-          background: "radial-gradient(circle at center, rgba(194, 150, 70, 0.08), rgba(160, 100, 40, 0.15))",
-          backdropFilter: "sepia(0.3) saturate(1.2) brightness(1.05)",
-        }}
-      />
+      {/* 1. طبقات العاصفة المتحركة */}
+      <div className="fixed inset-0 pointer-events-none z-[45] overflow-hidden">
+        <div className="sand-layer slow" />
+        <div className="sand-layer medium" />
+        <div className="sand-layer fast" />
+      </div>
 
-      {/* طبقة الجزيئات الذهبية */}
+      {/* 2. طبقة العاصفة الكثيفة */}
       <div
-        className="fixed inset-0 pointer-events-none z-[41]"
+        className="fixed inset-0 pointer-events-none z-[50]"
         style={{
-          backgroundImage: `radial-gradient(circle at 20% 40%, rgba(210, 170, 80, 0.4) 1px, transparent 1px),
-                            radial-gradient(circle at 80% 70%, rgba(190, 130, 50, 0.3) 1px, transparent 1px)`,
-          backgroundSize: "100px 100px, 150px 150px",
-          animation: "sandDrift 10s linear infinite",
-          opacity: isMoving ? 0.4 : 1, // الجزيئات بتهدى لما الماوس يتحرك
-          transition: "opacity 0.5s ease",
+          background: "rgba(160, 120, 60, 0.95)",
+          animation: "heatDistortion 6s ease-in-out infinite",
+          backdropFilter: "blur(16px) saturate(0.45)",
+          WebkitMaskImage: `radial-gradient(circle 180px at ${mousePos.x}px ${mousePos.y}px, transparent 0%, black 100%)`,
+          maskImage: `radial-gradient(circle 180px at ${mousePos.x}px ${mousePos.y}px, transparent 0%, black 100%)`,
         }}
-      />
+      >
+        {/* نص داخل العاصفة */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 pointer-events-none select-none">
+          <p className="font-display text-[10vw] text-amber-900 leading-none">
+            𓄿 𓅓 𓋴
+          </p>
+        </div>
+      </div>
 
-      {/* الكشاف الملكي - يمسح الضباب ويزيد الوضوح */}
+      {/* 3. توهج الكشاف */}
       <div
-        className="fixed pointer-events-none z-[42] transition-opacity duration-500"
+        className="fixed pointer-events-none z-[51] w-[360px] h-[360px] rounded-full"
         style={{
-          left: mousePos.x - 150,
-          top: mousePos.y - 150,
-          width: 300,
-          height: 300,
-          borderRadius: "50%",
-          opacity: isMoving ? 1 : 0,
-          background: "radial-gradient(circle, transparent 20%, rgba(194, 150, 70, 0.05) 50%, rgba(160, 100, 40, 0.3) 100%)",
-          boxShadow: "0 0 50px rgba(218, 165, 32, 0.2)",
-          backdropFilter: "blur(0px) contrast(1.1)", // بيمسح البلور اللي وراه
+          left: mousePos.x - 180,
+          top: mousePos.y - 180,
+          background:
+            "radial-gradient(circle, rgba(255, 200, 100, 0.1) 0%, transparent 70%)",
+          border: "1px solid rgba(251, 191, 36, 0.1)",
+          boxShadow: "inset 0 0 50px rgba(0,0,0,0.2)",
         }}
       />
 
       <style>{`
-        @keyframes sandDrift {
-          0% { background-position: 0 0, 0 0; }
-          100% { background-position: 400px 400px, -200px 200px; }
+        /* طبقات الرمل */
+        .sand-layer {
+          position: absolute;
+          inset: -50%;
+          background-image: url('https://www.transparenttextures.com/patterns/sandpaper.png');
+          background-repeat: repeat;
+          opacity: 0.15;
+        }
+
+        .sand-layer.slow {
+          animation: sandMoveSlow 25s linear infinite;
+          opacity: 0.1;
+          transform: scale(1.2);
+        }
+
+        .sand-layer.medium {
+          animation: sandMoveMedium 15s linear infinite;
+          opacity: 0.15;
+        }
+
+        .sand-layer.fast {
+          animation: sandMoveFast 8s linear infinite;
+          opacity: 0.25;
+          filter: blur(2px);
+        }
+
+        /* حركة الرياح */
+        @keyframes sandMoveSlow {
+          0%   { transform: translate(0, 0) scale(1.2); }
+          100% { transform: translate(-20%, 10%) scale(1.2); }
+        }
+
+        @keyframes sandMoveMedium {
+          0%   { transform: translate(0, 0); }
+          100% { transform: translate(-40%, 20%); }
+        }
+
+        @keyframes sandMoveFast {
+          0%   { transform: translate(0, 0); }
+          100% { transform: translate(-80%, 40%); }
+        }
+
+        /* تموج حرارة */
+        @keyframes heatDistortion {
+          0% { backdrop-filter: blur(16px) saturate(0.45); }
+          50% { backdrop-filter: blur(20px) saturate(0.35); }
+          100% { backdrop-filter: blur(16px) saturate(0.45); }
         }
       `}</style>
     </>
