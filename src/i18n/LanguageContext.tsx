@@ -4,44 +4,58 @@ export type Lang = "en" | "ar";
 type Dict = Record<string, { en: string; ar: string }>;
 
 export const T: Dict = {
-  // Navigation
-  "nav.about": { en: "About", ar: "نبذة" },
-  "nav.skills": { en: "Skills", ar: "المهارات" },
-  "nav.certificates": { en: "Certificates", ar: "الشهادات" },
-  "nav.projects": { en: "Projects", ar: "المشاريع" },
-  "nav.volunteering": { en: "Volunteering", ar: "التطوع" },
-  "nav.contact": { en: "Contact", ar: "تواصل" },
+  // Navigation - الملاحة بالألقاب الفرعونية
+  "nav.about": { en: "The Scribe", ar: "الكاتب" },
+  "nav.skills": { en: "Sacred Arts", ar: "الفنون المقدسة" },
+  "nav.certificates": { en: "Royal Seals", ar: "الأختام الملكية" },
+  "nav.projects": { en: "Monuments", ar: "الآثار" },
+  "nav.volunteering": { en: "The Chamber", ar: "الحجرة" },
+  "nav.contact": { en: "Ritual", ar: "الطقوس" },
 
-  // Hero Section
-  "hero.eyebrow": { en: "𓂀 · DATA ARCHITECT · 𓋹", ar: "𓂀 · مهندس بيانات · 𓋹" },
+  // Hero Section - هيبة الواجهة
+  "hero.eyebrow": { en: "𓂀 · GRAND ARCHITECT OF DATA · 𓋹", ar: "𓂀 · كبير مهندسي البيانات · 𓋹" },
   "hero.name1": { en: "AHMED", ar: "أحمد" },
   "hero.name2": { en: "ABD AL-HAFEZ", ar: "عبد الحافظ" },
-  "hero.role": { en: "Data Analyst • ML Enthusiast • BI Specialist", ar: "محلل بيانات • شغوف بتعلم الآلة • أخصائي ذكاء أعمال" },
+  "hero.role": { en: "Data Alchemist • ML High Priest • BI Sage", ar: "خيميائي البيانات • كاهن تعلم الآلة • حكيم ذكاء الأعمال" },
   "hero.tagline": { 
-    en: "Strategic Data Analyst with 1+ year of applied experience. Expert in SQL, Python, and Power BI. Certified by MCIT (Digilians) with 20+ successful projects.", 
-    ar: "محلل بيانات استراتيجي بخبرة تزيد عن عام. خبير في SQL وPython وPower BI. معتمد من وزارة الاتصالات (Digilians) بأكثر من 20 مشروعاً." 
+    en: "Transforming chaotic sands of data into golden insights. Certified by the Great Scribes of MCIT, wielding Python and SQL to predict the future of empires.", 
+    ar: "تحويل رمال البيانات العشوائية إلى رؤى ذهبية. معتمد من كبار كتبة وزارة الاتصالات، أسخر سحر Python وSQL للتنبؤ بمستقبل الإمبراطوريات." 
   },
-  "hero.cta1": { en: "The Scribe's Tale", ar: "حكاية الكاتب" },
-  "hero.cta2": { en: "View Projects", ar: "عرض المشاريع" },
+  "hero.cta1": { en: "Enter The Tomb", ar: "ادخل المقبرة" },
+  "hero.cta2": { en: "See The Legacy", ar: "شاهد الإرث" },
 
-  // VisionZone (The Middle Image Section)
+  // VisionZone - رؤية المنتصف
   "mid.spirit": { en: "𓋹 THE SCRIBE'S ANCIENT VISION 𓋹", ar: "𓋹 رؤية الكاتب الأزلية 𓋹" },
 
-  // About Section
-  "about.title": { en: "The Scribe's Tale", ar: "حكاية الكاتب" },
-  "about.p1": { 
-    en: "I bridge the gap between complex data and strategic decision-making using rigorous mathematical foundations.", 
-    ar: "أعمل على سد الفجوة بين البيانات المعقدة واتخاذ القرار الاستراتيجي باستخدام الأسس الرياضية الصارمة." 
-  },
-
-  // Project Descriptions
-  "pi.0.title": { en: "Fleet Performance Dashboard", ar: "لوحة أداء الأسطول" },
-  "pi.0.desc": { en: "Problem: Logistics inefficiency. Solution: Real-time BI dashboard. Outcome: 15% fuel waste reduction.", ar: "المشكلة: عدم كفاءة اللوجستيات. الحل: لوحة ذكاء أعمال لحظية. النتيجة: تقليل هدر الوقود بنسبة 15%." },
-
-  // Volunteering & Leadership
+  // Volunteering Section - وصف مشاريع القيادة (تيم ليدر)
   "vol.eyebrow": { en: "𓋴 · CHAPTER · VI", ar: "𓋴 · الفصل · ٦" },
   "vol.title": { en: "The Leader's Chamber", ar: "حجرة القائد" },
   "vol.solve": { en: "Align the sacred dials to unlock the Leader's Path", ar: "قم بمحاذاة الأقراص المقدسة للكشف عن مسار القيادة" },
+  "vol.p1": { 
+    en: "Even in the shadows of the pyramids, a leader must guide the workers. I led squads of creators to build digital monuments that defy time.", 
+    ar: "حتى في ظلال الأهرامات، يجب على القائد توجيه العمال. قدت فصائل من المبدعين لبناء صروح رقمية تتحدى الزمن." 
+  },
+  "vol.project1.title": { en: "Supreme Lead: E-Commerce Expedition", ar: "القائد الأعلى: بعثة التجارة الإلكترونية" },
+  "vol.project1.desc": { 
+    en: "Led a legion of 5 developers to construct a marketplace empire. Orchestrated the architecture and solved complex riddles of scalability, resulting in a flawless deployment under the desert sun.", 
+    ar: "قدت فيلقاً من 5 مطورين لبناء إمبراطورية تجارية. نسقت هندسة النظام وحللت ألغاز التوسع المعقدة، مما أدى لإطلاق ناجح تحت شمس الصحراء." 
+  },
+  "vol.project2.title": { en: "Chief Architect: AI-Health Oracle", ar: "كبير المهندسين: عرافة الصحة الذكية" },
+  "vol.project2.desc": { 
+    en: "Guided a specialized team as Team Lead in an AI-Health ritual. Integrated Machine Learning spells to track the vital signs of the living, achieving 95% accuracy in predicting biometric fates.", 
+    ar: "وجهت فريقاً متخصصاً كقائد لمشروع الصحة والذكاء الاصطناعي. دمجت تعاويذ تعلم الآلة لتتبع العلامات الحيوية، محققاً دقة 95% في التنبؤ بمصائر الأجساد." 
+  },
+
+  // Pharaoh Chat - استعادة الجمل المرعبة
+  "chat.welcome": { 
+    en: "I knew you would speak to me... the sands whispered your arrival.", 
+    ar: "كنت أعلم أنك ستتحدث معي... لقد همست الرمال بقدومك." 
+  },
+  "chat.warning": { 
+    en: "Beware, traveler. Every question has a price in the afterlife.", 
+    ar: "احذر أيها المسافر. فكل سؤال له ثمن في الحياة الأخرى." 
+  },
+  "chat.placeholder": { en: "Whisper your query...", ar: "اهمس بسؤالك..." },
 
   // Generic
   "gate.skip": { en: "SKIP THE RITUAL ›", ar: "تخطي الطقوس ›" },
@@ -50,7 +64,7 @@ export const T: Dict = {
 
 const LangCtx = createContext<any>(null);
 
-// ✅ التصدير الصحيح للـ Hook لضمان عدم حدوث Circular Import
+// تصدير الـ Hook بشكل صحيح لتجنب Circular Import
 export const useLang = () => {
   const context = useContext(LangCtx);
   if (!context) throw new Error("useLang must be used within LanguageProvider");
