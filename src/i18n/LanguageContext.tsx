@@ -11,6 +11,7 @@ export const T: Dict = {
   "nav.projects": { en: "Projects", ar: "المشاريع" },
   "nav.volunteering": { en: "Volunteering", ar: "التطوع" },
   "nav.contact": { en: "Contact", ar: "اتصل" },
+  "nav.github": { en: "GitHub", ar: "جيت هاب" },
 
   // ---------- Hero ----------
   "hero.eyebrow": { en: "𓂀 DATA ANALYST & ML ENGINEER", ar: "𓂀 محلل بيانات ومهندس تعلم آلة" },
@@ -24,53 +25,79 @@ export const T: Dict = {
   "hero.cta1": { en: "Enter the Chamber", ar: "ادخل الحجرة" },
   "hero.cta2": { en: "See My Work", ar: "اطلع على أعمالي" },
 
-  // ---------- About (نص كامل) ----------
+  // ---------- About (التقسيم الأصلي المستخدم في About.tsx) ----------
   "about.eyebrow": { en: "𓋴 THE SCRIBE'S IDENTITY", ar: "𓋴 هوية الكاتب" },
   "about.title": { en: "Who is Ahmed?", ar: "من هو أحمد؟" },
-  "about.content": {
-    en: "I am a Data Analyst and Machine Learning Engineer with over a year of hands-on experience in AI, ML, and data analytics. I completed a government-accredited training program under Egypt's Ministry of Communications (MCIT) through the Digilians initiative, mastering Python, SQL, R, Excel, Power BI, and Tableau. I deliver 20+ data projects spanning predictive modeling, interactive dashboards, HR analytics, and logistics intelligence. I hold 12 professional certifications including Google Data Analytics, IBM AI Fundamentals, and Deep Learning for NLP. My military academy discipline ensures reliable, high-quality analytical solutions on deadline.",
-    ar: "أنا محلل بيانات ومهندس تعلم آلة، لدي أكثر من عام من الخبرة العملية في الذكاء الاصطناعي وتعلم الآلة وتحليل البيانات. أكملت برنامجاً تدريبياً معتمداً من الحكومة المصرية (وزارة الاتصالات) عبر مبادرة ديجيليانز، حيث أتقنت Python و SQL و R و Excel و Power BI و Tableau. أقدم أكثر من 20 مشروع بيانات تشمل النمذجة التنبؤية ولوحات المعلومات التفاعلية وتحليلات الموارد البشرية وذكاء الخدمات اللوجستية. أحمل 12 شهادة مهنية من بينها جوجل لتحليل البيانات وأساسيات الذكاء الاصطناعي من IBM والتعلم العميق للمعالجة اللغوية. انضباطي المستمد من الأكاديمية العسكرية يضمن حلولاً تحليلية عالية الجودة في الوقت المحدد."
+  "about.p1": {
+    en: "I am a Data Analyst and Machine Learning Engineer with over a year of hands-on experience in AI, ML, and data analytics. I completed a government-accredited training program under Egypt's Ministry of Communications (MCIT) through the Digilians initiative, mastering Python, SQL, R, Excel, Power BI, and Tableau.",
+    ar: "أنا محلل بيانات ومهندس تعلم آلة، لدي أكثر من عام من الخبرة العملية في الذكاء الاصطناعي وتعلم الآلة وتحليل البيانات. أكملت برنامجاً تدريبياً معتمداً من الحكومة المصرية (وزارة الاتصالات) عبر مبادرة ديجيليانز، حيث أتقنت Python و SQL و R و Excel و Power BI و Tableau."
+  },
+  "about.p2_a": { en: "I deliver ", ar: "أقدم " },
+  "about.p2_b": { en: "20+ data projects", ar: "أكثر من 20 مشروع بيانات" },
+  "about.p2_c": { en: " spanning predictive modeling, interactive dashboards, HR analytics, and logistics intelligence. I hold ", ar: " تشمل النمذجة التنبؤية ولوحات المعلومات التفاعلية وتحليلات الموارد البشرية وذكاء الخدمات اللوجستية. أحمل " },
+  "about.p2_d": { en: "12 professional certifications", ar: "12 شهادة مهنية" },
+  "about.p2_e": {
+    en: " including Google Data Analytics, IBM AI Fundamentals, and Deep Learning for NLP. My military academy discipline ensures reliable, high-quality analytical solutions on deadline.",
+    ar: " من بينها جوجل لتحليل البيانات وأساسيات الذكاء الاصطناعي من IBM والتعلم العميق للمعالجة اللغوية. انضباطي المستمد من الأكاديمية العسكرية يضمن حلولاً تحليلية عالية الجودة في الوقت المحدد."
   },
   "about.stat1": { en: "Data Projects", ar: "مشروع بيانات" },
   "about.stat2": { en: "Certifications", ar: "شهادة" },
+  "about.stat3_n": { en: "1+", ar: "١+" },
   "about.stat3": { en: "Year Experience", ar: "عام خبرة" },
 
-  // ---------- Skills ----------
+  // ---------- Skills (المجموعات الثلاث) ----------
   "skills.eyebrow": { en: "𓋹 SACRED ARTS", ar: "𓋹 الفنون المقدسة" },
   "skills.title": { en: "My Tools & Powers", ar: "أدواتي وقواي" },
-  "skills.technical": { en: "Technical Skills", ar: "المهارات التقنية" },
-  "skills.soft": { en: "Soft Skills", ar: "المهارات الشخصية" },
-  "skills.tech_items": {
-    en: "Python, SQL, R, Power BI, Tableau, Excel, Scikit-learn, TensorFlow, Streamlit",
-    ar: "Python, SQL, R, Power BI, Tableau, Excel, Scikit-learn, TensorFlow, Streamlit"
-  },
-  "skills.soft_items": {
-    en: "Analytical Thinking, Problem Solving, Team Collaboration, Time Management, Adaptability",
-    ar: "التفكير التحليلي، حل المشكلات، العمل الجماعي، إدارة الوقت، التكيف"
-  },
+  "skills.g1": { en: "Data Analytics", ar: "تحليل البيانات" },
+  "skills.g2": { en: "Development Tools", ar: "أدوات التطوير" },
+  "skills.g3": { en: "AI & Machine Learning", ar: "الذكاء الاصطناعي وتعلم الآلة" },
 
-  // ---------- Certificates ----------
+  // ---------- Projects (مفاتيح القسم والمشاريع الستة) ----------
+  "proj.eyebrow": { en: "𓊽 MY MONUMENTS", ar: "𓊽 آثاري" },
+  "proj.title": { en: "Featured Projects", ar: "المشاريع البارزة" },
+  "proj.sealLabel": { en: "BREAK THE SEAL", ar: "اكسر الختم" },
+
+  "pi.0.title": { en: "Fleet Performance Dashboard", ar: "لوحة أداء الأسطول" },
+  "pi.0.desc": { en: "Interactive Power BI dashboard tracking fleet costs, travel distances, and spending patterns. Integrated KPI cards for operational decisions.", ar: "لوحة تحكم تفاعلية باستخدام Power BI لتتبع تكاليف الأسطول ومسافات الرحلات وأنماط الإنفاق. تم دمج بطاقات مؤشرات الأداء الرئيسية لدعم القرارات التشغيلية." },
+  "pi.1.title": { en: "Employee Report Dashboard", ar: "لوحة تقارير الموظفين" },
+  "pi.1.desc": { en: "Comprehensive HR analytics dashboard visualizing employee distribution by center, department, and salary bracket. Enabled workforce trend analysis.", ar: "لوحة تحكم شاملة لتحليلات الموارد البشرية تعرض توزيع الموظفين حسب المركز والإدارة وشريحة الراتب. تمكين تحليل اتجاهات القوى العاملة." },
+  "pi.2.title": { en: "Sales Performance Dashboard", ar: "لوحة أداء المبيعات" },
+  "pi.2.desc": { en: "Interactive sales analytics with geographic insights, product category performance, and time-series trends to optimize revenue.", ar: "تحليلات مبيعات تفاعلية مع رؤى جغرافية، أداء فئات المنتجات، واتجاهات زمنية لتحسين الإيرادات." },
+  "pi.3.title": { en: "Extra Bonus & Workforce Analysis", ar: "تحليل المكافآت الإضافية والقوى العاملة" },
+  "pi.3.desc": { en: "Multi-sheet Excel dashboard analyzing employee demographics, salary trends, bonus distribution across multiple countries.", ar: "لوحة تحكم متعددة الأوراق في Excel تحلل التركيبة السكانية للموظفين، اتجاهات الرواتب، توزيع المكافآت عبر عدة دول." },
+  "pi.4.title": { en: "Shipping & Invoice Analytics", ar: "تحليلات الشحن والفواتير" },
+  "pi.4.desc": { en: "European shipping performance tracker monitoring invoices, shipment status, and logistics efficiency by country and product category.", ar: "متتبع أداء الشحن الأوروبي يراقب الفواتير وحالة الشحن وكفاءة الخدمات اللوجستية حسب البلد وفئة المنتج." },
+  "pi.5.title": { en: "Fitness Performance AI Model", ar: "نموذج الذكاء الاصطناعي لأداء اللياقة" },
+  "pi.5.desc": { en: "AI-powered fitness analysis using Random Forest, XGBoost, and Neural Networks to predict athletic performance and generate training recommendations.", ar: "تحليل لياقة بدنية مدعوم بالذكاء الاصطناعي باستخدام Random Forest و XGBoost والشبكات العصبية للتنبؤ بالأداء الرياضي وتوليد توصيات تدريبية." },
+
+  // ---------- Certificates (مفاتيح القسم والشهادات الستة) ----------
   "cert.eyebrow": { en: "𓂀 ROYAL SEALS", ar: "𓂀 الأختام الملكية" },
   "cert.title": { en: "Certifications", ar: "الشهادات" },
-  "cert.list": {
-    en: "• Google Data Analytics Professional Certificate (Coursera)\n• Diploma in Microsoft Power BI for Beginners (Alison)\n• Python Programming (Mahara-Tech)\n• Mathematics for Machine Learning (Udemy)\n• Deep Learning for NLP (Mahara-Tech)\n• Artificial Intelligence Fundamentals (IBM SkillsBuild)\n• Elements of AI (University of Helsinki)\n• Database Fundamentals (Mahara-Tech/ITI)\n• Project Management Foundation (LinkedIn Learning)\n• Decision Making in Business (Edraak)\n• Delivering Quality Work with Agility (IBM/Coursera)\n• Canva Essentials (Canva Design School)",
-    ar: "• شهادة جوجل الاحترافية في تحليل البيانات (Coursera)\n• دبلوم مايكروسوفت Power BI للمبتدئين (Alison)\n• برمجة Python (Mahara-Tech)\n• رياضيات تعلم الآلة (Udemy)\n• تعلم عميق للمعالجة اللغوية (Mahara-Tech)\n• أساسيات الذكاء الاصطناعي (IBM SkillsBuild)\n• أساسيات الذكاء الاصطناعي (جامعة هلسنكي)\n• أساسيات قواعد البيانات (Mahara-Tech/ITI)\n• أساسيات إدارة المشاريع (LinkedIn Learning)\n• اتخاذ القرار في عالم الأعمال (Edraak)\n• تقديم عمل عالي الجودة بخفة الحركة (IBM/Coursera)\n• أساسيات كانفا (مدرسة كانفا للتصميم)"
-  },
+  "cert.sealLabel": { en: "UNSEAL THE CHAMBER", ar: "افتح الحجرة" },
+  "cert.intro": { en: "Hover over each seal to reveal the sacred certifications earned from international institutions.", ar: "مرر فوق كل ختم لكشف الشهادات المقدسة التي حصلت عليها من مؤسسات دولية." },
+  "cert.hidden": { en: "𓋴 HIDDEN 𓋴", ar: "𓋴 مخفي 𓋴" },
+  "cert.verify": { en: "VERIFY", ar: "تحقق" },
 
-  // ---------- Projects ----------
-  "projects.eyebrow": { en: "𓊽 MY MONUMENTS", ar: "𓊽 آثاري" },
-  "projects.title": { en: "Featured Projects", ar: "المشاريع البارزة" },
-  "projects.major": { en: "Major Project: Fleet Performance Dashboard", ar: "المشروع الرئيسي: لوحة أداء الأسطول" },
-  "projects.major_desc": {
-    en: "An interactive Power BI dashboard tracking fleet costs, travel distances, and spending patterns across drivers and vehicle models. Integrated KPI cards to support operational and financial decision-making.",
-    ar: "لوحة تحكم تفاعلية باستخدام Power BI لتتبع تكاليف الأسطول ومسافات الرحلات وأنماط الإنفاق عبر السائقين وموديلات المركبات. تم دمج بطاقات مؤشرات الأداء الرئيسية لدعم القرارات التشغيلية والمالية."
-  },
-  "projects.other": {
-    en: "• Employee Report Dashboard (Power BI – HR analytics)\n• Extra Bonus & Workforce Analysis (Excel – geographic insights)\n• Shipping & Invoice Analytics (Excel – logistics efficiency)\n• Fitness Performance AI Model (Python, Random Forest, XGBoost, Streamlit)\n• E-commerce Data Analytics (SQL, Power BI)",
-    ar: "• لوحة تقارير الموظفين (Power BI – تحليلات الموارد البشرية)\n• تحليل المكافآت الإضافية والقوى العاملة (Excel – رؤى جغرافية)\n• تحليلات الشحن والفواتير (Excel – كفاءة الخدمات اللوجستية)\n• نموذج الذكاء الاصطناعي لأداء اللياقة البدنية (Python، Random Forest، XGBoost، Streamlit)\n• تحليل بيانات التجارة الإلكترونية (SQL، Power BI)"
-  },
+  "ci.0.title": { en: "Google Data Analytics", ar: "جوجل لتحليل البيانات" },
+  "ci.0.issuer": { en: "Google (Coursera)", ar: "جوجل (كورسيرا)" },
+  "ci.0.date": { en: "2025", ar: "٢٠٢٥" },
+  "ci.1.title": { en: "IBM AI Fundamentals", ar: "أساسيات الذكاء الاصطناعي من IBM" },
+  "ci.1.issuer": { en: "IBM SkillsBuild", ar: "IBM SkillsBuild" },
+  "ci.1.date": { en: "2025", ar: "٢٠٢٥" },
+  "ci.2.title": { en: "Deep Learning for NLP", ar: "التعلم العميق للمعالجة اللغوية" },
+  "ci.2.issuer": { en: "Mahara-Tech", ar: "مهارة تك" },
+  "ci.2.date": { en: "2025", ar: "٢٠٢٥" },
+  "ci.3.title": { en: "Decision Making in Business", ar: "اتخاذ القرار في عالم الأعمال" },
+  "ci.3.issuer": { en: "Edraak", ar: "إدراك" },
+  "ci.3.date": { en: "2024", ar: "٢٠٢٤" },
+  "ci.4.title": { en: "Canva Essentials", ar: "أساسيات كانفا" },
+  "ci.4.issuer": { en: "Canva Design School", ar: "مدرسة كانفا للتصميم" },
+  "ci.4.date": { en: "2024", ar: "٢٠٢٤" },
+  "ci.5.title": { en: "Microsoft Power BI DAX", ar: "مايكروسوفت Power BI DAX" },
+  "ci.5.issuer": { en: "Microsoft / Alison", ar: "مايكروسوفت / أليسون" },
+  "ci.5.date": { en: "2025", ar: "٢٠٢٥" },
 
-  // ---------- Volunteering ----------
+  // ---------- Volunteering (كما هو - يعمل) ----------
   "vol.eyebrow": { en: "𓋴 VOLUNTEERING · TEAM LEADER", ar: "𓋴 التطوع · قائد فريق" },
   "vol.title": { en: "Leadership Chamber", ar: "حجرة القيادة" },
   "vol.solve": { en: "Tap the symbols in the sacred order to unlock the scrolls", ar: "اضغط على الرموز بالترتيب المقدس لفتح الأسفار" },
@@ -91,15 +118,18 @@ export const T: Dict = {
     ar: "هذان المشروعان عززا مهاراتي في القيادة التقنية والعمل الجماعي وقدرتي على ترجمة احتياجات المستخدم إلى حلول عملية بالذكاء الاصطناعي. إذا أردت معرفة المزيد، فتوجه إلى غرفة الأحاديث المقدسة (شات الفرعون)."
   },
 
-  // ---------- Contact ----------
+  // ---------- Contact (جميع المفاتيح المستخدمة في Contact.tsx) ----------
   "contact.eyebrow": { en: "𓂀 SEND A SCROLL", ar: "𓂀 أرسل بردي" },
   "contact.title": { en: "Let's Talk", ar: "لنتحدث" },
-  "contact.email": { en: "Email", ar: "البريد الإلكتروني" },
-  "contact.linkedin": { en: "LinkedIn", ar: "لينكد إن" },
-  "contact.github": { en: "GitHub", ar: "جيت هاب" },
-  "contact.submit": { en: "SEAL & SEND", ar: "ختم وإرسال" },
-  "contact.name_placeholder": { en: "Your name", ar: "اسمك" },
-  "contact.message_placeholder": { en: "Your message...", ar: "رسالتك..." },
+  "contact.send": { en: "Send a Message", ar: "أرسل رسالة" },
+  "contact.name": { en: "Your name", ar: "اسمك" },
+  "contact.email": { en: "Your email", ar: "بريدك الإلكتروني" },
+  "contact.message": { en: "Your message", ar: "رسالتك" },
+  "contact.direct": { en: "Direct Contact", ar: "اتصال مباشر" },
+  "contact.location": { en: "Cairo, Egypt", ar: "القاهرة، مصر" },
+  "contact.toast": { en: "Message sealed and sent!", ar: "تم ختم الرسالة وإرسالها!" },
+  "contact.footer": { en: "All monuments are forged by the scribe of data.", ar: "جميع الآثار صُنعت على يد كاتب البيانات." },
+  "contact.submit": { en: "SEAL & SEND", ar: "ختم وإرسال" }, // используется في الزر
 
   // ---------- Hidden Chamber ----------
   "hidden.line1": { en: "You step into the darkness. The air is heavy with centuries.", ar: "تخطو في الظلام. الهواء ثقيل بقرون مضت." },
