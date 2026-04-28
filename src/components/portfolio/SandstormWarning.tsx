@@ -11,17 +11,17 @@ export const SandstormWarning = ({ onAccept, onReject }: SandstormWarningProps) 
 
   return (
     <div 
-      className="fixed inset-0 z-[400] flex items-center justify-center bg-black/90 backdrop-blur-md pointer-events-auto"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-md pointer-events-auto"
       data-cursor="native"
-      style={{ zIndex: 9999 }}
     >
       <div 
         className="relative max-w-lg w-full mx-4 p-6 border-4 border-gold rounded-xl shadow-2xl bg-stone-950/95 animate-reveal-up"
-        style={{ boxShadow: "0 0 50px rgba(255, 215, 0, 0.6)" }}
+        style={{ boxShadow: "0 0 60px rgba(255, 215, 0, 0.7)" }}
       >
         <button 
           onClick={onReject}
           className="absolute top-3 right-3 text-gold/70 hover:text-gold transition"
+          aria-label="Close"
         >
           <X className="w-6 h-6" />
         </button>
