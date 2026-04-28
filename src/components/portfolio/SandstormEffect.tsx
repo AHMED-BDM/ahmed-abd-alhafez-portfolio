@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
 
-// تم تغيير الاسم هنا ليطابق الـ Import في ملف Index.tsx
 export const SandstormEffect = ({ mode }: { mode: "day" | "night" }) => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isActive, setIsActive] = useState(false);
@@ -103,7 +102,6 @@ export const SandstormEffect = ({ mode }: { mode: "day" | "night" }) => {
         .animate-sand-streak { animation: sand-streak linear infinite; }
         .animate-grain { animation: grain 0.1s steps(2) infinite; }
         
-        /* تحسينات لملء الشاشة بالكامل */
         body::after {
           content: "";
           position: fixed;
