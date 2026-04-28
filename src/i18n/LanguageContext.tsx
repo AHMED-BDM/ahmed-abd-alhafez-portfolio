@@ -25,9 +25,15 @@ export const T: Dict = {
   "hero.cta1": { en: "Enter the Chamber", ar: "ادخل الحجرة" },
   "hero.cta2": { en: "See My Work", ar: "اطلع على أعمالي" },
 
-  // ---------- About (التقسيم الأصلي المستخدم في About.tsx) ----------
+  // ---------- About (بالإضافة إلى المفتاح المفقود about.content) ----------
   "about.eyebrow": { en: "𓋴 THE SCRIBE'S IDENTITY", ar: "𓋴 هوية الكاتب" },
   "about.title": { en: "Who is Ahmed?", ar: "من هو أحمد؟" },
+  // المفتاح الجديد:
+  "about.content": {
+    en: "I am a Data Analyst and Machine Learning Engineer with over a year of hands-on experience in AI, ML, and data analytics. I completed a government-accredited training program under Egypt's Ministry of Communications (MCIT) through the Digilians initiative, mastering Python, SQL, R, Excel, Power BI, and Tableau. I deliver 20+ data projects spanning predictive modeling, interactive dashboards, HR analytics, and logistics intelligence. I hold 12 professional certifications including Google Data Analytics, IBM AI Fundamentals, and Deep Learning for NLP. My military academy discipline ensures reliable, high-quality analytical solutions on deadline.",
+    ar: "أنا محلل بيانات ومهندس تعلم آلة، لدي أكثر من عام من الخبرة العملية في الذكاء الاصطناعي وتعلم الآلة وتحليل البيانات. أكملت برنامجاً تدريبياً معتمداً من الحكومة المصرية (وزارة الاتصالات) عبر مبادرة ديجيليانز، حيث أتقنت Python و SQL و R و Excel و Power BI و Tableau. أقدم أكثر من 20 مشروع بيانات تشمل النمذجة التنبؤية ولوحات المعلومات التفاعلية وتحليلات الموارد البشرية وذكاء الخدمات اللوجستية. أحمل 12 شهادة مهنية من بينها جوجل لتحليل البيانات وأساسيات الذكاء الاصطناعي من IBM والتعلم العميق للمعالجة اللغوية. انضباطي المستمد من الأكاديمية العسكرية يضمن حلولاً تحليلية عالية الجودة في الوقت المحدد."
+  },
+  // المفاتيح القديمة (احتفظ بها تحسباً لاستخدامها في مكان آخر)
   "about.p1": {
     en: "I am a Data Analyst and Machine Learning Engineer with over a year of hands-on experience in AI, ML, and data analytics. I completed a government-accredited training program under Egypt's Ministry of Communications (MCIT) through the Digilians initiative, mastering Python, SQL, R, Excel, Power BI, and Tableau.",
     ar: "أنا محلل بيانات ومهندس تعلم آلة، لدي أكثر من عام من الخبرة العملية في الذكاء الاصطناعي وتعلم الآلة وتحليل البيانات. أكملت برنامجاً تدريبياً معتمداً من الحكومة المصرية (وزارة الاتصالات) عبر مبادرة ديجيليانز، حيث أتقنت Python و SQL و R و Excel و Power BI و Tableau."
@@ -45,18 +51,17 @@ export const T: Dict = {
   "about.stat3_n": { en: "1+", ar: "١+" },
   "about.stat3": { en: "Year Experience", ar: "عام خبرة" },
 
-  // ---------- Skills (المجموعات الثلاث) ----------
+  // ---------- Skills ----------
   "skills.eyebrow": { en: "𓋹 SACRED ARTS", ar: "𓋹 الفنون المقدسة" },
   "skills.title": { en: "My Tools & Powers", ar: "أدواتي وقواي" },
   "skills.g1": { en: "Data Analytics", ar: "تحليل البيانات" },
   "skills.g2": { en: "Development Tools", ar: "أدوات التطوير" },
   "skills.g3": { en: "AI & Machine Learning", ar: "الذكاء الاصطناعي وتعلم الآلة" },
 
-  // ---------- Projects (مفاتيح القسم والمشاريع الستة) ----------
+  // ---------- Projects ----------
   "proj.eyebrow": { en: "𓊽 MY MONUMENTS", ar: "𓊽 آثاري" },
   "proj.title": { en: "Featured Projects", ar: "المشاريع البارزة" },
   "proj.sealLabel": { en: "BREAK THE SEAL", ar: "اكسر الختم" },
-
   "pi.0.title": { en: "Fleet Performance Dashboard", ar: "لوحة أداء الأسطول" },
   "pi.0.desc": { en: "Interactive Power BI dashboard tracking fleet costs, travel distances, and spending patterns. Integrated KPI cards for operational decisions.", ar: "لوحة تحكم تفاعلية باستخدام Power BI لتتبع تكاليف الأسطول ومسافات الرحلات وأنماط الإنفاق. تم دمج بطاقات مؤشرات الأداء الرئيسية لدعم القرارات التشغيلية." },
   "pi.1.title": { en: "Employee Report Dashboard", ar: "لوحة تقارير الموظفين" },
@@ -70,14 +75,13 @@ export const T: Dict = {
   "pi.5.title": { en: "Fitness Performance AI Model", ar: "نموذج الذكاء الاصطناعي لأداء اللياقة" },
   "pi.5.desc": { en: "AI-powered fitness analysis using Random Forest, XGBoost, and Neural Networks to predict athletic performance and generate training recommendations.", ar: "تحليل لياقة بدنية مدعوم بالذكاء الاصطناعي باستخدام Random Forest و XGBoost والشبكات العصبية للتنبؤ بالأداء الرياضي وتوليد توصيات تدريبية." },
 
-  // ---------- Certificates (مفاتيح القسم والشهادات الستة) ----------
+  // ---------- Certificates ----------
   "cert.eyebrow": { en: "𓂀 ROYAL SEALS", ar: "𓂀 الأختام الملكية" },
   "cert.title": { en: "Certifications", ar: "الشهادات" },
   "cert.sealLabel": { en: "UNSEAL THE CHAMBER", ar: "افتح الحجرة" },
   "cert.intro": { en: "Hover over each seal to reveal the sacred certifications earned from international institutions.", ar: "مرر فوق كل ختم لكشف الشهادات المقدسة التي حصلت عليها من مؤسسات دولية." },
   "cert.hidden": { en: "𓋴 HIDDEN 𓋴", ar: "𓋴 مخفي 𓋴" },
   "cert.verify": { en: "VERIFY", ar: "تحقق" },
-
   "ci.0.title": { en: "Google Data Analytics", ar: "جوجل لتحليل البيانات" },
   "ci.0.issuer": { en: "Google (Coursera)", ar: "جوجل (كورسيرا)" },
   "ci.0.date": { en: "2025", ar: "٢٠٢٥" },
@@ -97,7 +101,7 @@ export const T: Dict = {
   "ci.5.issuer": { en: "Microsoft / Alison", ar: "مايكروسوفت / أليسون" },
   "ci.5.date": { en: "2025", ar: "٢٠٢٥" },
 
-  // ---------- Volunteering (كما هو - يعمل) ----------
+  // ---------- Volunteering ----------
   "vol.eyebrow": { en: "𓋴 VOLUNTEERING · TEAM LEADER", ar: "𓋴 التطوع · قائد فريق" },
   "vol.title": { en: "Leadership Chamber", ar: "حجرة القيادة" },
   "vol.solve": { en: "Tap the symbols in the sacred order to unlock the scrolls", ar: "اضغط على الرموز بالترتيب المقدس لفتح الأسفار" },
@@ -118,7 +122,7 @@ export const T: Dict = {
     ar: "هذان المشروعان عززا مهاراتي في القيادة التقنية والعمل الجماعي وقدرتي على ترجمة احتياجات المستخدم إلى حلول عملية بالذكاء الاصطناعي. إذا أردت معرفة المزيد، فتوجه إلى غرفة الأحاديث المقدسة (شات الفرعون)."
   },
 
-  // ---------- Contact (جميع المفاتيح المستخدمة في Contact.tsx) ----------
+  // ---------- Contact ----------
   "contact.eyebrow": { en: "𓂀 SEND A SCROLL", ar: "𓂀 أرسل بردي" },
   "contact.title": { en: "Let's Talk", ar: "لنتحدث" },
   "contact.send": { en: "Send a Message", ar: "أرسل رسالة" },
@@ -129,7 +133,7 @@ export const T: Dict = {
   "contact.location": { en: "Cairo, Egypt", ar: "القاهرة، مصر" },
   "contact.toast": { en: "Message sealed and sent!", ar: "تم ختم الرسالة وإرسالها!" },
   "contact.footer": { en: "All monuments are forged by the scribe of data.", ar: "جميع الآثار صُنعت على يد كاتب البيانات." },
-  "contact.submit": { en: "SEAL & SEND", ar: "ختم وإرسال" }, // используется في الزر
+  "contact.submit": { en: "SEAL & SEND", ar: "ختم وإرسال" },
 
   // ---------- Hidden Chamber ----------
   "hidden.line1": { en: "You step into the darkness. The air is heavy with centuries.", ar: "تخطو في الظلام. الهواء ثقيل بقرون مضت." },
