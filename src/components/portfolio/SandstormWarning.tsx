@@ -31,40 +31,40 @@ export const SandstormWarning = ({ mode, onAcknowledge }: SandstormWarningProps)
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/85 backdrop-blur-md pointer-events-auto">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md pointer-events-auto">
       <div 
-        className="relative max-w-lg w-full mx-4 p-6 border-4 border-primary/80 rounded-xl shadow-2xl bg-stone-900/95 animate-reveal-up"
-        style={{ boxShadow: "0 0 50px rgba(210, 150, 50, 0.8)" }}
+        className="relative max-w-lg w-full mx-4 p-6 border-4 border-gold rounded-xl shadow-2xl bg-stone-950/95 animate-reveal-up"
+        style={{ boxShadow: "0 0 50px rgba(255, 215, 0, 0.6)" }}
       >
         <button 
           onClick={handleClose}
-          className="absolute top-3 right-3 text-primary/70 hover:text-primary transition"
+          className="absolute top-3 right-3 text-gold/70 hover:text-gold transition"
         >
           <X className="w-6 h-6" />
         </button>
 
         <div className="text-center mb-6">
-          <span className="text-6xl block mb-2 animate-pulse">𓂀</span>
-          <h2 className="font-display text-2xl md:text-3xl text-gold tracking-wider">
+          <span className="text-7xl block mb-2 animate-pulse text-gold drop-shadow-[0_0_15px_gold]">𓂀</span>
+          <h2 className="font-display text-2xl md:text-3xl text-gold tracking-wider drop-shadow-[0_0_10px_gold]">
             {t("sandstorm.title")}
           </h2>
-          <div className="w-24 h-px bg-primary/50 mx-auto my-3" />
+          <div className="w-24 h-px bg-gold/50 mx-auto my-3" />
         </div>
 
-        <p className="text-foreground text-lg leading-relaxed text-center font-serif bg-black/30 p-4 rounded-lg shadow-inner">
+        <p className="text-gold/90 text-lg leading-relaxed text-center font-serif drop-shadow-[0_0_5px_rgba(255,215,0,0.5)]">
           {t("sandstorm.message")}
         </p>
 
         <div className="flex justify-center mt-8">
           <button
             onClick={handleClose}
-            className="px-8 py-3 bg-primary/30 border-2 border-primary text-primary font-display tracking-widest hover:bg-primary hover:text-black transition-all duration-300 shadow-gold text-lg"
+            className="px-8 py-3 bg-gold/20 border-2 border-gold text-gold font-display tracking-widest hover:bg-gold hover:text-black transition-all duration-300 shadow-gold rounded-md"
           >
             {t("sandstorm.button")}
           </button>
         </div>
 
-        <p className="text-center text-primary/50 text-xs mt-6 tracking-wider">
+        <p className="text-center text-gold/50 text-xs mt-6 tracking-wider">
           𓋴 𓎟 𓏙
         </p>
       </div>
