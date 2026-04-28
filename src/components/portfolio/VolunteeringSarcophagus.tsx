@@ -120,10 +120,13 @@ export const VolunteeringSarcophagus = () => {
                   {lang === "ar" ? "تسلسلك:" : "Your sequence:"}
                 </p>
                 <div className="flex justify-center gap-3 text-4xl">
-                  {selected.length === 0 && <span className="text-primary/30 text-2xl">❓ ❓ ❓</span>}
-                  {selected.map((s, idx) => (
-                    <span key={idx} className="bg-black/40 px-4 py-2 rounded-xl border border-primary/40">{s}</span>
-                  ))}
+                  {selected.length === 0 ? (
+                    <span className="text-primary/30 text-2xl">❓ ❓ ❓</span>
+                  ) : (
+                    selected.map((s, idx) => (
+                      <span key={idx} className="bg-black/40 px-4 py-2 rounded-xl border border-primary/40">{s}</span>
+                    ))
+                  )}
                 </div>
                 {errorMsg && <p className="text-red-400 text-sm mt-3 animate-pulse">{errorMsg}</p>}
                 {selected.length > 0 && (
@@ -133,7 +136,6 @@ export const VolunteeringSarcophagus = () => {
                 )}
               </div>
 
-              {/* ✅ تلميح كبير وواضح جدًا */}
               <div className="mt-6 p-4 bg-black/50 border-2 border-gold rounded-xl shadow-gold animate-pulse">
                 <p className="text-gold font-display text-xl md:text-2xl tracking-wider">
                   {lang === "ar" ? "🔑 التلميح المقدس:" : "🔑 Sacred Hint:"}
@@ -148,7 +150,6 @@ export const VolunteeringSarcophagus = () => {
             </div>
           ) : (
             <div className="reveal-up space-y-8 py-6">
-              {/* محتوى التطوع */
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <span className="text-gold text-2xl">𓋴</span>
