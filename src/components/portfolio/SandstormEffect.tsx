@@ -6,118 +6,141 @@ interface SandstormEffectProps {
 
 export const SandstormEffect = ({ mode }: SandstormEffectProps) => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isVisible, setIsVisible] = useState(false);
-  const rafRef = useRef<number>();
+  const [isHovering, setIsHovering] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number>();
+  const particlesRef = useRef<Array<{ x: number; y: number; size: number; speedX: number; speedY: number; opacity: number }>>([]);
+  const lastTimestampRef = useRef<number>(0);
+
+  // تفعيل فقط في وضع النهار
+  if (mode !== "day") return null;
+
+  // تهيئة جزيئات الرمال
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", resize);
+    resize();
+
+    // إنشاء 300 جزيئة رمل
+    const particleCount = 300;
+    particlesRef.current = [];
+    for (let i = 0; i < particleCount; i++) {
+      particlesRef.current.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 4 + 2,
+        speedX: (Math.random() - 0.5) * 1.5,
+        speedY: Math.random() * 1 + 0.5,
+        opacity: Math.random() * 0.6 + 0.2,
+      });
+    }
+
+    const render = () => {
+      if (!canvas || !ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // رسم طبقة الضباب الرملي (خلفية عكرة)
+      ctx.fillStyle = "rgba(194, 150, 70, 0.25)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // رسم الجزيئات
+      for (let p of particlesRef.current) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(210, 170, 80, ${p.opacity * 0.8})`;
+        ctx.fill();
+      }
+      
+      // رسم تأثير الكشاف (فتحة دائرية حول الماوس)
+      if (isHovering && mousePos.x > 0 && mousePos.y > 0) {
+        ctx.save();
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.beginPath();
+        ctx.arc(mousePos.x, mousePos.y, 130, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(0,0,0,0.9)";
+        ctx.fill();
+        
+        // إضافة تأثير توهج خفيف حول الحافة
+        ctx.globalCompositeOperation = "source-over";
+        ctx.beginPath();
+        ctx.arc(mousePos.x, mousePos.y, 130, 0, Math.PI * 2);
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = "rgba(255,215,0,0.5)";
+        ctx.strokeStyle = "rgba(255,215,0,0.4)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.restore();
+      }
+      
+      animationRef.current = requestAnimationFrame(render);
+    };
+    render();
+
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      window.removeEventListener("resize", resize);
+    };
+  }, [isHovering, mousePos]);
+
+  // تحديث مواقع الجزيئات
+  useEffect(() => {
+    const animateParticles = (timestamp: number) => {
+      if (lastTimestampRef.current === 0) {
+        lastTimestampRef.current = timestamp;
+        requestAnimationFrame(animateParticles);
+        return;
+      }
+      const delta = Math.min(0.05, (timestamp - lastTimestampRef.current) / 1000);
+      lastTimestampRef.current = timestamp;
+      
+      for (let p of particlesRef.current) {
+        p.x += p.speedX * delta * 60;
+        p.y += p.speedY * delta * 60;
+        if (p.x < -50) p.x = window.innerWidth + 50;
+        if (p.x > window.innerWidth + 50) p.x = -50;
+        if (p.y < -50) p.y = window.innerHeight + 50;
+        if (p.y > window.innerHeight + 50) p.y = -50;
+      }
+      requestAnimationFrame(animateParticles);
+    };
+    const anim = requestAnimationFrame(animateParticles);
+    return () => cancelAnimationFrame(anim);
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (mode !== "day") return;
       setMousePos({ x: e.clientX, y: e.clientY });
-      setIsVisible(true);
-      
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {});
+      setIsHovering(true);
     };
-    
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-    };
-    
+    const handleMouseLeave = () => setIsHovering(false);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseleave", handleMouseLeave);
-    
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [mode]);
-
-  if (mode !== "day") return null;
+  }, []);
 
   return (
-    <>
-      {/* طبقة العاصفة الرملية الخلفية */}
-      <div 
-        className="sandstorm-overlay"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          pointerEvents: "none",
-          zIndex: 40,
-          background: "radial-gradient(circle at center, rgba(194, 150, 70, 0.15) 0%, rgba(160, 110, 40, 0.35) 100%)",
-          backdropFilter: "blur(8px) brightness(0.85) sepia(0.4)",
-          mixBlendMode: "multiply",
-          transition: "opacity 0.3s ease",
-        }}
-      />
-      
-      {/* نافذة الرؤية حول الماوس (كشاف) */}
-      <div
-        className="sandstorm-viewport"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          pointerEvents: "none",
-          zIndex: 41,
-          WebkitMaskImage: isVisible 
-            ? `radial-gradient(circle 120px at ${mousePos.x}px ${mousePos.y}px, transparent 0%, transparent 70%, black 99%)`
-            : "none",
-          maskImage: isVisible 
-            ? `radial-gradient(circle 120px at ${mousePos.x}px ${mousePos.y}px, transparent 0%, transparent 70%, black 99%)`
-            : "none",
-          WebkitMaskComposite: "source-out",
-          maskComposite: "exclude",
-        }}
-      />
-      
-      {/* جزيئات الرمال المتحركة */}
-      <div className="sand-particles" style={{
+    <canvas
+      ref={canvasRef}
+      style={{
         position: "fixed",
         top: 0,
         left: 0,
         width: "100%",
         height: "100%",
         pointerEvents: "none",
-        zIndex: 42,
-        backgroundImage: `radial-gradient(circle at 20% 30%, rgba(210, 170, 80, 0.2) 1px, transparent 1px),
-                          radial-gradient(circle at 80% 70%, rgba(190, 140, 60, 0.15) 1px, transparent 1px),
-                          radial-gradient(circle at 40% 85%, rgba(200, 160, 70, 0.25) 1px, transparent 1px)`,
-        backgroundSize: "150px 150px, 200px 200px, 100px 100px",
-        animation: "sandDrift 20s linear infinite",
-        opacity: 0.6,
-      }} />
-      
-      <style>{`
-        @keyframes sandDrift {
-          0% { background-position: 0 0, 0 0, 0 0; }
-          100% { background-position: 300px 200px, 400px 300px, 200px 150px; }
-        }
-        
-        @keyframes sandParticleFloat {
-          0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-          10% { opacity: 0.6; }
-          90% { opacity: 0.4; }
-          100% { transform: translate(var(--dx, 100px), var(--dy, -200px)) rotate(360deg); opacity: 0; }
-        }
-        
-        /* تحسين أداء المؤثرات */
-        .sandstorm-overlay, .sandstorm-viewport, .sand-particles {
-          will-change: transform, mask-position, background-position;
-        }
-        
-        /* ضمان أن المحتوى التفاعلي لا يتأثر */
-        button, a, input, textarea, [data-cursor="native"] {
-          position: relative;
-          z-index: 50;
-        }
-      `}</style>
-    </>
+        zIndex: 45,
+      }}
+    />
   );
 };
