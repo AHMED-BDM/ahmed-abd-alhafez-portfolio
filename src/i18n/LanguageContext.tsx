@@ -143,7 +143,7 @@ export const T: Dict = {
   },
   "sandstorm.message": {
     en: "You have entered the realm of the Day... the desert spirits are furious. A mighty sandstorm has been unleashed upon your path. You cannot see clearly... unless you move the sacred torch (your mouse cursor). Let its glow pierce the dust, or you shall wander blind. Do you accept this trial?",
-    ar: "لقد دخلت نطاق النهار... أرواح الصحراء غاضبة. عاصفة رملية هائلة أُطلقت على دربك. لا ترى بوضوح... إلا إذا حركت الشعلة المقدسة (مؤشر فأرتك). دع توهجها يخترق الغبار، وإلا ستظل تائهًا. أتقبل هذه المحنة؟"
+    ar: "لقد دخلت نطاق النهار... أرواح الصحراء غاضبة. عاصفة رملية هائلة أُطلقت على دربك. لا ترى بوضوح... إلا إذا حركت الشعلة المقدسة (مؤشر الماوس). دع توهجها يخترق الغبار، وإلا ستظل تائهًا. أتقبل هذه المحنة؟"
   },
   "sandstorm.button": {
     en: "I accept and proceed",
