@@ -7,7 +7,7 @@ export const Hero = ({ mode, onOpenBox }: { mode: "night" | "day", onOpenBox: ()
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24">
-      {/* خلفية المعبد المتغيرة حسب المود */}
+      {/* خلفية المعبد الأزلية */}
       <img
         src={mode === "night" ? heroNight : heroDay}
         alt="Ancient Egyptian temple"
@@ -15,17 +15,21 @@ export const Hero = ({ mode, onOpenBox }: { mode: "night" | "day", onOpenBox: ()
         width={1920} 
         height={1280}
       />
-      <div className="absolute inset-0 bg-background/55 backdrop-blur-[2px]" />
+      <div className="absolute inset-0 bg-background/55 backdrop-blur-[1px]" />
 
       <div className="relative z-10 container grid md:grid-cols-2 gap-12 items-center py-20">
-        {/* الجانب النصي التعريفي */}
+        {/* نداء الكاتب - الجانب النصي */}
         <div className="reveal-up">
-          <p className="font-display text-primary tracking-[0.5em] text-xs mb-6 uppercase">
+          <p className="font-display text-primary tracking-[0.5em] text-[10px] mb-6 uppercase animate-pulse">
             {t("hero.eyebrow")}
           </p>
           <h1 className="font-display text-5xl md:text-7xl font-black leading-[1.05] mb-6">
-            <span className="text-gold block">{t("hero.name1")}</span>
-            <span className="text-gold block">{t("hero.name2")}</span>
+            <span className="text-gold block drop-shadow-[0_0_15px_rgba(251,191,36,0.4)]">
+              {t("hero.name1")}
+            </span>
+            <span className="text-gold block drop-shadow-[0_0_15px_rgba(251,191,36,0.4)]">
+              {t("hero.name2")}
+            </span>
           </h1>
           <p className="text-xl md:text-2xl text-foreground/90 italic mb-3 max-w-xl">
             {t("hero.role")}
@@ -36,22 +40,21 @@ export const Hero = ({ mode, onOpenBox }: { mode: "night" | "day", onOpenBox: ()
           
           <div className="flex flex-wrap gap-4">
             <a href="#about"
-              className="group relative px-8 py-3 font-display tracking-widest text-sm bg-primary text-primary-foreground gold-frame hover:shadow-gold transition-all">
+              className="group relative px-8 py-3 font-display tracking-widest text-sm bg-primary text-primary-foreground gold-frame hover:shadow-gold transition-all duration-500">
               {t("hero.cta1")}
             </a>
             <a href="#projects"
-              className="px-8 py-3 font-display tracking-widest text-sm border-2 border-primary/50 text-primary hover:bg-primary/10 transition-all">
+              className="px-8 py-3 font-display tracking-widest text-sm border-2 border-primary/50 text-primary hover:bg-primary/10 transition-all duration-500">
               {t("hero.cta2")}
             </a>
           </div>
         </div>
 
-        {/* جانب الصورة الرسمية (البرواز الملكي) */}
+        {/* التابوت الملكي - الجانب البصري */}
         <div className="relative flex justify-center reveal-up" style={{ animationDelay: "0.3s" }} onClick={onOpenBox}>
           <div className="absolute inset-0 rounded-full blur-3xl bg-primary/20 animate-pulse" />
           
-          <div className="relative group cursor-pointer transition-transform duration-500 hover:scale-[1.02]" style={{ width: "min(24rem, 90vw)" }}>
-            {/* الإطار الذهبي الخارجي مع النقوش */}
+          <div className="relative group cursor-pointer transition-all duration-700 hover:rotate-1" style={{ width: "min(24rem, 90vw)" }}>
             <div className="relative p-4 rounded-md gold-frame bg-gradient-to-b from-amber-900/40 via-card/60 to-amber-900/40 backdrop-blur-sm shadow-gold overflow-hidden">
               
               {/* شريط الرموز العلوي */}
@@ -59,22 +62,18 @@ export const Hero = ({ mode, onOpenBox }: { mode: "night" | "day", onOpenBox: ()
                 <span>𓂀</span><span>𓋹</span><span>𓆣</span><span>𓋹</span><span>𓂀</span>
               </div>
 
-              {/* حاوية الصورة المربعة */}
+              {/* حاوية الصورة الرسمية */}
               <div className="relative my-7 p-[3px] bg-gradient-to-br from-amber-300 via-yellow-600 to-amber-800 rounded-sm">
                 <div className="p-[2px] bg-background/50 rounded-sm overflow-hidden aspect-square relative">
-                  
-                  {/* ✅ صورتك الرسمية (Professional) */}
                   <img 
                     src="/professional-photo.jpeg" 
-                    alt="Ahmed Abd Al-Hafez - Professional Portrait" 
-                    className="w-full h-full object-cover object-top transition-all duration-700 group-hover:scale-110 group-hover:brightness-110" 
+                    alt="Ahmed Abd Al-Hafez - Grand Architect" 
+                    className="w-full h-full object-cover object-top transition-all duration-1000 group-hover:scale-110 group-hover:brightness-110" 
                     loading="eager"
                   />
+                  <div className="pointer-events-none absolute inset-0 shimmer-gold opacity-20 group-hover:opacity-40" />
                   
-                  {/* تأثير لمعان الذهب فوق الصورة */}
-                  <div className="pointer-events-none absolute inset-0 shimmer-gold opacity-20" />
-                  
-                  {/* زوايا مزخرفة داخلية */}
+                  {/* أختام الزوايا */}
                   <span className="absolute top-1 left-1 text-primary/60 text-[10px]">𓋹</span>
                   <span className="absolute top-1 right-1 text-primary/60 text-[10px]">𓋹</span>
                   <span className="absolute bottom-1 left-1 text-primary/60 text-[10px]">𓂀</span>
@@ -88,8 +87,8 @@ export const Hero = ({ mode, onOpenBox }: { mode: "night" | "day", onOpenBox: ()
               </div>
             </div>
 
-            {/* لوحة الاسم السفلي (Cartouche) */}
-            <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 px-6 py-1.5 rounded-full bg-background/95 border-2 border-primary/70 shadow-gold whitespace-nowrap z-20">
+            {/* الخرطوش الملكي (الاسم) */}
+            <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 px-6 py-1.5 rounded-full bg-background/95 border-2 border-primary/70 shadow-gold whitespace-nowrap z-20 transition-all group-hover:scale-110">
               <span className="font-display text-primary text-[10px] tracking-[0.4em] uppercase">
                 𓋹 · {t("hero.name1")} {t("hero.name2")} · 𓋹
               </span>
@@ -98,8 +97,7 @@ export const Hero = ({ mode, onOpenBox }: { mode: "night" | "day", onOpenBox: ()
         </div>
       </div>
 
-      {/* أيقونة التمرير للأسفل */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-primary text-2xl animate-bounce opacity-50">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-primary text-2xl animate-bounce opacity-40">
         𓂀
       </div>
     </section>
