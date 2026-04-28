@@ -4,7 +4,7 @@ export type Lang = "en" | "ar";
 type Dict = Record<string, { en: string; ar: string }>;
 
 export const T: Dict = {
-  // ---------- Navigation ----------
+  // Navigation
   "nav.about": { en: "About", ar: "عنوان" },
   "nav.skills": { en: "Skills", ar: "المهارات" },
   "nav.certificates": { en: "Certificates", ar: "الشهادات" },
@@ -13,7 +13,7 @@ export const T: Dict = {
   "nav.contact": { en: "Contact", ar: "اتصل" },
   "nav.github": { en: "GitHub", ar: "جيت هاب" },
 
-  // ---------- Hero ----------
+  // Hero
   "hero.eyebrow": { en: "𓂀 DATA ANALYST & ML ENGINEER", ar: "𓂀 محلل بيانات ومهندس تعلم آلة" },
   "hero.name1": { en: "AHMED", ar: "أحمد" },
   "hero.name2": { en: "ABD AL-HAFEZ", ar: "عبد الحافظ" },
@@ -25,40 +25,25 @@ export const T: Dict = {
   "hero.cta1": { en: "Enter the Chamber", ar: "ادخل الحجرة" },
   "hero.cta2": { en: "See My Work", ar: "اطلع على أعمالي" },
 
-  // ---------- About (بالإضافة إلى المفتاح المفقود about.content) ----------
+  // About
   "about.eyebrow": { en: "𓋴 THE SCRIBE'S IDENTITY", ar: "𓋴 هوية الكاتب" },
   "about.title": { en: "Who is Ahmed?", ar: "من هو أحمد؟" },
-  // المفتاح الجديد:
   "about.content": {
     en: "I am a Data Analyst and Machine Learning Engineer with over a year of hands-on experience in AI, ML, and data analytics. I completed a government-accredited training program under Egypt's Ministry of Communications (MCIT) through the Digilians initiative, mastering Python, SQL, R, Excel, Power BI, and Tableau. I deliver 20+ data projects spanning predictive modeling, interactive dashboards, HR analytics, and logistics intelligence. I hold 12 professional certifications including Google Data Analytics, IBM AI Fundamentals, and Deep Learning for NLP. My military academy discipline ensures reliable, high-quality analytical solutions on deadline.",
     ar: "أنا محلل بيانات ومهندس تعلم آلة، لدي أكثر من عام من الخبرة العملية في الذكاء الاصطناعي وتعلم الآلة وتحليل البيانات. أكملت برنامجاً تدريبياً معتمداً من الحكومة المصرية (وزارة الاتصالات) عبر مبادرة الرواد الرقميون (Digilians)، حيث أتقنت Python و SQL و R و Excel و Power BI و Tableau. أقدم أكثر من 20 مشروع بيانات تشمل النمذجة التنبؤية ولوحات المعلومات التفاعلية وتحليلات الموارد البشرية وذكاء الخدمات اللوجستية. أحمل 12 شهادة مهنية من بينها جوجل لتحليل البيانات وأساسيات الذكاء الاصطناعي من IBM والتعلم العميق للمعالجة اللغوية. انضباطي المستمد من الأكاديمية العسكرية يضمن حلولاً تحليلية عالية الجودة في الوقت المحدد."
   },
-  // المفاتيح القديمة (احتفظ بها تحسباً لاستخدامها في مكان آخر)
-  "about.p1": {
-    en: "I am a Data Analyst and Machine Learning Engineer with over a year of hands-on experience in AI, ML, and data analytics. I completed a government-accredited training program under Egypt's Ministry of Communications (MCIT) through the Digilians initiative, mastering Python, SQL, R, Excel, Power BI, and Tableau.",
-    ar: "أنا محلل بيانات ومهندس تعلم آلة، لدي أكثر من عام من الخبرة العملية في الذكاء الاصطناعي وتعلم الآلة وتحليل البيانات. أكملت برنامجاً تدريبياً معتمداً من الحكومة المصرية (وزارة الاتصالات) عبر مبادرة ديجيليانز، حيث أتقنت Python و SQL و R و Excel و Power BI و Tableau."
-  },
-  "about.p2_a": { en: "I deliver ", ar: "أقدم " },
-  "about.p2_b": { en: "20+ data projects", ar: "أكثر من 20 مشروع بيانات" },
-  "about.p2_c": { en: " spanning predictive modeling, interactive dashboards, HR analytics, and logistics intelligence. I hold ", ar: " تشمل النمذجة التنبؤية ولوحات المعلومات التفاعلية وتحليلات الموارد البشرية وذكاء الخدمات اللوجستية. أحمل " },
-  "about.p2_d": { en: "12 professional certifications", ar: "12 شهادة مهنية" },
-  "about.p2_e": {
-    en: " including Google Data Analytics, IBM AI Fundamentals, and Deep Learning for NLP. My military academy discipline ensures reliable, high-quality analytical solutions on deadline.",
-    ar: " من بينها جوجل لتحليل البيانات وأساسيات الذكاء الاصطناعي من IBM والتعلم العميق للمعالجة اللغوية. انضباطي المستمد من الأكاديمية العسكرية يضمن حلولاً تحليلية عالية الجودة في الوقت المحدد."
-  },
   "about.stat1": { en: "Data Projects", ar: "مشروع بيانات" },
   "about.stat2": { en: "Certifications", ar: "شهادة" },
-  "about.stat3_n": { en: "1+", ar: "١+" },
   "about.stat3": { en: "Year Experience", ar: "عام خبرة" },
 
-  // ---------- Skills ----------
+  // Skills
   "skills.eyebrow": { en: "𓋹 SACRED ARTS", ar: "𓋹 الفنون المقدسة" },
   "skills.title": { en: "My Tools & Powers", ar: "أدواتي وقواي" },
   "skills.g1": { en: "Data Analytics", ar: "تحليل البيانات" },
   "skills.g2": { en: "Development Tools", ar: "أدوات التطوير" },
   "skills.g3": { en: "AI & Machine Learning", ar: "الذكاء الاصطناعي وتعلم الآلة" },
 
-  // ---------- Projects ----------
+  // Projects
   "proj.eyebrow": { en: "𓊽 MY MONUMENTS", ar: "𓊽 آثاري" },
   "proj.title": { en: "Featured Projects", ar: "المشاريع البارزة" },
   "proj.sealLabel": { en: "BREAK THE SEAL", ar: "اكسر الختم" },
@@ -75,7 +60,7 @@ export const T: Dict = {
   "pi.5.title": { en: "Fitness Performance AI Model", ar: "نموذج الذكاء الاصطناعي لأداء اللياقة" },
   "pi.5.desc": { en: "AI-powered fitness analysis using Random Forest, XGBoost, and Neural Networks to predict athletic performance and generate training recommendations.", ar: "تحليل لياقة بدنية مدعوم بالذكاء الاصطناعي باستخدام Random Forest و XGBoost والشبكات العصبية للتنبؤ بالأداء الرياضي وتوليد توصيات تدريبية." },
 
-  // ---------- Certificates ----------
+  // Certificates
   "cert.eyebrow": { en: "𓂀 ROYAL SEALS", ar: "𓂀 الأختام الملكية" },
   "cert.title": { en: "Certifications", ar: "الشهادات" },
   "cert.sealLabel": { en: "UNSEAL THE CHAMBER", ar: "افتح الحجرة" },
@@ -101,7 +86,7 @@ export const T: Dict = {
   "ci.5.issuer": { en: "Microsoft / Alison", ar: "مايكروسوفت / أليسون" },
   "ci.5.date": { en: "2025", ar: "٢٠٢٥" },
 
-  // ---------- Volunteering ----------
+  // Volunteering
   "vol.eyebrow": { en: "𓋴 VOLUNTEERING · TEAM LEADER", ar: "𓋴 التطوع · قائد فريق" },
   "vol.title": { en: "Leadership Chamber", ar: "حجرة القيادة" },
   "vol.solve": { en: "Tap the symbols in the sacred order to unlock the scrolls", ar: "اضغط على الرموز بالترتيب المقدس لفتح الأسفار" },
@@ -122,7 +107,7 @@ export const T: Dict = {
     ar: "هذان المشروعان عززا مهاراتي في القيادة التقنية والعمل الجماعي وقدرتي على ترجمة احتياجات المستخدم إلى حلول عملية بالذكاء الاصطناعي. إذا أردت معرفة المزيد، فتوجه إلى غرفة الأحاديث المقدسة (شات الفرعون)."
   },
 
-  // ---------- Contact ----------
+  // Contact
   "contact.eyebrow": { en: "𓂀 SEND A SCROLL", ar: "𓂀 أرسل بردي" },
   "contact.title": { en: "Let's Talk", ar: "لنتحدث" },
   "contact.send": { en: "Send a Message", ar: "أرسل رسالة" },
@@ -135,7 +120,7 @@ export const T: Dict = {
   "contact.footer": { en: "All monuments are forged by the scribe of data.", ar: "جميع الآثار صُنعت على يد كاتب البيانات." },
   "contact.submit": { en: "SEAL & SEND", ar: "ختم وإرسال" },
 
-  // ---------- Hidden Chamber ----------
+  // Hidden Chamber
   "hidden.line1": { en: "You step into the darkness. The air is heavy with centuries.", ar: "تخطو في الظلام. الهواء ثقيل بقرون مضت." },
   "hidden.line2": { en: "A whisper comes from the walls: 'No one leaves without answering.'", ar: "همس يأتي من الجدران: 'لا أحد يغادر دون أن يجيب.'" },
   "hidden.line3": { en: "You see your reflection in an obsidian stone, but it smiles differently.", ar: "ترى انعكاسك في حجر سبج، لكنه يبتسم بشكل مختلف." },
@@ -143,7 +128,7 @@ export const T: Dict = {
   "hidden.line5": { en: "Suddenly, a scroll appears: 'Do not seek answers. Seek the right question.'", ar: "فجأة، يظهر بردية: 'لا تبحث عن إجابات. ابحث عن السؤال الصحيح.'" },
   "hidden.line6": { en: "The chamber shakes. A door opens to the Pharaoh's Chat. Enter if you dare.", ar: "الحجرة تهتز. باب يفتح على شات الفرعون. ادخل إن تجرأت." },
 
-  // ---------- Pharaoh Chat ----------
+  // Pharaoh Chat
   "chat.welcome": {
     en: "I knew you would come here... I saw your name on the tablet of fate 3,000 years ago.",
     ar: "كنت أعلم أنك ستأتي إلى هنا... لقد رأيت اسمك في لوحة الأقدار منذ 3000 سنة."
@@ -151,7 +136,7 @@ export const T: Dict = {
   "chat.placeholder": { en: "Whisper your question to the Servant of Horus...", ar: "اهمس بسؤالك لخادم حورس..." },
   "chat.button": { en: "Send message", ar: "أرسل الرسالة" },
 
-  // ---------- Generic ----------
+  // Generic
   "gate.skip": { en: "SKIP THE RITUAL ›", ar: "تخطي الطقوس ›" },
   "mid.spirit": { en: "Data is the new papyrus · Insight is the new power", ar: "البيانات هي البردي الجديد · والرؤية هي القوة الجديدة" }
 };
@@ -171,6 +156,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     const stored = window.localStorage.getItem("temple.lang") as Lang | null;
     if (stored) setLangState(stored);
   }, []);
+
+  // 🔹 هذا هو الحل الأساسي لتداخل النصوص 🔹
+  useEffect(() => {
+    document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+    document.documentElement.setAttribute("lang", lang);
+  }, [lang]);
 
   const toggle = useCallback(() => {
     const nextMode = lang === "en" ? "ar" : "en";
