@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import gateImg from "@/assets/gate-door.jpg";
 import { useLang } from "@/i18n/LanguageContext";
 import { DustEffect } from "./DustEffect";
@@ -12,44 +12,39 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
   const [hidden, setHidden] = useState(false);
   const [armed, setArmed] = useState(false);
   const [dials, setDials] = useState([0, 1, 2]);
-  
-  // ✅ حالة جديدة للتأكد إن الصورة حملت بالكامل
   const [imgLoaded, setImgLoaded] = useState(false);
+  const portalRef = useRef<HTMLDivElement>(null);
 
-  // ✅ تحميل مسبق للصورة في الخلفية
+  // تحميل مسبق للصورة
   useEffect(() => {
     const img = new Image();
     img.src = gateImg;
     img.onload = () => {
-      // بعد ما الصورة تحمل، بنستنى جزء من الثانية عشان نضمن إن المتصفح عالجها
-      setTimeout(() => setImgLoaded(true), 300);
+      setTimeout(() => setImgLoaded(true), 100);
     };
   }, []);
 
   const playGateSound = () => {
     if (sounds.gate) {
       sounds.gate.currentTime = 0;
-      sounds.gate.volume = 0.8;
+      sounds.gate.volume = 0.85;
       sounds.gate.play().catch(e => console.error("Sound play failed:", e));
     }
   };
 
   useEffect(() => {
     const isSolved = dials.every(v => v === dials[0]);
-    
     if (isSolved && !armed) {
       setArmed(true);
-      
       setTimeout(() => {
         setOpening(true);
-        playGateSound(); 
-        
-        // تم ضبط الوقت ليصبح 5.2 ثانية (5 ثواني للحركة + 200 ملي ثانية أمان قبل الإخفاء)
+        playGateSound();
+        // 5.2 ثانية لإخفاء البوابة بعد اكتمال الفتح (5 ثوان حركة + 0.2 أمان)
         setTimeout(() => {
           setHidden(true);
           onEnter();
         }, 5200);
-      }, 1000);
+      }, 650); // تأخير بسيط قبل بدء الفتح
     }
   }, [dials, armed, onEnter]);
 
@@ -64,109 +59,193 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-black overflow-hidden flex items-center justify-center">
-      
-      {/* الرسالة السرية - تظهر وتستغل وقت التحميل كتمهيد للزائر */}
-      {!armed && !opening && (
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 text-center w-full px-4 z-30 pointer-events-none transition-opacity duration-1000">
-          <p className="font-display text-primary/60 text-xs md:text-sm tracking-[0.2em] mb-2 uppercase drop-shadow-md">
-            Remember this code well, you might need it
-          </p>
-          <p className="font-display text-primary/60 text-xs md:text-sm tracking-[0.2em] mb-4 drop-shadow-md" dir="rtl">
-            تذكر هذا الرمز جيدا، ربما ستحتاجه
-          </p>
-          <p className="font-display text-primary font-bold text-3xl md:text-5xl tracking-[0.5em] drop-shadow-[0_0_20px_var(--primary)]">
-            B D M
-          </p>
-        </div>
-      )}
-
-      {/* ✅ الغلاف الكامل للبوابة، مش هيظهر غير لما الصورة تحمل 100% */}
-      <div 
-        className={`absolute inset-0 transition-opacity duration-[1500ms] ease-in-out ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+      {/* الطبقة الرئيسية التي تظهر بعد تحميل الصورة */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+          imgLoaded ? "opacity-100" : "opacity-0"
+        }`}
       >
-        {/* تأثير الضوء خلف الأبواب - متزامن مع الـ 5 ثواني */}
-        <div 
-          className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
-          style={{ 
-            transition: "opacity 5s ease-in-out", 
+        {/* تأثير الإضاءة الخلفية المتوهجة أثناء الفتح */}
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{
+            transition: "opacity 5s cubic-bezier(0.2, 0.9, 0.4, 1)",
             opacity: opening ? 1 : 0,
-            background: "radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%)"
+            background: `radial-gradient(ellipse at center, 
+              rgba(212, 175, 55, 0.25) 0%, 
+              rgba(180, 120, 40, 0.4) 40%,
+              transparent 80%)`,
+            transform: `scale(${opening ? 1.2 : 0.8})`,
+          }}
+        />
+
+        {/* تأثير انعكاس ذهبي على حواف الأبواب */}
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{
+            boxShadow: opening
+              ? "inset 0 0 80px rgba(212, 175, 55, 0.6), 0 0 120px rgba(212, 175, 55, 0.4)"
+              : "inset 0 0 20px rgba(212, 175, 55, 0.2)",
+            transition: "box-shadow 5s cubic-bezier(0.2, 0.9, 0.4, 1)",
           }}
         />
 
         <DustEffect isActive={opening} />
 
-        {/* الأبواب الـ 3D مع تسريع الهاردوير transform-gpu */}
-        <div className="absolute inset-0 flex z-10" style={{ perspective: "2000px" }}>
-          <div 
-            className="w-1/2 h-full bg-cover bg-right border-r border-primary/10 transform-gpu will-change-transform"
-            style={{ 
-              backgroundImage: `url(${gateImg})`, 
+        {/* الأبواب بمؤثرات ثلاثية الأبعاد محسنة */}
+        <div
+          className="absolute inset-0 flex z-10"
+          style={{ perspective: "1800px", perspectiveOrigin: "center" }}
+        >
+          {/* الباب الأيسر */}
+          <div
+            className="w-1/2 h-full bg-cover bg-right border-r border-primary/20 transform-gpu will-change-transform"
+            style={{
+              backgroundImage: `url(${gateImg})`,
+              backgroundPosition: "right",
               transformOrigin: "left center",
-              // استخدام منحنى حركة مخصص لإعطاء إحساس بوزن الحجر الثقيل لمدة 5 ثواني
-              transition: "transform 5s cubic-bezier(0.65, 0, 0.05, 1)", 
-              transform: opening ? "rotateY(-105deg) translate3d(0,0,0)" : "rotateY(0deg) translate3d(0,0,0)"
-            }} 
+              transition: "transform 5s cubic-bezier(0.23, 1, 0.32, 1)", // منحنى سلس وثقيل
+              transform: opening
+                ? "rotateY(-112deg) translate3d(-5px, 0, 0)"
+                : "rotateY(0deg) translate3d(0, 0, 0)",
+              boxShadow: opening ? "20px 0 40px -10px rgba(0,0,0,0.8)" : "none",
+            }}
           />
-          <div 
-            className="w-1/2 h-full bg-cover bg-left border-l border-primary/10 transform-gpu will-change-transform"
-            style={{ 
-              backgroundImage: `url(${gateImg})`, 
-              backgroundPositionX: "-100%",
+          {/* الباب الأيمن */}
+          <div
+            className="w-1/2 h-full bg-cover bg-left border-l border-primary/20 transform-gpu will-change-transform"
+            style={{
+              backgroundImage: `url(${gateImg})`,
+              backgroundPosition: "left",
               transformOrigin: "right center",
-              // استخدام نفس منحنى الحركة للباب الأيمن
-              transition: "transform 5s cubic-bezier(0.65, 0, 0.05, 1)",
-              transform: opening ? "rotateY(105deg) translate3d(0,0,0)" : "rotateY(0deg) translate3d(0,0,0)"
-            }} 
+              transition: "transform 5s cubic-bezier(0.23, 1, 0.32, 1)",
+              transform: opening
+                ? "rotateY(112deg) translate3d(5px, 0, 0)"
+                : "rotateY(0deg) translate3d(0, 0, 0)",
+              boxShadow: opening ? "-20px 0 40px -10px rgba(0,0,0,0.8)" : "none",
+            }}
           />
         </div>
 
-        {/* واجهة اللغز */}
-        <div 
+        {/* تأثير الكاميرا (اهتزاز خفيف أثناء الفتح) */}
+        {opening && (
+          <div
+            className="absolute inset-0 z-20 pointer-events-none"
+            style={{
+              animation: "templeShake 1.5s ease-in-out 0.2s 1",
+            }}
+          />
+        )}
+
+        {/* واجهة اللغز - تختفي ببطء أثناء الفتح */}
+        <div
           className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-6"
-          style={{ 
-            transition: "all 1.5s ease-in-out", 
+          style={{
+            transition: "all 1.2s ease-out",
             opacity: opening ? 0 : 1,
-            transform: `translate(-50%, ${opening ? '30px' : '0'})`
+            transform: `translate(-50%, ${opening ? "40px" : "0"})`,
+            pointerEvents: opening ? "none" : "auto",
           }}
         >
           <p className="font-display text-primary/70 text-[10px] tracking-[0.4em] uppercase animate-pulse">
-            {armed ? "انكسر الختم القديم" : "طابق الرموز لفتح المعبد"}
+            {armed
+              ? "انكسر الختم القديم"
+              : "طابق الرموز لفتح المعبد"}
           </p>
-          
-          <div className="flex gap-4 p-4 bg-black/60 backdrop-blur-md border border-primary/20 rounded-md shadow-[0_0_30px_rgba(0,0,0,0.5)] transform-gpu">
+
+          <div className="flex gap-4 p-4 bg-black/60 backdrop-blur-md border border-primary/20 rounded-md shadow-[0_0_30px_rgba(0,0,0,0.5)]">
             {dials.map((val, i) => (
               <button
                 key={i}
                 onClick={() => handleDialClick(i)}
                 disabled={armed}
-                className={`w-14 h-16 flex items-center justify-center bg-stone-900 border-2 transition-all duration-500 will-change-transform
-                  ${armed ? "border-primary shadow-[0_0_15px_var(--primary)]" : "border-primary/30 hover:border-primary/70"}`}
+                className={`w-14 h-16 flex items-center justify-center bg-stone-900 border-2 transition-all duration-500 transform-gpu hover:scale-105
+                  ${armed
+                    ? "border-primary shadow-[0_0_20px_var(--primary)]"
+                    : "border-primary/30 hover:border-primary/70"
+                  }`}
               >
-                <span className={`text-3xl select-none transition-all duration-500 ${armed ? "text-primary scale-110" : "text-primary/60"}`}>
+                <span
+                  className={`text-3xl select-none transition-all duration-500 ${
+                    armed ? "text-primary scale-110" : "text-primary/60"
+                  }`}
+                >
                   {GLYPHS[val]}
                 </span>
               </button>
             ))}
           </div>
 
-          <button 
-            onClick={() => { setHidden(true); onEnter(); }}
+          <button
+            onClick={() => {
+              setHidden(true);
+              onEnter();
+            }}
             className="mt-4 text-[9px] font-display tracking-[0.2em] text-primary/30 hover:text-primary transition-colors"
           >
             {t("gate.skip")}
           </button>
         </div>
 
-        {/* وميض أبيض خفيف عند بداية الفتح */}
-        <div 
+        {/* وميض أبيض عند بدء الفتح */}
+        <div
           className="absolute inset-0 z-30 pointer-events-none bg-white"
           style={{
-            transition: "opacity 2s ease-in-out",
-            opacity: (armed && !opening) ? 0.05 : 0
+            transition: "opacity 0.8s ease-out",
+            opacity: armed && !opening ? 0.08 : 0,
           }}
         />
+
+        {/* تأثير جزيئات ذهبية متطايرة أثناء الفتح */}
+        {opening && (
+          <div className="absolute inset-0 z-15 pointer-events-none overflow-hidden">
+            {Array.from({ length: 30 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 bg-gold rounded-full"
+                style={{
+                  top: `${Math.random() * 100}%`,
+                  left: `${Math.random() * 100}%`,
+                  animation: `glowParticle ${1 + Math.random() * 2}s linear forwards`,
+                  opacity: 0.6,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
+
+      <style>{`
+        @keyframes templeShake {
+          0% { transform: translate(0, 0); }
+          15% { transform: translate(2px, -1px); }
+          30% { transform: translate(-2px, 1px); }
+          45% { transform: translate(1px, -2px); }
+          60% { transform: translate(-1px, 2px); }
+          75% { transform: translate(0, 0); }
+          100% { transform: translate(0, 0); }
+        }
+        
+        @keyframes glowParticle {
+          0% {
+            transform: scale(0) translate(0, 0);
+            opacity: 0.8;
+          }
+          100% {
+            transform: scale(1.5) translate(${Math.random() * 100 - 50}px, ${Math.random() * -200 - 50}px);
+            opacity: 0;
+          }
+        }
+        
+        /* تحسين الأداء */
+        .will-change-transform {
+          will-change: transform;
+        }
+        
+        .transform-gpu {
+          transform: translate3d(0, 0, 0);
+        }
+      `}</style>
     </div>
   );
 };
