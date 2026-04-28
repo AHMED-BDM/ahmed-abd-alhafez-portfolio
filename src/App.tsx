@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLang } from "@/i18n/LanguageContext"; // أضف هذا الاستيراد
+import { useLang } from "@/i18n/LanguageContext";
 import { sounds, setupAudio } from "./audio";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -12,14 +12,14 @@ import { GhostManager } from "@/components/portfolio/GhostManager";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const { lang } = useLang(); // الحصول على اللغة الحالية
+  const { lang } = useLang();
 
-  // تحديث اتجاه الصفحة عند تغيير اللغة
+  // تغيير اتجاه الصفحة عند تغيير اللغة
   useEffect(() => {
     document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
   }, [lang]);
 
-  // تشغيل الصوت الخلفي بعد أول click
+  // تشغيل الصوت الخلفي
   useEffect(() => {
     const startAudio = () => {
       setupAudio();
