@@ -13,7 +13,7 @@ export const SandstormWarning = ({ mode, onAcknowledge }: SandstormWarningProps)
 
   useEffect(() => {
     if (mode === "day") {
-      // التحقق مما إذا كان المستخدم قد شاهد الرسالة في هذه الجلسة
+      // تخزين مؤقت - تظهر مرة واحدة لكل جلسة تصفح
       const hasSeen = sessionStorage.getItem("sandstorm_warning_seen");
       if (!hasSeen) {
         setIsOpen(true);
