@@ -7,10 +7,13 @@ interface SandstormWarningProps {
 }
 
 export const SandstormWarning = ({ onAccept, onReject }: SandstormWarningProps) => {
-  const { t, lang } = useLang();
+  const { t } = useLang();
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md pointer-events-auto">
+    <div 
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md pointer-events-auto"
+      data-cursor="native"
+    >
       <div 
         className="relative max-w-lg w-full mx-4 p-6 border-4 border-gold rounded-xl shadow-2xl bg-stone-950/95 animate-reveal-up"
         style={{ boxShadow: "0 0 50px rgba(255, 215, 0, 0.6)" }}
