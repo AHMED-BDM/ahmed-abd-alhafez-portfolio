@@ -370,3 +370,13 @@ button, a, input, textarea, [role="button"], [data-cursor="native"] {
 .night .sacred-insect {
   transition: transform 0.1s linear;
 }
+/* تلميح اللغز - وضوح عالي */
+.volunteering-hint {
+  background: rgba(0,0,0,0.7);
+  border: 2px solid hsl(var(--primary));
+  border-radius: 1rem;
+  box-shadow: 0 0 30px rgba(255,215,0,0.6);
+}
+.volunteering-hint p {
+  text-shadow: 1px 1px 2px black;
+}
