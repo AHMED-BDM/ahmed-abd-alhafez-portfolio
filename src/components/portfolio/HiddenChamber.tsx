@@ -6,11 +6,8 @@ import { sounds } from "../../audio";
 
 const openPharaohChat = () => {
   const chatButton = document.querySelector('[data-pharaoh-chat-trigger]') as HTMLElement;
-  if (chatButton) {
-    chatButton.click();
-  } else {
-    window.dispatchEvent(new CustomEvent("openPharaohChat"));
-  }
+  if (chatButton) chatButton.click();
+  else window.dispatchEvent(new CustomEvent("openPharaohChat"));
 };
 
 export const HiddenChamber = () => {
@@ -25,7 +22,6 @@ export const HiddenChamber = () => {
       const max = Math.max(document.body.scrollHeight - window.innerHeight, 1);
       if (window.scrollY / max > 0.92 && !unlocked) {
         setUnlocked(true);
-        console.log("[HiddenChamber] Unlocked via deep scroll");
       }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -44,7 +40,6 @@ export const HiddenChamber = () => {
       play("open", { pan: 0, volume: 0.7 });
       sounds.ancient.currentTime = 0;
       sounds.ancient.play().catch(e => console.log(e));
-      console.log("[HiddenChamber] Unlocked via sigil triple-click");
     }
   };
 
@@ -59,7 +54,6 @@ export const HiddenChamber = () => {
 
   return (
     <>
-      {/* الختم السري (الجعران) */}
       <button
         type="button"
         onClick={onSigilClick}
@@ -70,7 +64,6 @@ export const HiddenChamber = () => {
         𓆣
       </button>
 
-      {/* إشعار فتح الغرفة (يظهر في الأسفل بجوار الختم) */}
       {unlocked && !open && (
         <button
           type="button"
@@ -86,7 +79,6 @@ export const HiddenChamber = () => {
         </button>
       )}
 
-      {/* نافذة الغرفة السرية (Modal منبثق) */}
       {open && (
         <div
           className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-md pointer-events-auto"
@@ -98,12 +90,12 @@ export const HiddenChamber = () => {
           }}
         >
           <div
-            className="relative max-w-xl w-full mx-4 border-2 border-primary/60 bg-stone-950/95 p-6 text-center shadow-2xl rounded-xl"
+            className="relative max-w-xl w-full mx-4 border-2 border-gold bg-stone-950/95 p-6 text-center shadow-2xl rounded-xl"
             style={{ animation: "scale-in 0.3s ease-out" }}
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              className="absolute top-3 right-3 text-primary/70 hover:text-primary transition"
+              className="absolute top-3 right-3 text-gold/70 hover:text-gold transition"
               onClick={() => {
                 setOpen(false);
                 sounds.ancient.pause();
@@ -113,13 +105,13 @@ export const HiddenChamber = () => {
               <X className="h-6 w-6" />
             </button>
 
-            <p className="font-display text-primary text-xs tracking-[0.4em] mb-4">
+            <p className="font-display text-gold text-xs tracking-[0.4em] mb-4 drop-shadow-gold">
               𓂀 {lang === "ar" ? "حجرة الأسرار المحرمة" : "FORBIDDEN CHAMBER OF SECRETS"} 𓂀
             </p>
 
-            <div className="space-y-3 text-foreground/90 leading-relaxed mb-6 text-left">
+            <div className="space-y-3 text-gold/90 leading-relaxed mb-6 text-left drop-shadow-gold">
               {horrorLines.map((line, idx) => (
-                <p key={idx} className="border-l-2 border-primary/30 pl-4 text-sm italic">
+                <p key={idx} className="border-l-2 border-gold/50 pl-4 text-sm italic">
                   {line}
                 </p>
               ))}
@@ -132,13 +124,13 @@ export const HiddenChamber = () => {
                 sounds.ancient.pause();
                 sounds.ancient.currentTime = 0;
               }}
-              className="mt-2 inline-flex items-center gap-2 rounded-md bg-primary/20 px-4 py-2 font-display text-sm tracking-wider text-primary transition hover:bg-primary/40 hover:shadow-gold"
+              className="mt-2 inline-flex items-center gap-2 rounded-md bg-gold/20 border border-gold px-4 py-2 font-display text-sm tracking-wider text-gold transition hover:bg-gold hover:text-black shadow-gold"
             >
               <MessageSquare className="h-4 w-4" />
               {lang === "ar" ? "توجه إلى شات الفرعون" : "Go to Pharaoh's Chat"}
             </button>
 
-            <p className="mt-6 text-[10px] tracking-[0.3em] text-primary/50">
+            <p className="mt-6 text-[10px] tracking-[0.3em] text-gold/50">
               — 𓋴 SEALED BY THE SCRIBE OF THOTH 𓋴 —
             </p>
           </div>
