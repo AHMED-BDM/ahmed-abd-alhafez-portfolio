@@ -1,6 +1,11 @@
 import { useEffect, useState, useMemo } from "react";
 
-export const SandstormEffect = ({ mode }: { mode: "day" | "night" }) => {
+interface SandstormEffectProps {
+  mode: "day" | "night";
+  showSpotlight: boolean;
+}
+
+export const SandstormEffect = ({ mode, showSpotlight }: SandstormEffectProps) => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isActive, setIsActive] = useState(false);
 
@@ -11,7 +16,6 @@ export const SandstormEffect = ({ mode }: { mode: "day" | "night" }) => {
       left: Math.random() * 100 + "%",
       duration: 0.5 + Math.random() * 1,
       delay: Math.random() * 2,
-      size: 1 + Math.random() * 3 + "px",
       opacity: 0.1 + Math.random() * 0.5
     })), []);
 
@@ -57,35 +61,39 @@ export const SandstormEffect = ({ mode }: { mode: "day" | "night" }) => {
         ))}
       </div>
 
-      {/* 3. العاصفة الكثيفة والقناع */}
-      <div
-        className="fixed inset-0 z-[50] pointer-events-none transition-opacity duration-[1500ms]"
-        style={{
-          opacity: isActive ? 1 : 0,
-          background: "rgba(140, 90, 40, 0.85)",
-          backdropFilter: "blur(8px) contrast(1.1)",
-          WebkitMaskImage: `radial-gradient(circle 180px at ${mousePos.x}px ${mousePos.y}px, transparent 0%, rgba(0,0,0,0.3) 45%, black 100%)`,
-          maskImage: `radial-gradient(circle 180px at ${mousePos.x}px ${mousePos.y}px, transparent 0%, rgba(0,0,0,0.3) 45%, black 100%)`,
-        }}
-      >
-        <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none text-[20vw] font-bold text-amber-900">
-           DANGER
+      {/* 3. طبقة العاصفة الكثيفة والقناع (الكشاف) - تظهر فقط إذا showSpotlight === true */}
+      {showSpotlight && (
+        <div
+          className="fixed inset-0 z-[50] pointer-events-none transition-opacity duration-[1500ms]"
+          style={{
+            opacity: isActive ? 1 : 0,
+            background: "rgba(140, 90, 40, 0.85)",
+            backdropFilter: "blur(8px) contrast(1.1)",
+            WebkitMaskImage: `radial-gradient(circle 180px at ${mousePos.x}px ${mousePos.y}px, transparent 0%, rgba(0,0,0,0.3) 45%, black 100%)`,
+            maskImage: `radial-gradient(circle 180px at ${mousePos.x}px ${mousePos.y}px, transparent 0%, rgba(0,0,0,0.3) 45%, black 100%)`,
+          }}
+        >
+          <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none text-[20vw] font-bold text-amber-900">
+            DANGER
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* 4. توهج الكشاف */}
-      <div
-        className="fixed pointer-events-none z-[51] transition-opacity duration-[700ms]"
-        style={{
-          opacity: isActive ? 1 : 0,
-          left: mousePos.x - 250,
-          top: mousePos.y - 250,
-          width: 500,
-          height: 500,
-          background: `radial-gradient(circle, rgba(255, 200, 100, 0.15) 0%, rgba(210, 140, 50, 0.05) 40%, transparent 70%)`,
-          mixBlendMode: "screen"
-        }}
-      />
+      {/* 4. توهج الكشاف - يظهر فقط مع الكشاف */}
+      {showSpotlight && (
+        <div
+          className="fixed pointer-events-none z-[51] transition-opacity duration-[700ms]"
+          style={{
+            opacity: isActive ? 1 : 0,
+            left: mousePos.x - 250,
+            top: mousePos.y - 250,
+            width: 500,
+            height: 500,
+            background: `radial-gradient(circle, rgba(255, 200, 100, 0.15) 0%, rgba(210, 140, 50, 0.05) 40%, transparent 70%)`,
+            mixBlendMode: "screen"
+          }}
+        />
+      )}
 
       {/* 5. حبيبات الرمل */}
       <div className="fixed inset-0 z-[52] pointer-events-none opacity-[0.15] animate-grain bg-[url('https://www.transparenttextures.com/patterns/sandpaper.png')]" />
