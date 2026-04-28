@@ -39,13 +39,13 @@ export const SandstormEffect = ({ mode, showSpotlight }: SandstormEffectProps) =
 
   return (
     <>
-      {/* 1. القاعدة الأساسية */}
+      {/* طبقة الضباب الأساسية */}
       <div 
         className={`fixed inset-0 z-[40] pointer-events-none transition-opacity duration-[2000ms] ${isActive ? 'opacity-100' : 'opacity-0'}`}
         style={{ backgroundColor: "rgba(160, 110, 50, 0.2)", backdropFilter: "sepia(0.5) saturate(1.2)" }} 
       />
 
-      {/* 2. طبقة الرياح */}
+      {/* طبقة الرياح */}
       <div className="fixed inset-0 z-[41] pointer-events-none overflow-hidden opacity-40">
         {particles.map(p => (
           <div key={p.id} className="absolute bg-[#ffe4b5] animate-sand-streak"
@@ -61,8 +61,8 @@ export const SandstormEffect = ({ mode, showSpotlight }: SandstormEffectProps) =
         ))}
       </div>
 
-      {/* 3. طبقة العاصفة الكثيفة والقناع (الكشاف) - تظهر فقط إذا showSpotlight === true */}
-      {showSpotlight && (
+      {/* العاصفة الكثيفة + الكشاف (يظهر فقط إذا showSpotlight === true) */}
+      {showSpotlight ? (
         <div
           className="fixed inset-0 z-[50] pointer-events-none transition-opacity duration-[1500ms]"
           style={{
@@ -77,9 +77,19 @@ export const SandstormEffect = ({ mode, showSpotlight }: SandstormEffectProps) =
             DANGER
           </div>
         </div>
+      ) : (
+        // إذا تم رفض الكشاف, نعرض طبقة عاصفة كثيفة بدون فتحة (لا يرى المستخدم شيئاً)
+        <div
+          className="fixed inset-0 z-[50] pointer-events-none transition-opacity duration-[1500ms]"
+          style={{
+            opacity: isActive ? 1 : 0,
+            background: "rgba(140, 90, 40, 0.85)",
+            backdropFilter: "blur(8px) contrast(1.1)",
+          }}
+        />
       )}
 
-      {/* 4. توهج الكشاف - يظهر فقط مع الكشاف */}
+      {/* توهج الكشاف (يظهر فقط مع الكشاف) */}
       {showSpotlight && (
         <div
           className="fixed pointer-events-none z-[51] transition-opacity duration-[700ms]"
@@ -95,7 +105,7 @@ export const SandstormEffect = ({ mode, showSpotlight }: SandstormEffectProps) =
         />
       )}
 
-      {/* 5. حبيبات الرمل */}
+      {/* حبيبات الرمل */}
       <div className="fixed inset-0 z-[52] pointer-events-none opacity-[0.15] animate-grain bg-[url('https://www.transparenttextures.com/patterns/sandpaper.png')]" />
 
       <style>{`
