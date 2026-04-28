@@ -8,7 +8,7 @@ import p5 from "@/assets/project-shipping.png";
 import p6 from "@/assets/project-neural-body.png";
 import { ExternalLink, X } from "lucide-react";
 import { Sarcophagus } from "./Sarcophagus";
-import { useLang, T } from "@/i18n/LanguageContext";
+import { useLang } from "@/i18n/LanguageContext";
 
 const projects = [
   { img: p1, tags: ["Power BI", "KPI", "Analytics"], link: "#" },
@@ -23,7 +23,7 @@ export const Projects = () => {
   const { t } = useLang();
   const [opened, setOpened] = useState(false);
   const [active, setActive] = useState<number | null>(null);
-  const tt = (i: number, k: "title" | "desc") => t(`pi.${i}.${k}` as keyof typeof T);
+  const tt = (i: number, k: "title" | "desc") => t(`pi.${i}.${k}` as any);
 
   return (
     <section id="projects" className="relative py-28 px-6 overflow-hidden">
@@ -48,8 +48,8 @@ export const Projects = () => {
                   <h3 className="font-display text-lg text-gold tracking-wide mb-2">{tt(i, "title")}</h3>
                   <p className="text-sm text-foreground/80 mb-3 line-clamp-2">{tt(i, "desc")}</p>
                   <div className="flex flex-wrap gap-1.5">
-                    {p.tags.map(t => (
-                      <span key={t} className="text-[10px] tracking-widest px-2 py-0.5 border border-primary/50 text-primary">{t.toUpperCase()}</span>
+                    {p.tags.map(tag => (
+                      <span key={tag} className="text-[10px] tracking-widest px-2 py-0.5 border border-primary/50 text-primary">{tag.toUpperCase()}</span>
                     ))}
                   </div>
                 </div>
