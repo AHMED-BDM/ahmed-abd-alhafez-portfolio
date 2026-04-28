@@ -1,132 +1,136 @@
-import { sounds } from "../audio";
-import { useState, useEffect } from "react";
-import { EntryGate } from "@/components/portfolio/EntryGate";
-import { CustomCursor } from "@/components/portfolio/CustomCursor";
-import { ModeToggle } from "@/components/portfolio/ModeToggle";
-import { Navbar } from "@/components/portfolio/Navbar";
-import { Hero } from "@/components/portfolio/Hero";
-import { About } from "@/components/portfolio/About";
-import { Skills } from "@/components/portfolio/Skills";
-import { Certificates } from "@/components/portfolio/Certificates";
-import { Projects } from "@/components/portfolio/Projects";
-import { Contact } from "@/components/portfolio/Contact";
-import { SoundProvider } from "@/components/portfolio/SoundContext";
-import { Mummies } from "@/components/portfolio/Mummies";
-import { Curse } from "@/components/portfolio/Curse";
-import { Whispers } from "@/components/portfolio/Whispers";
-import { SecretPapyrus } from "@/components/portfolio/SecretPapyrus";
-import { TempleAtmosphere } from "@/components/portfolio/TempleAtmosphere";
-import { PharaohChat } from "@/components/portfolio/PharaohChat";
-import { AtmosphereControls } from "@/components/portfolio/AtmosphereControls";
-import { FourthWall } from "@/components/portfolio/FourthWall";
-import { HiddenChamber } from "@/components/portfolio/HiddenChamber";
-import { GithubDashboard } from "@/components/portfolio/GithubDashboard";
-import { VisionZone } from "@/components/portfolio/VisionZone";
-import { LanguageToggle } from "@/components/portfolio/LanguageToggle";
-import { LanguageProvider } from "@/i18n/LanguageContext";
-import { usePerformanceMode } from "@/hooks/usePerformanceMode";
-import { VolunteeringSarcophagus } from "@/components/portfolio/VolunteeringSarcophagus";
-import { SandstormEffect } from "@/components/portfolio/SandstormEffect";
-import { SacredInsects } from "@/components/portfolio/SacredInsects";
-import { SandstormWarning } from "@/components/portfolio/SandstormWarning";
+import { useEffect, useRef, useState } from "react";
+// 1. استيراد createPortal من react-dom
+import { createPortal } from "react-dom"; 
+import { X, MessageSquare } from "lucide-react";
+import { useSound } from "./SoundContext";
+import { useLang } from "@/i18n/LanguageContext";
+import { sounds } from "../../audio";
 
-const Index = () => {
-  const [entered, setEntered] = useState(false);
-  const [mode, setMode] = useState<"night" | "day">("night");
-  const [intensity, setIntensity] = useState<"subtle" | "immersive">("immersive");
-  const { reducedEffects } = usePerformanceMode();
-  const [showSandstorm, setShowSandstorm] = useState(true);
-  const [showWarning, setShowWarning] = useState(false);
-  const [showSpotlight, setShowSpotlight] = useState(true);
-
-  useEffect(() => {
-    if (mode === "day") {
-      setShowSandstorm(true);
-      setShowWarning(true);
-      setShowSpotlight(true);
-      console.log("🌞 Day mode – sandstorm warning should appear.");
-    } else {
-      setShowWarning(false);
-      setShowSandstorm(true);
-      setShowSpotlight(true);
-    }
-  }, [mode]);
-
-  const acceptChallenge = () => {
-    setShowWarning(false);
-    setShowSpotlight(true);
-  };
-
-  const rejectChallenge = () => {
-    setShowWarning(false);
-    setShowSpotlight(false);
-  };
-
-  const openSarcophagus = () => {
-    try {
-      const audio = sounds.box;
-      audio.currentTime = 0;
-      audio.play().catch(() => console.log("Audio play interaction needed"));
-    } catch (err) {
-      console.log("Audio not ready yet");
-    }
-  };
-
-  return (
-    <LanguageProvider>
-      <SoundProvider mode={mode} intensity={intensity} reducedEffects={reducedEffects}>
-        <div className={mode === "day" ? "day min-h-screen bg-stone-50" : "min-h-screen bg-black"}>
-          {!entered && <EntryGate onEnter={() => setEntered(true)} />}
-          <CustomCursor mode={mode} />
-          <TempleAtmosphere mode={mode} intensity={intensity} reducedEffects={reducedEffects} />
-          <Navbar />
-          <div className="fixed top-6 right-6 z-[100] flex items-center gap-3">
-            <LanguageToggle />
-            <ModeToggle
-              mode={mode}
-              onToggle={() => {
-                const nextMode = mode === "night" ? "day" : "night";
-                setMode(nextMode);
-                if (nextMode === "day") {
-                  sounds.night.pause();
-                  sounds.day.currentTime = 0;
-                  sounds.day.play().catch(e => console.log("Audio blocked"));
-                } else {
-                  sounds.day.pause();
-                  sounds.night.currentTime = 0;
-                  sounds.night.play().catch(e => console.log("Audio blocked"));
-                }
-              }}
-            />
-          </div>
-          <div className="hidden pointer-events-none opacity-0">
-            <AtmosphereControls intensity={intensity} onIntensityToggle={() => setIntensity(v => v === "immersive" ? "subtle" : "immersive")} />
-          </div>
-          <Mummies mode={mode} />
-          <Curse reducedEffects={reducedEffects} />
-          <Whispers />
-          <SecretPapyrus />
-          <HiddenChamber onOpenBox={openSarcophagus} />
-          <FourthWall reducedEffects={reducedEffects} />
-          <main className="relative z-10">
-            <Hero mode={mode} onOpenBox={openSarcophagus} />
-            <About />
-            <Skills />
-            <VisionZone mode={mode} />
-            <Certificates />
-            <Projects />
-            <GithubDashboard devMode={false} />
-            <VolunteeringSarcophagus />
-            <Contact />
-          </main>
-          <PharaohChat mode={mode} />
-          <SacredInsects mode={mode} />
-          {mode === "day" && showSandstorm && <SandstormEffect mode={mode} showSpotlight={showSpotlight} />}
-          {showWarning && mode === "day" && <SandstormWarning onAccept={acceptChallenge} onReject={rejectChallenge} />}
-        </div>
-      </SoundProvider>
-    </LanguageProvider>
-  );
+const openPharaohChat = () => {
+  const chatButton = document.querySelector('[data-pharaoh-chat-trigger]') as HTMLElement;
+  if (chatButton) chatButton.click();
+  else window.dispatchEvent(new CustomEvent("openPharaohChat"));
 };
 
-export default Index;
+export const HiddenChamber = () => {
+  const [unlocked, setUnlocked] = useState(false);
+  const [open, setOpen] = useState(false);
+  const clicksRef = useRef<number[]>([]);
+  const { play } = useSound();
+  const { t, lang } = useLang();
+
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollHeight = document.body.scrollHeight;
+      const windowHeight = window.innerHeight;
+      if (scrollHeight <= windowHeight) return;
+      const max = scrollHeight - windowHeight;
+      const scrolled = window.scrollY / max;
+      if (scrolled > 0.92 && !unlocked && window.scrollY > 30) {
+        setUnlocked(true);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [unlocked]);
+
+  const onSigilClick = () => {
+    const now = Date.now();
+    clicksRef.current = clicksRef.current.filter((t) => now - t < 2500);
+    clicksRef.current.push(now);
+    play("hover", { pan: 0.1, volume: 0.6 });
+    if (clicksRef.current.length >= 3) {
+      clicksRef.current = [];
+      setUnlocked(true);
+      play("open", { pan: 0, volume: 0.7 });
+      sounds.ancient.currentTime = 0;
+      sounds.ancient.play().catch(e => console.log(e));
+    }
+  };
+
+  const horrorLines = [
+    t("hidden.line1"), t("hidden.line2"), t("hidden.line3"),
+    t("hidden.line4"), t("hidden.line5"), t("hidden.line6")
+  ];
+
+  return (
+    <>
+      {/* الأزرار بتفضل زي ما هي fixed بالنسبة لمكان استدعاء المكون */}
+      <button
+        type="button"
+        onClick={onSigilClick}
+        className="fixed bottom-20 left-6 z-[55] h-9 w-9 rounded-full text-primary/30 transition hover:scale-125 hover:text-primary cursor-pointer"
+      >
+        𓆣
+      </button>
+
+      {unlocked && !open && (
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(true);
+            play("open", { pan: 0, volume: 0.7 });
+            sounds.ancient.currentTime = 0;
+            sounds.ancient.play().catch(e => console.log(e));
+          }}
+          className="fixed bottom-32 left-6 z-[55] rounded border border-primary/50 bg-card/85 px-3 py-1.5 font-display text-[10px] tracking-[0.25em] text-primary backdrop-blur-md hover:shadow-gold cursor-pointer"
+        >
+          𓂀 {lang === "ar" ? "ادخل الحجرة السرية" : "ENTER HIDDEN CHAMBER"}
+        </button>
+      )}
+
+      {/* 2. هنا نستخدم البورتال عشان المودال يخرج برا أي Stacking Context مزعج */}
+      {open && createPortal(
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-xl pointer-events-auto"
+          style={{ animation: "fadeIn 0.4s ease-out" }}
+          onClick={() => {
+            setOpen(false);
+            sounds.ancient.pause();
+          }}
+        >
+          <div
+            className="relative max-w-xl w-[90%] border-2 border-gold bg-stone-950/95 p-8 text-center shadow-[0_0_50px_rgba(212,175,55,0.3)] rounded-2xl"
+            style={{ animation: "scale-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-4 right-4 text-gold/50 hover:text-gold transition-colors"
+              onClick={() => setOpen(false)}
+            >
+              <X className="h-8 w-8" />
+            </button>
+
+            <p className="font-display text-gold text-sm tracking-[0.5em] mb-6 drop-shadow-gold">
+              𓂀 {lang === "ar" ? "حجرة الأسرار المحرمة" : "FORBIDDEN CHAMBER OF SECRETS"} 𓂀
+            </p>
+
+            <div className="space-y-4 text-gold/90 leading-relaxed mb-8 text-left border-y border-gold/20 py-6">
+              {horrorLines.map((line, idx) => (
+                <p key={idx} className="border-l-2 border-gold/30 pl-4 text-sm italic hover:border-gold transition-colors">
+                  {line}
+                </p>
+              ))}
+            </div>
+
+            <button
+              onClick={() => {
+                openPharaohChat();
+                setOpen(false);
+              }}
+              className="group relative inline-flex items-center gap-3 rounded-full bg-gold/10 border border-gold px-8 py-3 font-display text-sm tracking-widest text-gold transition-all hover:bg-gold hover:text-black"
+            >
+              <MessageSquare className="h-5 w-5 transition-transform group-hover:scale-110" />
+              {lang === "ar" ? "تحدث مع الكاهن" : "Summon the Priest"}
+            </button>
+
+            <p className="mt-8 text-[9px] tracking-[0.4em] text-gold/40 uppercase">
+              — 𓋴 sealed by the order of thoth 𓋴 —
+            </p>
+          </div>
+        </div>,
+        document.body // 👈 ده اللي بيخليه يترندر في الـ root بتاع الصفحة
+      )}
+    </>
+  );
+};
