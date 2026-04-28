@@ -285,7 +285,7 @@
   background-image: none;
 }
 
-/* ========== RTL Support for Arabic ========== */
+/* ========== RTL Support & Text Isolation (دمج كل القواعد في قسم واحد نظيف) ========== */
 html[dir="rtl"] {
   direction: rtl;
   text-align: right;
@@ -296,34 +296,38 @@ html[dir="ltr"] {
   text-align: left;
 }
 
-/* ضبط الهوامش والمسافات للعربية */
-[dir="rtl"] .pl-10 {
+/* استخدام Logical Properties للمسافات */
+[dir="rtl"] .ps-4 {
   padding-left: 0;
-  padding-right: 2.5rem;
+  padding-right: 1rem;
 }
-
-[dir="rtl"] .pr-10 {
+[dir="rtl"] .pe-4 {
   padding-right: 0;
-  padding-left: 2.5rem;
+  padding-left: 1rem;
 }
-
-[dir="rtl"] .mr-2 {
-  margin-right: 0;
-  margin-left: 0.5rem;
-}
-
-[dir="rtl"] .ml-2 {
+[dir="rtl"] .ms-2 {
   margin-left: 0;
   margin-right: 0.5rem;
 }
+[dir="rtl"] .me-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+[dir="rtl"] .text-start {
+  text-align: right;
+}
+[dir="rtl"] .text-end {
+  text-align: left;
+}
 
-/* تحسين عرض النصوص المختلطة */
-[dir="rtl"] p, [dir="rtl"] li, [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+/* عزل النصوص المختلطة (إنجليزي داخل عربي) - يمنع علامات الترقيم من الطفو */
+[dir="rtl"] p, [dir="rtl"] li, [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] div:not(.stats-number) {
   unicode-bidi: plaintext;
 }
 
-/* معالجة الأرقام والرموز */
-[dir="rtl"] .stats-number {
+/* إبقاء الأرقام والإحصائيات باتجاه LTR */
+.stats-number {
   display: inline-block;
   direction: ltr !important;
+  unicode-bidi: embed;
 }
