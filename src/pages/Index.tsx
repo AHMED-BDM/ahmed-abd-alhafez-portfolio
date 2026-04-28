@@ -35,31 +35,33 @@ const Index = () => {
   const [mode, setMode] = useState<"night" | "day">("night");
   const [intensity, setIntensity] = useState<"subtle" | "immersive">("immersive");
   const { reducedEffects } = usePerformanceMode();
-  const [showSandstorm, setShowSandstorm] = useState(true); // التحكم في العاصفة
-  const [showWarning, setShowWarning] = useState(false); // عرض رسالة التحذير عند التبديل للنهار
+  const [showSandstorm, setShowSandstorm] = useState(true);
+  const [showWarning, setShowWarning] = useState(false);
+  const [showSpotlight, setShowSpotlight] = useState(true); // التحكم في الكشاف
 
-  // عند تغيير mode إلى day، نظهر الرسالة ونعيد تفعيل العاصفة (إذا لم تكن معطلة بواسطة المستخدم)
+  // عند تغيير mode إلى day، نظهر الرسالة ونعيد تفعيل العاصفة والكشاف
   useEffect(() => {
     if (mode === "day") {
-      setShowSandstorm(true); // إعادة تفعيل العاصفة عند الدخول للنهار (يمكن أن تكون معطلة سابقًا)
+      setShowSandstorm(true);
       setShowWarning(true);
+      setShowSpotlight(true);
     } else {
       setShowWarning(false);
-      // عند العودة لليل، نعيد تفعيل العاصفة افتراضيًا (أو نحتفظ بالحالة السابقة، لكن الأفضل إعادة تفعيلها)
       setShowSandstorm(true);
+      setShowSpotlight(true);
     }
   }, [mode]);
 
-  // دالة لقبول التحدي (إبقاء العاصفة)
+  // قبول التحدي: يبقى الكشاف مفعلاً
   const acceptChallenge = () => {
     setShowWarning(false);
-    setShowSandstorm(true);
+    setShowSpotlight(true);
   };
 
-  // دالة لرفض التحدي (إلغاء العاصفة)
+  // رفض التحدي: نطفئ الكشاف فقط (العاصفة باقية)
   const rejectChallenge = () => {
     setShowWarning(false);
-    setShowSandstorm(false);
+    setShowSpotlight(false);
   };
 
   // دالة تشغيل صوت التابوت
@@ -141,18 +143,14 @@ const Index = () => {
           </main>
 
           <PharaohChat mode={mode} />
-
           <SacredInsects mode={mode} />
 
-          {/* العاصفة الرملية تظهر فقط في النهار وإذا كانت مفعلة */}
-          {mode === "day" && showSandstorm && <SandstormEffect mode={mode} />}
+          {/* العاصفة الرملية (تظهر فقط مع showSpotlight للتحكم في الكشاف) */}
+          {mode === "day" && showSandstorm && <SandstormEffect mode={mode} showSpotlight={showSpotlight} />}
 
-          {/* رسالة التحذير تظهر كل مرة ننتقل فيها إلى النهار */}
+          {/* رسالة التحذير (تظهر كل مرة ننتقل إلى النهار) */}
           {showWarning && mode === "day" && (
-            <SandstormWarning
-              onAccept={acceptChallenge}
-              onReject={rejectChallenge}
-            />
+            <SandstormWarning onAccept={acceptChallenge} onReject={rejectChallenge} />
           )}
         </div>
       </SoundProvider>
