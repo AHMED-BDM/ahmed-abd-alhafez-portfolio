@@ -39,6 +39,8 @@ const Index = () => {
   const [showWarning, setShowWarning] = useState(false);
   const [showSpotlight, setShowSpotlight] = useState(true);
 
+  // ✅ عند تبديل الوضع: إذا كان نهاراً => أظهر الرسالة، أظهر العاصفة، أظهر الكشاف
+  // ✅ إذا كان ليلاً => أخفِ الرسالة، أبِقِ العاصفة والكشاف افتراضياً
   useEffect(() => {
     if (mode === "day") {
       setShowSandstorm(true);
@@ -51,11 +53,13 @@ const Index = () => {
     }
   }, [mode]);
 
+  // ✅ قبول التحدي: يبقى الكشاف مفعلاً
   const acceptChallenge = () => {
     setShowWarning(false);
     setShowSpotlight(true);
   };
 
+  // ✅ رفض التحدي: نطفئ الكشاف فقط (العاصفة باقية)
   const rejectChallenge = () => {
     setShowWarning(false);
     setShowSpotlight(false);
@@ -134,8 +138,10 @@ const Index = () => {
           <PharaohChat mode={mode} />
           <SacredInsects mode={mode} />
 
+          {/* ✅ العاصفة الرملية: تظهر في النهار فقط، وتستقبل showSpotlight من الحالة */}
           {mode === "day" && showSandstorm && <SandstormEffect mode={mode} showSpotlight={showSpotlight} />}
 
+          {/* ✅ رسالة التحذير: تظهر فقط عند showWarning وكون الوضع نهاراً */}
           {showWarning && mode === "day" && (
             <SandstormWarning onAccept={acceptChallenge} onReject={rejectChallenge} />
           )}
