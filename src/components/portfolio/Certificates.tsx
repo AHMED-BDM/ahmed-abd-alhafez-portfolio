@@ -8,7 +8,7 @@ import cert5 from "@/assets/cert-canva-essentials.png";
 import cert6 from "@/assets/cert-microsoft-dax.png";
 import { X } from "lucide-react";
 import { Sarcophagus } from "./Sarcophagus";
-import { useLang, T } from "@/i18n/LanguageContext";
+import { useLang } from "@/i18n/LanguageContext";
 
 const certs = [
   { img: cert1, link: "https://coursera.org/verify/professional-cert/4V3WLQA2B3PL" },
@@ -24,7 +24,7 @@ export const Certificates = () => {
   const [open, setOpen] = useState<number | null>(null);
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
   const [unsealed, setUnsealed] = useState(false);
-  const tt = (i: number, k: "title" | "issuer" | "date") => t(`ci.${i}.${k}` as keyof typeof T);
+  const tt = (i: number, k: "title" | "issuer" | "date") => t(`ci.${i}.${k}` as any);
 
   return (
     <section id="certificates" className="relative py-28 px-6 overflow-hidden">
