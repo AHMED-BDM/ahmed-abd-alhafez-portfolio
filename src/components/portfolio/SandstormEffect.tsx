@@ -25,36 +25,37 @@ export const SandstormEffect = ({ mode }: { mode: "day" | "night" }) => {
         <div className="sand-layer fast" />
       </div>
 
-      {/* 2. طبقة العاصفة الأساسية (شفافة جزئياً) */}
+      {/* 2. طبقة العاصفة الأساسية (شفافة جزئياً للرؤية المتوسطة) */}
       <div
         className="fixed inset-0 pointer-events-none z-[50]"
         style={{
-          background: "rgba(160, 120, 60, 0.75)", // 👈 أخف من قبل
+          background: "rgba(180, 140, 80, 0.55)", // 👈 لون رملي أفتح شوية
           animation: "heatDistortion 6s ease-in-out infinite",
-          backdropFilter: "blur(10px) saturate(0.6)", // 👈 أقل blur
+          // 👇 قللنا الضبابية عشان النصوص تبقى مقروءة بصعوبة مش مختفية
+          backdropFilter: "blur(3px) saturate(0.7)", 
           
-          // 👇 هنا السحر: مش شفافية كاملة، في تدرج
-          WebkitMaskImage: `radial-gradient(circle 200px at ${mousePos.x}px ${mousePos.y}px,
-            rgba(0,0,0,0.2) 0%,
-            rgba(0,0,0,0.6) 40%,
-            rgba(0,0,0,1) 100%)`,
-          
-          maskImage: `radial-gradient(circle 200px at ${mousePos.x}px ${mousePos.y}px,
-            rgba(0,0,0,0.2) 0%,
-            rgba(0,0,0,0.6) 40%,
-            rgba(0,0,0,1) 100%)`,
+          // 👇 السحر المظبوط: 0% عند الماوس (شفاف تماماً)، 85% في الأطراف (عاصفة متوسطة)
+          WebkitMaskImage: `radial-gradient(circle 250px at ${mousePos.x}px ${mousePos.y}px, 
+            rgba(0,0,0,0) 0%, 
+            rgba(0,0,0,0.4) 40%, 
+            rgba(0,0,0,0.85) 100%)`,
+            
+          maskImage: `radial-gradient(circle 250px at ${mousePos.x}px ${mousePos.y}px, 
+            rgba(0,0,0,0) 0%, 
+            rgba(0,0,0,0.4) 40%, 
+            rgba(0,0,0,0.85) 100%)`,
         }}
       />
 
-      {/* 3. توهج الكشاف */}
+      {/* 3. توهج الكشاف (تم توسيعه وجعله واقعي) */}
       <div
-        className="fixed pointer-events-none z-[51] w-[300px] h-[300px] rounded-full"
+        className="fixed pointer-events-none z-[51] w-[400px] h-[400px] rounded-full"
         style={{
-          left: mousePos.x - 150,
-          top: mousePos.y - 150,
-          background:
-            "radial-gradient(circle, rgba(255, 220, 120, 0.25) 0%, rgba(255,200,100,0.08) 40%, transparent 70%)",
-          filter: "blur(8px)",
+          left: mousePos.x - 200,
+          top: mousePos.y - 200,
+          background: "radial-gradient(circle, rgba(255, 230, 150, 0.15) 0%, rgba(255, 200, 100, 0.05) 40%, transparent 70%)",
+          filter: "blur(12px)",
+          mixBlendMode: "screen" // 👈 بيخلي الإضاءة تندمج مع الخلفية كأنها كشاف حقيقي
         }}
       />
 
@@ -84,7 +85,7 @@ export const SandstormEffect = ({ mode }: { mode: "day" | "night" }) => {
         .sand-layer.fast {
           animation: sandMoveFast 10s linear infinite;
           opacity: 0.18;
-          filter: blur(1.5px);
+          filter: blur(1px); /* تقليل التغبيش عشان منأثرش على الرؤية العامة زيادة عن اللزوم */
         }
 
         @keyframes sandMoveSlow {
@@ -102,17 +103,17 @@ export const SandstormEffect = ({ mode }: { mode: "day" | "night" }) => {
           100% { transform: translate(-70%, 35%); }
         }
 
-        /* تموج حرارة */
+        /* تموج حرارة - تم تقليل الـ blur ليتناسب مع الرؤية المتوسطة */
         @keyframes heatDistortion {
-          0% { backdrop-filter: blur(10px) saturate(0.6); }
-          50% { backdrop-filter: blur(14px) saturate(0.5); }
-          100% { backdrop-filter: blur(10px) saturate(0.6); }
+          0% { backdrop-filter: blur(3px) saturate(0.7); }
+          50% { backdrop-filter: blur(5px) saturate(0.6); }
+          100% { backdrop-filter: blur(3px) saturate(0.7); }
         }
 
         /* ضوضاء خفيفة */
         .noise {
           background-image: url('https://www.transparenttextures.com/patterns/noise.png');
-          opacity: 0.05;
+          opacity: 0.04;
           animation: noiseMove 0.4s infinite;
         }
 
