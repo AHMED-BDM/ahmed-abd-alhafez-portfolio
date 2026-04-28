@@ -18,7 +18,6 @@ export const SandstormWarning = ({ onAccept, onReject }: SandstormWarningProps) 
         <button 
           onClick={onReject}
           className="absolute top-3 right-3 text-gold/70 hover:text-gold transition"
-          aria-label="Close"
         >
           <X className="w-6 h-6" />
         </button>
