@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom"; 
 import { X, MessageSquare } from "lucide-react";
-import { useSound } from "./SoundContext";
+import { useSound } from "./SoundContext"; // تأكد من المسار هنا @/components/portfolio/SoundContext
 import { useLang } from "@/i18n/LanguageContext";
 import { sounds } from "../../audio";
 
@@ -13,11 +14,16 @@ const openPharaohChat = () => {
 export const HiddenChamber = () => {
   const [unlocked, setUnlocked] = useState(false);
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false); // للأمان مع الـ Portal
   const clicksRef = useRef<number[]>([]);
   const { play } = useSound();
   const { t, lang } = useLang();
 
-  // فتح القفل عند النزول لأكثر من 92% (مع تجنب التفعيل المبكر)
+  // التأكد من أن المكون جاهز في المتصفح
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const onScroll = () => {
       const scrollHeight = document.body.scrollHeight;
@@ -25,16 +31,15 @@ export const HiddenChamber = () => {
       if (scrollHeight <= windowHeight) return;
       const max = scrollHeight - windowHeight;
       const scrolled = window.scrollY / max;
+      // تفعيل عند الوصول لـ 92% من الصفحة
       if (scrolled > 0.92 && !unlocked && window.scrollY > 30) {
         setUnlocked(true);
-        console.log("[HiddenChamber] Unlocked via deep scroll");
       }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [unlocked]);
 
-  // فتح القفل بالضغط ثلاث مرات على الختم (دون فتح المودال مباشرة)
   const onSigilClick = () => {
     const now = Date.now();
     clicksRef.current = clicksRef.current.filter((t) => now - t < 2500);
@@ -44,82 +49,83 @@ export const HiddenChamber = () => {
       clicksRef.current = [];
       setUnlocked(true);
       play("open", { pan: 0, volume: 0.7 });
-      sounds.ancient.currentTime = 0;
-      sounds.ancient.play().catch(e => console.log(e));
-      console.log("[HiddenChamber] Unlocked via sigil triple-click");
-      // لا نفتح المودال هنا - نتركه للمستخدم بالنقر على زر الدخول
+      if (sounds.ancient) {
+        sounds.ancient.currentTime = 0;
+        sounds.ancient.play().catch(e => console.log("Audio play blocked", e));
+      }
     }
   };
 
   const horrorLines = [
-    t("hidden.line1"),
-    t("hidden.line2"),
-    t("hidden.line3"),
-    t("hidden.line4"),
-    t("hidden.line5"),
-    t("hidden.line6")
+    t("hidden.line1"), t("hidden.line2"), t("hidden.line3"),
+    t("hidden.line4"), t("hidden.line5"), t("hidden.line6")
   ];
+
+  // إذا لم يتم تحميل المكون بعد، لا ترندر الـ Portal
+  if (!mounted) return null;
 
   return (
     <>
+      {/* ختم الجعران المقدس */}
       <button
         type="button"
         onClick={onSigilClick}
-        aria-label="Ancient sigil"
-        className="fixed bottom-20 left-6 z-[55] h-9 w-9 rounded-full text-primary/30 transition hover:scale-125 hover:text-primary cursor-pointer"
+        title="Ancient Sigil"
+        className="fixed bottom-20 left-6 z-[55] h-9 w-9 rounded-full text-primary/30 transition-all duration-500 hover:scale-150 hover:text-primary cursor-pointer flex items-center justify-center bg-black/20 backdrop-blur-sm border border-white/5"
       >
-        𓆣
+        <span className="text-xl">𓆣</span>
       </button>
 
+      {/* زر الدخول بعد فك القفل */}
       {unlocked && !open && (
         <button
           type="button"
           onClick={() => {
             setOpen(true);
             play("open", { pan: 0, volume: 0.7 });
-            sounds.ancient.currentTime = 0;
-            sounds.ancient.play().catch(e => console.log(e));
+            if (sounds.ancient) sounds.ancient.play();
           }}
-          className="fixed bottom-32 left-6 z-[55] rounded border border-primary/50 bg-card/85 px-3 py-1.5 font-display text-[10px] tracking-[0.25em] text-primary backdrop-blur-md hover:shadow-gold cursor-pointer"
+          className="fixed bottom-32 left-6 z-[55] rounded border border-gold/50 bg-stone-900/90 px-4 py-2 font-display text-[10px] tracking-[0.25em] text-gold backdrop-blur-md hover:shadow-[0_0_15px_rgba(212,175,55,0.5)] transition-all animate-pulse cursor-pointer"
         >
           𓂀 {lang === "ar" ? "ادخل الحجرة السرية" : "ENTER HIDDEN CHAMBER"}
         </button>
       )}
 
-      {open && (
+      {/* المودال باستخدام Portal للهروب من أي Stacking Context */}
+      {open && createPortal(
         <div
-          className="fixed inset-0 z-[300] flex items-center justify-center bg-black/85 backdrop-blur-md pointer-events-auto"
-          style={{ animation: "fadeIn 0.3s ease-out" }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-xl"
+          style={{ animation: "hiddenFadeIn 0.5s ease-out forwards" }}
           onClick={() => {
             setOpen(false);
-            sounds.ancient.pause();
-            sounds.ancient.currentTime = 0;
+            if (sounds.ancient) sounds.ancient.pause();
           }}
-          data-cursor="native"
         >
           <div
-            className="relative max-w-xl w-full mx-4 border-2 border-gold bg-stone-950/95 p-6 text-center shadow-2xl rounded-xl"
-            style={{ animation: "scale-in 0.3s ease-out" }}
+            className="relative max-w-xl w-[92%] border-2 border-gold/50 bg-stone-950 p-8 text-center shadow-[0_0_100px_rgba(0,0,0,1)] rounded-2xl overflow-hidden"
+            style={{ animation: "hiddenScaleIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards" }}
             onClick={(e) => e.stopPropagation()}
           >
+            {/* زخرفة خلفية خفيفة */}
+            <div className="absolute inset-0 opacity-5 pointer-events-none text-[10rem] flex items-center justify-center">𓁹</div>
+
             <button
-              className="absolute top-3 right-3 text-gold/70 hover:text-gold transition"
+              className="absolute top-4 right-4 text-gold/40 hover:text-gold transition-colors p-2"
               onClick={() => {
                 setOpen(false);
-                sounds.ancient.pause();
-                sounds.ancient.currentTime = 0;
+                if (sounds.ancient) sounds.ancient.pause();
               }}
             >
               <X className="h-6 w-6" />
             </button>
 
-            <p className="font-display text-gold text-xs tracking-[0.4em] mb-4 drop-shadow-gold">
+            <p className="font-display text-gold text-sm tracking-[0.5em] mb-8 drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]">
               𓂀 {lang === "ar" ? "حجرة الأسرار المحرمة" : "FORBIDDEN CHAMBER OF SECRETS"} 𓂀
             </p>
 
-            <div className="space-y-3 text-gold/90 leading-relaxed mb-6 text-left drop-shadow-gold">
+            <div className="space-y-5 text-gold/80 leading-relaxed mb-10 text-left border-y border-gold/10 py-8">
               {horrorLines.map((line, idx) => (
-                <p key={idx} className="border-l-2 border-gold/50 pl-4 text-sm italic">
+                <p key={idx} className="border-l-2 border-gold/20 pl-5 text-sm italic hover:text-gold transition-colors duration-500">
                   {line}
                 </p>
               ))}
@@ -129,21 +135,32 @@ export const HiddenChamber = () => {
               onClick={() => {
                 openPharaohChat();
                 setOpen(false);
-                sounds.ancient.pause();
-                sounds.ancient.currentTime = 0;
+                if (sounds.ancient) sounds.ancient.pause();
               }}
-              className="mt-2 inline-flex items-center gap-2 rounded-md bg-gold/20 border border-gold px-4 py-2 font-display text-sm tracking-wider text-gold transition hover:bg-gold hover:text-black shadow-gold"
+              className="group relative inline-flex items-center gap-3 rounded-full bg-gold/5 border border-gold/40 px-10 py-4 font-display text-xs tracking-[0.2em] text-gold transition-all hover:bg-gold hover:text-black hover:scale-105 active:scale-95"
             >
               <MessageSquare className="h-4 w-4" />
-              {lang === "ar" ? "توجه إلى شات الفرعون" : "Go to Pharaoh's Chat"}
+              {lang === "ar" ? "استدعِ الكاهن" : "SUMMON THE PRIEST"}
             </button>
 
-            <p className="mt-6 text-[10px] tracking-[0.3em] text-gold/50">
-              — 𓋴 SEALED BY THE SCRIBE OF THOTH 𓋴 —
+            <p className="mt-10 text-[8px] tracking-[0.5em] text-gold/30 uppercase">
+              — 𓋴 sealed by the order of thoth 𓋴 —
             </p>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
+
+      <style>{`
+        @keyframes hiddenFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes hiddenScaleIn {
+          from { opacity: 0; transform: scale(0.9) translateY(20px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+      `}</style>
     </>
   );
 };
