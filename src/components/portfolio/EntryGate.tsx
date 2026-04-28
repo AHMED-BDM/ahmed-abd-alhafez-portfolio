@@ -44,10 +44,11 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
         setOpening(true);
         playGateSound(); 
         
+        // تم ضبط الوقت ليصبح 5.2 ثانية (5 ثواني للحركة + 200 ملي ثانية أمان قبل الإخفاء)
         setTimeout(() => {
           setHidden(true);
           onEnter();
-        }, 6500);
+        }, 5200);
       }, 1000);
     }
   }, [dials, armed, onEnter]);
@@ -83,11 +84,11 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
       <div 
         className={`absolute inset-0 transition-opacity duration-[1500ms] ease-in-out ${imgLoaded ? "opacity-100" : "opacity-0"}`}
       >
-        {/* تأثير الضوء خلف الأبواب */}
+        {/* تأثير الضوء خلف الأبواب - متزامن مع الـ 5 ثواني */}
         <div 
           className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
           style={{ 
-            transition: "opacity 4s ease-in-out", 
+            transition: "opacity 5s ease-in-out", 
             opacity: opening ? 1 : 0,
             background: "radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%)"
           }}
@@ -102,8 +103,9 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
             style={{ 
               backgroundImage: `url(${gateImg})`, 
               transformOrigin: "left center",
-              transition: "transform 6s cubic-bezier(0.4, 0, 0.2, 1)", 
-              transform: opening ? "rotateY(-105deg) translateZ(0)" : "rotateY(0deg) translateZ(0)"
+              // استخدام منحنى حركة مخصص لإعطاء إحساس بوزن الحجر الثقيل لمدة 5 ثواني
+              transition: "transform 5s cubic-bezier(0.65, 0, 0.05, 1)", 
+              transform: opening ? "rotateY(-105deg) translate3d(0,0,0)" : "rotateY(0deg) translate3d(0,0,0)"
             }} 
           />
           <div 
@@ -112,8 +114,9 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
               backgroundImage: `url(${gateImg})`, 
               backgroundPositionX: "-100%",
               transformOrigin: "right center",
-              transition: "transform 6s cubic-bezier(0.4, 0, 0.2, 1)",
-              transform: opening ? "rotateY(105deg) translateZ(0)" : "rotateY(0deg) translateZ(0)"
+              // استخدام نفس منحنى الحركة للباب الأيمن
+              transition: "transform 5s cubic-bezier(0.65, 0, 0.05, 1)",
+              transform: opening ? "rotateY(105deg) translate3d(0,0,0)" : "rotateY(0deg) translate3d(0,0,0)"
             }} 
           />
         </div>
@@ -122,9 +125,9 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
         <div 
           className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-6"
           style={{ 
-            transition: "all 1s ease-in-out", 
+            transition: "all 1.5s ease-in-out", 
             opacity: opening ? 0 : 1,
-            transform: `translate(-50%, ${opening ? '20px' : '0'})`
+            transform: `translate(-50%, ${opening ? '30px' : '0'})`
           }}
         >
           <p className="font-display text-primary/70 text-[10px] tracking-[0.4em] uppercase animate-pulse">
