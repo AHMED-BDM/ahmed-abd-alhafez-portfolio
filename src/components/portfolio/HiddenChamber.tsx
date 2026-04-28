@@ -59,6 +59,7 @@ export const HiddenChamber = () => {
 
   return (
     <>
+      {/* الختم السري (الجعران) */}
       <button
         type="button"
         onClick={onSigilClick}
@@ -69,6 +70,7 @@ export const HiddenChamber = () => {
         𓆣
       </button>
 
+      {/* إشعار فتح الغرفة (يظهر في الأسفل بجوار الختم) */}
       {unlocked && !open && (
         <button
           type="button"
@@ -84,37 +86,33 @@ export const HiddenChamber = () => {
         </button>
       )}
 
+      {/* نافذة الغرفة السرية (Modal منبثق) */}
       {open && (
         <div
-          className="fixed inset-0 z-[96] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md pointer-events-auto"
-          style={{ animation: "fadeIn 0.5s ease-out" }}
-          data-cursor="native"
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-md pointer-events-auto"
+          style={{ animation: "fadeIn 0.3s ease-out" }}
           onClick={() => {
             setOpen(false);
             sounds.ancient.pause();
             sounds.ancient.currentTime = 0;
           }}
         >
-          <button
-            className="absolute top-6 right-6 z-10 text-primary cursor-pointer"
-            aria-label="Close hidden chamber"
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpen(false);
-              sounds.ancient.pause();
-              sounds.ancient.currentTime = 0;
-            }}
-            data-cursor="native"
-          >
-            <X className="h-7 w-7" />
-          </button>
-
           <div
-            className="relative max-w-xl w-full rounded-md border-2 border-primary/60 bg-stone-950/90 p-8 text-center shadow-2xl backdrop-blur-sm"
-            style={{ animation: "scale-in 0.6s ease-out" }}
-            data-cursor="native"
+            className="relative max-w-xl w-full mx-4 border-2 border-primary/60 bg-stone-950/95 p-6 text-center shadow-2xl rounded-xl"
+            style={{ animation: "scale-in 0.3s ease-out" }}
             onClick={(e) => e.stopPropagation()}
           >
+            <button
+              className="absolute top-3 right-3 text-primary/70 hover:text-primary transition"
+              onClick={() => {
+                setOpen(false);
+                sounds.ancient.pause();
+                sounds.ancient.currentTime = 0;
+              }}
+            >
+              <X className="h-6 w-6" />
+            </button>
+
             <p className="font-display text-primary text-xs tracking-[0.4em] mb-4">
               𓂀 {lang === "ar" ? "حجرة الأسرار المحرمة" : "FORBIDDEN CHAMBER OF SECRETS"} 𓂀
             </p>
@@ -134,7 +132,7 @@ export const HiddenChamber = () => {
                 sounds.ancient.pause();
                 sounds.ancient.currentTime = 0;
               }}
-              className="mt-4 inline-flex items-center gap-2 rounded-md bg-primary/20 px-4 py-2 font-display text-sm tracking-wider text-primary transition hover:bg-primary/40 hover:shadow-gold"
+              className="mt-2 inline-flex items-center gap-2 rounded-md bg-primary/20 px-4 py-2 font-display text-sm tracking-wider text-primary transition hover:bg-primary/40 hover:shadow-gold"
             >
               <MessageSquare className="h-4 w-4" />
               {lang === "ar" ? "توجه إلى شات الفرعون" : "Go to Pharaoh's Chat"}
