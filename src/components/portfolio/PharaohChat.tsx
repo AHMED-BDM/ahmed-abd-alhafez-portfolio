@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useSound } from "./SoundContext";
 import { useLang } from "@/i18n/LanguageContext";
-import { sounds } from "../../audio"; // ✅ استيراد ملف الأصوات الخاص بك
+import { sounds } from "../../audio";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -18,13 +18,13 @@ type ChatMessage = {
 const starterMessage: ChatMessage = {
   role: "assistant",
   content:
-    "**𓂀 Oracle of the Pharaoh** is awake. Ask about Ahmed's projects, certificates, skills, or career path and I shall reveal the scrolls.",
+    "**𓂀 Servant of Horus** is listening. Ask about Ahmed's data analysis projects, ML models, certificates, or career path, and I shall reveal what the scrolls hold.",
 };
 
 const suggestionPrompts = [
-  "Summarize Ahmed's strongest AI skills.",
-  "Which project should a recruiter open first?",
-  "Tell me about the certificates in this temple.",
+  "Summarize Ahmed's strongest data analysis skills.",
+  "Which project should a recruiter examine first?",
+  "Tell me about Ahmed's certifications in BI and AI.",
 ];
 
 export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
@@ -33,7 +33,7 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([starterMessage]);
   const { play } = useSound();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const greetedRef = useRef(false);
 
@@ -45,23 +45,34 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
     [mode],
   );
 
+  // التمرير إلى أسفل الرسائل تلقائياً
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading, open]);
 
+  // رسالة الترحيب المرعبة عند فتح الشات لأول مرة
   useEffect(() => {
     if (open && !greetedRef.current) {
       greetedRef.current = true;
-      console.log("[PharaohChat] First open — fourth-wall greeting");
-      const greet = t("chat.greet");
+      console.log("[PharaohChat] First open — sending eerie welcome");
+      const welcomeMsg = t("chat.welcome"); // تستخدم المفتاح من ملف الترجمة
       window.setTimeout(() => {
         setMessages((current) => [
           ...current,
-          { role: "assistant", content: greet },
+          { role: "assistant", content: welcomeMsg },
         ]);
       }, 700);
     }
   }, [open, t]);
+
+  // الاستماع لحدث فتح الشات من الغرفة السرية
+  useEffect(() => {
+    const handleOpenChat = () => {
+      if (!open) setOpen(true);
+    };
+    window.addEventListener("openPharaohChat", handleOpenChat);
+    return () => window.removeEventListener("openPharaohChat", handleOpenChat);
+  }, [open]);
 
   const sendMessage = async (prefill?: string) => {
     const content = (prefill ?? input).trim();
@@ -103,14 +114,22 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
     await sendMessage();
   };
 
+  // تحديد اسم الخادم حسب اللغة
+  const servantName = lang === "ar" ? "خادم حورس" : "Servant of Horus";
+
   return (
-    <div className="fixed bottom-5 right-5 z-[90] flex flex-col items-end gap-3 cursor-auto pointer-events-auto" data-cursor="native">
+    <div
+      className="fixed bottom-5 right-5 z-[90] flex flex-col items-end gap-3 cursor-auto pointer-events-auto"
+      data-cursor="native"
+    >
       {open && (
         <div className={`gold-frame w-[min(24rem,calc(100vw-1.5rem))] shadow-deep cursor-auto pointer-events-auto ${panelClasses}`} data-cursor="native">
           <div className="flex items-center justify-between border-b border-border/70 px-4 py-3">
             <div>
-              <p className="font-display text-sm tracking-[0.28em] text-primary">𓂀 ORACLE</p>
-              <p className="text-xs text-foreground/65">Pharaoh-style AI guide</p>
+              <p className="font-display text-sm tracking-[0.28em] text-primary">𓂀 {servantName}</p>
+              <p className="text-xs text-foreground/65">
+                {lang === "ar" ? "دليل بالذكاء الاصطناعي" : "AI guide"}
+              </p>
             </div>
             <Button
               variant="ghost"
@@ -169,7 +188,7 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
                 <div className="mr-8 rounded-md border border-primary/30 bg-background/35 px-4 py-3 text-sm text-foreground/70">
                   <span className="inline-flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-primary animate-pulse" />
-                    The oracle is reading the chamber walls...
+                    {lang === "ar" ? "الخادم يقرأ جدران الحجرة..." : "The servant is reading the chamber walls..."}
                   </span>
                 </div>
               )}
@@ -182,7 +201,7 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
               <Textarea
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
-                placeholder="Ask about projects, certificates, or Ahmed's path..."
+                placeholder={lang === "ar" ? "اسأل عن المشاريع، الشهادات، أو مسار أحمد..." : "Ask about projects, certificates, or Ahmed's path..."}
                 rows={2}
                 className="min-h-[3.25rem] resize-none border-primary/25 bg-background/40 text-foreground placeholder:text-muted-foreground"
               />
@@ -202,11 +221,11 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
       <Button
         size="lg"
         className="gold-frame h-14 rounded-full px-5 shadow-gold"
+        data-pharaoh-chat-trigger   // 👈 للربط مع الغرفة السرية
         onMouseEnter={() => play("hover", { pan: 0.45, volume: 0.8 })}
         onClick={() => {
           setOpen((current) => {
             const next = !current;
-            // 🔊 ✅ تشغيل صوت I See You عند فتح الشات
             if (next) {
               try {
                 sounds.iseeyou.currentTime = 0;
@@ -222,7 +241,7 @@ export const PharaohChat = ({ mode }: { mode: "night" | "day" }) => {
         }}
       >
         <MessageCircle className="h-5 w-5" />
-        ORACLE
+        {servantName}
       </Button>
     </div>
   );
