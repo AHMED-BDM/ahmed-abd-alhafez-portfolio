@@ -26,6 +26,9 @@ import { LanguageToggle } from "@/components/portfolio/LanguageToggle";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import { usePerformanceMode } from "@/hooks/usePerformanceMode";
 import { VolunteeringSarcophagus } from "@/components/portfolio/VolunteeringSarcophagus";
+// ✅ إضافة المكونات الجديدة
+import { SandstormEffect } from "@/components/portfolio/SandstormEffect";
+import { SacredInsects } from "@/components/portfolio/SacredInsects";
 
 const Index = () => {
   const [entered, setEntered] = useState(false);
@@ -125,6 +128,12 @@ const Index = () => {
 
           {/* شات القائد الفرعوني */}
           <PharaohChat mode={mode} />
+
+          {/* ✅ إضافة الحشرات المقدسة (تظهر ليلاً ونهاراً) */}
+          <SacredInsects mode={mode} />
+          
+          {/* ✅ إضافة العاصفة الرملية (تظهر فقط في وضع النهار) */}
+          <SandstormEffect mode={mode} />
           
         </div>
       </SoundProvider>
