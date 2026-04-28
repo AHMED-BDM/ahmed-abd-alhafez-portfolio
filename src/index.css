@@ -284,3 +284,46 @@
   background: hsl(var(--card));
   background-image: none;
 }
+
+/* ========== RTL Support for Arabic ========== */
+html[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
+/* ضبط الهوامش والمسافات للعربية */
+[dir="rtl"] .pl-10 {
+  padding-left: 0;
+  padding-right: 2.5rem;
+}
+
+[dir="rtl"] .pr-10 {
+  padding-right: 0;
+  padding-left: 2.5rem;
+}
+
+[dir="rtl"] .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+[dir="rtl"] .ml-2 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+/* تحسين عرض النصوص المختلطة */
+[dir="rtl"] p, [dir="rtl"] li, [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+  unicode-bidi: plaintext;
+}
+
+/* معالجة الأرقام والرموز */
+[dir="rtl"] .stats-number {
+  display: inline-block;
+  direction: ltr !important;
+}
