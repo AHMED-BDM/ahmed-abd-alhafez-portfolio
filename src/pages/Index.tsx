@@ -1,5 +1,5 @@
 import { sounds } from "../audio";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EntryGate } from "@/components/portfolio/EntryGate";
 import { CustomCursor } from "@/components/portfolio/CustomCursor";
 import { ModeToggle } from "@/components/portfolio/ModeToggle";
@@ -28,15 +28,41 @@ import { usePerformanceMode } from "@/hooks/usePerformanceMode";
 import { VolunteeringSarcophagus } from "@/components/portfolio/VolunteeringSarcophagus";
 import { SandstormEffect } from "@/components/portfolio/SandstormEffect";
 import { SacredInsects } from "@/components/portfolio/SacredInsects";
-import { SandstormWarning } from "@/components/portfolio/SandstormWarning"; // ✅ إضافة رسالة التحذير
+import { SandstormWarning } from "@/components/portfolio/SandstormWarning";
 
 const Index = () => {
   const [entered, setEntered] = useState(false);
   const [mode, setMode] = useState<"night" | "day">("night");
   const [intensity, setIntensity] = useState<"subtle" | "immersive">("immersive");
   const { reducedEffects } = usePerformanceMode();
+  const [showSandstorm, setShowSandstorm] = useState(true); // التحكم في العاصفة
+  const [showWarning, setShowWarning] = useState(false); // عرض رسالة التحذير عند التبديل للنهار
 
-  // 🔊 دالة تشغيل صوت التابوت عند التفاعل مع العناصر الملكية
+  // عند تغيير mode إلى day، نظهر الرسالة ونعيد تفعيل العاصفة (إذا لم تكن معطلة بواسطة المستخدم)
+  useEffect(() => {
+    if (mode === "day") {
+      setShowSandstorm(true); // إعادة تفعيل العاصفة عند الدخول للنهار (يمكن أن تكون معطلة سابقًا)
+      setShowWarning(true);
+    } else {
+      setShowWarning(false);
+      // عند العودة لليل، نعيد تفعيل العاصفة افتراضيًا (أو نحتفظ بالحالة السابقة، لكن الأفضل إعادة تفعيلها)
+      setShowSandstorm(true);
+    }
+  }, [mode]);
+
+  // دالة لقبول التحدي (إبقاء العاصفة)
+  const acceptChallenge = () => {
+    setShowWarning(false);
+    setShowSandstorm(true);
+  };
+
+  // دالة لرفض التحدي (إلغاء العاصفة)
+  const rejectChallenge = () => {
+    setShowWarning(false);
+    setShowSandstorm(false);
+  };
+
+  // دالة تشغيل صوت التابوت
   const openSarcophagus = () => {
     try {
       const audio = sounds.box;
@@ -69,7 +95,7 @@ const Index = () => {
               onToggle={() => {
                 const nextMode = mode === "night" ? "day" : "night";
                 setMode(nextMode);
-                // تبديل الموسيقى الخلفية بناءً على الوقت (ليل/نهار)
+                // تبديل الموسيقى الخلفية
                 if (nextMode === "day") {
                   sounds.night.pause();
                   sounds.day.currentTime = 0;
@@ -83,7 +109,7 @@ const Index = () => {
             />
           </div>
 
-          {/* أدوات التحكم المخفية في الغلاف الجوي */}
+          {/* أدوات التحكم المخفية */}
           <div className="hidden pointer-events-none opacity-0">
             <AtmosphereControls
               intensity={intensity}
@@ -101,43 +127,33 @@ const Index = () => {
           <HiddenChamber onOpenBox={openSarcophagus} />
           <FourthWall reducedEffects={reducedEffects} />
 
-          {/* المحتوى الأساسي للموقع */}
+          {/* المحتوى الأساسي */}
           <main className="relative z-10">
-            {/* 1. قسم الواجهة: يظهر فيه صورتك الرسمية professional-photo.jpeg */}
             <Hero mode={mode} onOpenBox={openSarcophagus} />
-            
             <About />
-            
             <Skills />
-
-            {/* 2. ✅ قسم الرؤية: يظهر فيه صورتك بالصولجان personal-photo.png في منتصف الصفحة */}
             <VisionZone mode={mode} />
-
             <Certificates />
-            
             <Projects />
-            
-            {/* لوحة بيانات GitHub (Developer Mode Off) */}
             <GithubDashboard devMode={false} />
-
-            {/* قسم التطوع والقيادة (Required for Grade) */}
             <VolunteeringSarcophagus />
-
             <Contact />
           </main>
 
-          {/* شات القائد الفرعوني */}
           <PharaohChat mode={mode} />
 
-          {/* ✅ إضافة الحشرات المقدسة (تظهر ليلاً ونهاراً) */}
           <SacredInsects mode={mode} />
-          
-          {/* ✅ إضافة العاصفة الرملية (تظهر فقط في وضع النهار) */}
-          <SandstormEffect mode={mode} />
 
-          {/* ✅ إضافة رسالة تحذير العاصفة الرملية (مرعبة وتظهر مرة واحدة لكل جلسة) */}
-          <SandstormWarning mode={mode} onAcknowledge={() => {}} />
-          
+          {/* العاصفة الرملية تظهر فقط في النهار وإذا كانت مفعلة */}
+          {mode === "day" && showSandstorm && <SandstormEffect mode={mode} />}
+
+          {/* رسالة التحذير تظهر كل مرة ننتقل فيها إلى النهار */}
+          {showWarning && mode === "day" && (
+            <SandstormWarning
+              onAccept={acceptChallenge}
+              onReject={rejectChallenge}
+            />
+          )}
         </div>
       </SoundProvider>
     </LanguageProvider>
