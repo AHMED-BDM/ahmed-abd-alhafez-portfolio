@@ -26,6 +26,9 @@ import { LanguageToggle } from "@/components/portfolio/LanguageToggle";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import { usePerformanceMode } from "@/hooks/usePerformanceMode";
 
+// ✅ استيراد قسم التطوع الجديد
+import { VolunteeringSarcophagus } from "@/components/portfolio/VolunteeringSarcophagus";
+
 const Index = () => {
   const [entered, setEntered] = useState(false);
   const [mode, setMode] = useState<"night" | "day">("night");
@@ -100,8 +103,13 @@ const Index = () => {
             <Skills />
             <Certificates />
             <Projects />
+            
             {/* ✅ تم إيقاف وضع المطور نهائياً بتمرير false */}
             <GithubDashboard devMode={false} />
+
+            {/* ✅ قسم التطوع الجديد المضاف بناءً على متطلبات التقييم */}
+            <VolunteeringSarcophagus />
+
             <Contact />
           </main>
 
