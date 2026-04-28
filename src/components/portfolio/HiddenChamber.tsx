@@ -4,15 +4,11 @@ import { useSound } from "./SoundContext";
 import { useLang } from "@/i18n/LanguageContext";
 import { sounds } from "../../audio";
 
-// استدعاء دالة لفتح شات الفرعون (سنقوم بتعريفها لاحقًا)
-// سنفترض وجود معرف أو حدث عام يمكن استدعاؤه لفتح الشات
 const openPharaohChat = () => {
-  // نبحث عن عنصر الشات أو نرسل حدث مخصص
   const chatButton = document.querySelector('[data-pharaoh-chat-trigger]') as HTMLElement;
   if (chatButton) {
     chatButton.click();
   } else {
-    // بديل: ننشئ حدث مخصص يمكن لأي مكون الاستماع إليه
     window.dispatchEvent(new CustomEvent("openPharaohChat"));
   }
 };
@@ -22,7 +18,7 @@ export const HiddenChamber = () => {
   const [open, setOpen] = useState(false);
   const clicksRef = useRef<number[]>([]);
   const { play } = useSound();
-  const { t, lang } = useLang(); // lang لتحديد اللغة إذا احتجنا
+  const { t, lang } = useLang();
 
   useEffect(() => {
     const onScroll = () => {
@@ -52,7 +48,6 @@ export const HiddenChamber = () => {
     }
   };
 
-  // الأسطر الستة المخيفة (تؤخذ من الترجمة)
   const horrorLines = [
     t("hidden.line1"),
     t("hidden.line2"),
@@ -64,7 +59,6 @@ export const HiddenChamber = () => {
 
   return (
     <>
-      {/* الختم السري (الجعران) */}
       <button
         type="button"
         onClick={onSigilClick}
@@ -75,7 +69,6 @@ export const HiddenChamber = () => {
         𓆣
       </button>
 
-      {/* إشعار فتح الغرفة (يظهر في الأسفل بجوار الختم) */}
       {unlocked && !open && (
         <button
           type="button"
@@ -91,22 +84,22 @@ export const HiddenChamber = () => {
         </button>
       )}
 
-      {/* نافذة الغرفة السرية (6 أسطر + رابط للشات) */}
       {open && (
         <div
+          className="fixed inset-0 z-[96] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md pointer-events-auto"
+          style={{ animation: "fadeIn 0.5s ease-out" }}
+          data-cursor="native"
           onClick={() => {
             setOpen(false);
             sounds.ancient.pause();
             sounds.ancient.currentTime = 0;
           }}
-          className="fixed inset-0 z-[96] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md cursor-auto pointer-events-auto"
-          style={{ animation: "fadeIn 0.5s ease-out" }}
-          data-cursor="native"
         >
           <button
             className="absolute top-6 right-6 z-10 text-primary cursor-pointer"
             aria-label="Close hidden chamber"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setOpen(false);
               sounds.ancient.pause();
               sounds.ancient.currentTime = 0;
@@ -117,17 +110,15 @@ export const HiddenChamber = () => {
           </button>
 
           <div
-            onClick={(e) => e.stopPropagation()}
             className="relative max-w-xl w-full rounded-md border-2 border-primary/60 bg-stone-950/90 p-8 text-center shadow-2xl backdrop-blur-sm"
             style={{ animation: "scale-in 0.6s ease-out" }}
             data-cursor="native"
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* عنوان مخيف */}
             <p className="font-display text-primary text-xs tracking-[0.4em] mb-4">
               𓂀 {lang === "ar" ? "حجرة الأسرار المحرمة" : "FORBIDDEN CHAMBER OF SECRETS"} 𓂀
             </p>
 
-            {/* الأسطر الستة */}
             <div className="space-y-3 text-foreground/90 leading-relaxed mb-6 text-left">
               {horrorLines.map((line, idx) => (
                 <p key={idx} className="border-l-2 border-primary/30 pl-4 text-sm italic">
@@ -136,11 +127,10 @@ export const HiddenChamber = () => {
               ))}
             </div>
 
-            {/* الزر الذي يوجه إلى شات الفرعون */}
             <button
               onClick={() => {
                 openPharaohChat();
-                setOpen(false); // إغلاق الغرفة بعد التوجيه
+                setOpen(false);
                 sounds.ancient.pause();
                 sounds.ancient.currentTime = 0;
               }}
