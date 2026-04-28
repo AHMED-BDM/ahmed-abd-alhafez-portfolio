@@ -1,54 +1,107 @@
-import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
+import { useLang } from "@/i18n/LanguageContext";
+import heroNight from "@/assets/hero-temple-night.jpg";
+import heroDay from "@/assets/hero-temple-day.jpg";
 
-export type Lang = "en" | "ar";
-type Dict = Record<string, { en: string; ar: string }>;
+export const Hero = ({ mode, onOpenBox }: { mode: "night" | "day", onOpenBox: () => void }) => {
+  const { t } = useLang();
 
-export const T: Dict = {
-  "nav.about": { en: "About", ar: "نبذة" },
-  "nav.skills": { en: "Skills", ar: "المهارات" },
-  "nav.certificates": { en: "Certificates", ar: "الشهادات" },
-  "nav.projects": { en: "Projects", ar: "المشاريع" },
-  "nav.volunteering": { en: "Volunteering", ar: "التطوع" },
-  "nav.contact": { en: "Contact", ar: "تواصل" },
+  return (
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24">
+      {/* خلفية المعبد المتغيرة حسب المود */}
+      <img
+        src={mode === "night" ? heroNight : heroDay}
+        alt="Ancient Egyptian temple"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+        width={1920} 
+        height={1280}
+      />
+      <div className="absolute inset-0 bg-background/55 backdrop-blur-[2px]" />
 
-  // Hero Section
-  "hero.eyebrow": { en: "𓂀 · DATA ARCHITECT · 𓋹", ar: "𓂀 · مهندس بيانات · 𓋹" },
-  "hero.name1": { en: "AHMED", ar: "أحمد" },
-  "hero.name2": { en: "ABD AL-HAFEZ", ar: "عبد الحافظ" },
-  "hero.role": { en: "Data Analyst • ML Enthusiast • BI Specialist", ar: "محلل بيانات • شغوف بتعلم الآلة • أخصائي ذكاء أعمال" },
-  "hero.tagline": { 
-    en: "Strategic Data Analyst with 1+ year of applied experience. Expert in SQL, Python, and Power BI, focusing on Machine Learning to drive data-driven decision making. Certified by MCIT (Digilians).", 
-    ar: "محلل بيانات استراتيجي بخبرة تزيد عن عام. خبير في SQL وPython وPower BI، مع تركيز على تعلم الآلة لدعم اتخاذ القرار. معتمد من وزارة الاتصالات (Digilians)." 
-  },
-  "hero.cta1": { en: "The Scribe's Tale", ar: "حكاية الكاتب" },
-  "hero.cta2": { en: "View Projects", ar: "عرض المشاريع" },
+      <div className="relative z-10 container grid md:grid-cols-2 gap-12 items-center py-20">
+        {/* الجانب النصي التعريفي */}
+        <div className="reveal-up">
+          <p className="font-display text-primary tracking-[0.5em] text-xs mb-6 uppercase">
+            {t("hero.eyebrow")}
+          </p>
+          <h1 className="font-display text-5xl md:text-7xl font-black leading-[1.05] mb-6">
+            <span className="text-gold block">{t("hero.name1")}</span>
+            <span className="text-gold block">{t("hero.name2")}</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-foreground/90 italic mb-3 max-w-xl">
+            {t("hero.role")}
+          </p>
+          <p className="text-foreground/70 max-w-lg mb-10 leading-relaxed">
+            {t("hero.tagline")}
+          </p>
+          
+          <div className="flex flex-wrap gap-4">
+            <a href="#about"
+              className="group relative px-8 py-3 font-display tracking-widest text-sm bg-primary text-primary-foreground gold-frame hover:shadow-gold transition-all">
+              {t("hero.cta1")}
+            </a>
+            <a href="#projects"
+              className="px-8 py-3 font-display tracking-widest text-sm border-2 border-primary/50 text-primary hover:bg-primary/10 transition-all">
+              {t("hero.cta2")}
+            </a>
+          </div>
+        </div>
 
-  // VisionZone (Middle Page)
-  "mid.spirit": { en: "𓋹 THE SCRIBE'S ANCIENT VISION 𓋹", ar: "𓋹 رؤية الكاتب الأزلية 𓋹" },
+        {/* جانب الصورة الرسمية (البرواز الملكي) */}
+        <div className="relative flex justify-center reveal-up" style={{ animationDelay: "0.3s" }} onClick={onOpenBox}>
+          <div className="absolute inset-0 rounded-full blur-3xl bg-primary/20 animate-pulse" />
+          
+          <div className="relative group cursor-pointer transition-transform duration-500 hover:scale-[1.02]" style={{ width: "min(24rem, 90vw)" }}>
+            {/* الإطار الذهبي الخارجي مع النقوش */}
+            <div className="relative p-4 rounded-md gold-frame bg-gradient-to-b from-amber-900/40 via-card/60 to-amber-900/40 backdrop-blur-sm shadow-gold overflow-hidden">
+              
+              {/* شريط الرموز العلوي */}
+              <div className="absolute top-0 left-0 right-0 h-7 flex items-center justify-around px-3 text-primary/80 font-display text-sm tracking-widest bg-gradient-to-b from-background/80 to-transparent border-b border-primary/40">
+                <span>𓂀</span><span>𓋹</span><span>𓆣</span><span>𓋹</span><span>𓂀</span>
+              </div>
 
-  // Projects (P-S-T-O Format)
-  "pi.0.title": { en: "Fleet Performance Dashboard", ar: "لوحة أداء الأسطول" },
-  "pi.0.desc": { en: "Problem: Logistics inefficiency. Solution: Real-time BI dashboard. Tools: SQL, Power BI. Outcome: 15% fuel waste reduction.", ar: "المشكلة: عدم كفاءة اللوجستيات. الحل: لوحة ذكاء أعمال لحظية. الأدوات: SQL و Power BI. النتيجة: تقليل هدر الوقود بنسبة 15%." },
-  
-  // Volunteering
-  "vol.eyebrow": { en: "𓋴 · CHAPTER · VI", ar: "𓋴 · الفصل · ٦" },
-  "vol.title": { en: "The Leader's Chamber", ar: "حجرة القائد" },
-  "vol.solve": { en: "Align the sacred dials to unlock the Leader's Path", ar: "قم بمحاذاة الأقراص المقدسة للكشف عن مسار القيادة" },
-};
+              {/* حاوية الصورة المربعة */}
+              <div className="relative my-7 p-[3px] bg-gradient-to-br from-amber-300 via-yellow-600 to-amber-800 rounded-sm">
+                <div className="p-[2px] bg-background/50 rounded-sm overflow-hidden aspect-square relative">
+                  
+                  {/* ✅ صورتك الرسمية (Professional) */}
+                  <img 
+                    src="/professional-photo.jpeg" 
+                    alt="Ahmed Abd Al-Hafez - Professional Portrait" 
+                    className="w-full h-full object-cover object-top transition-all duration-700 group-hover:scale-110 group-hover:brightness-110" 
+                    loading="eager"
+                  />
+                  
+                  {/* تأثير لمعان الذهب فوق الصورة */}
+                  <div className="pointer-events-none absolute inset-0 shimmer-gold opacity-20" />
+                  
+                  {/* زوايا مزخرفة داخلية */}
+                  <span className="absolute top-1 left-1 text-primary/60 text-[10px]">𓋹</span>
+                  <span className="absolute top-1 right-1 text-primary/60 text-[10px]">𓋹</span>
+                  <span className="absolute bottom-1 left-1 text-primary/60 text-[10px]">𓂀</span>
+                  <span className="absolute bottom-1 right-1 text-primary/60 text-[10px]">𓂀</span>
+                </div>
+              </div>
 
-const LangCtx = createContext<any>(null);
-export const useLang = () => useContext(LangCtx);
-export const LanguageProvider = ({ children }: { ReactNode }) => {
-  const [lang, setLangState] = useState<Lang>("en");
-  useEffect(() => {
-    const stored = window.localStorage.getItem("temple.lang") as Lang;
-    if (stored) setLangState(stored);
-  }, []);
-  const toggle = useCallback(() => {
-    const next = lang === "en" ? "ar" : "en";
-    setLangState(next);
-    window.localStorage.setItem("temple.lang", next);
-  }, [lang]);
-  const t = (key: string) => T[key]?.[lang] ?? T[key]?.en ?? key;
-  return <LangCtx.Provider value={{ lang, toggle, t }}>{children}</LangCtx.Provider>;
+              {/* شريط الرموز السفلي */}
+              <div className="absolute bottom-0 left-0 right-0 h-7 flex items-center justify-around px-3 text-primary/80 font-display text-sm tracking-widest bg-gradient-to-t from-background/80 to-transparent border-t border-primary/40">
+                <span>𓋴</span><span>𓎟</span><span>𓍿</span><span>𓎟</span><span>𓋴</span>
+              </div>
+            </div>
+
+            {/* لوحة الاسم السفلي (Cartouche) */}
+            <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 px-6 py-1.5 rounded-full bg-background/95 border-2 border-primary/70 shadow-gold whitespace-nowrap z-20">
+              <span className="font-display text-primary text-[10px] tracking-[0.4em] uppercase">
+                𓋹 · {t("hero.name1")} {t("hero.name2")} · 𓋹
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* أيقونة التمرير للأسفل */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-primary text-2xl animate-bounce opacity-50">
+        𓂀
+      </div>
+    </section>
+  );
 };
