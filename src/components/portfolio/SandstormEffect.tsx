@@ -1,15 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 export const SandstormEffect = ({ mode }: { mode: "day" | "night" }) => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  // توليد ذرات رمل عشوائية عشان متتكررش كل رندر
+  const sandGrains = useMemo(() => 
+    Array.from({ length: 40 }).map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      size: Math.random() * 3 + 1,
+      duration: Math.random() * 2 + 1,
+      delay: Math.random() * 5
+    })), []);
+
   useEffect(() => {
     if (mode !== "day") return;
-
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
     };
-
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mode]);
@@ -18,111 +27,103 @@ export const SandstormEffect = ({ mode }: { mode: "day" | "night" }) => {
 
   return (
     <>
-      {/* 1. طبقات الرمل المتحركة */}
-      <div className="fixed inset-0 pointer-events-none z-[45] overflow-hidden">
-        <div className="sand-layer slow" />
-        <div className="sand-layer medium" />
-        <div className="sand-layer fast" />
+      {/* 1. ذرات الرمل المتطايرة (Particles) */}
+      <div className="fixed inset-0 pointer-events-none z-[53] overflow-hidden">
+        {sandGrains.map((grain) => (
+          <div
+            key={grain.id}
+            className="absolute bg-[#e3b677] rounded-full opacity-60"
+            style={{
+              left: `${grain.left}%`,
+              top: `${grain.top}%`,
+              width: `${grain.size}px`,
+              height: `${grain.size}px`,
+              animation: `sandFly ${grain.duration}s linear infinite`,
+              animationDelay: `${grain.delay}s`,
+              filter: 'blur(0.5px)'
+            }}
+          />
+        ))}
       </div>
 
-      {/* 2. طبقة العاصفة الأساسية (شفافة جزئياً للرؤية المتوسطة) */}
+      {/* 2. وهج الشمس الحارق (Heat Haze) */}
+      <div className="fixed inset-0 pointer-events-none z-[44] opacity-30 bg-gradient-to-tr from-orange-500/20 via-transparent to-yellow-500/20 mix-blend-overlay" />
+
+      {/* 3. طبقات الرمل الكثيفة المتحركة */}
+      <div className="fixed inset-0 pointer-events-none z-[45] overflow-hidden opacity-40">
+        <div className="sand-layer fast-storm" />
+        <div className="sand-layer medium-storm" />
+      </div>
+
+      {/* 4. طبقة العاصفة الأساسية (الرؤية المتوسطة) */}
       <div
         className="fixed inset-0 pointer-events-none z-[50]"
         style={{
-          background: "rgba(180, 140, 80, 0.55)", // 👈 لون رملي أفتح شوية
-          animation: "heatDistortion 6s ease-in-out infinite",
-          // 👇 قللنا الضبابية عشان النصوص تبقى مقروءة بصعوبة مش مختفية
-          backdropFilter: "blur(3px) saturate(0.7)", 
+          background: "rgba(194, 155, 100, 0.65)", 
+          animation: "heatDistortion 4s ease-in-out infinite",
+          backdropFilter: "blur(4px) saturate(0.5) sepia(0.3)", // إضافة sepia للجو الصحراوي
           
-          // 👇 السحر المظبوط: 0% عند الماوس (شفاف تماماً)، 85% في الأطراف (عاصفة متوسطة)
-          WebkitMaskImage: `radial-gradient(circle 250px at ${mousePos.x}px ${mousePos.y}px, 
+          WebkitMaskImage: `radial-gradient(circle 220px at ${mousePos.x}px ${mousePos.y}px, 
             rgba(0,0,0,0) 0%, 
-            rgba(0,0,0,0.4) 40%, 
-            rgba(0,0,0,0.85) 100%)`,
-            
-          maskImage: `radial-gradient(circle 250px at ${mousePos.x}px ${mousePos.y}px, 
+            rgba(0,0,0,0.5) 50%, 
+            rgba(0,0,0,0.9) 100%)`,
+          maskImage: `radial-gradient(circle 220px at ${mousePos.x}px ${mousePos.y}px, 
             rgba(0,0,0,0) 0%, 
-            rgba(0,0,0,0.4) 40%, 
-            rgba(0,0,0,0.85) 100%)`,
+            rgba(0,0,0,0.5) 50%, 
+            rgba(0,0,0,0.9) 100%)`,
         }}
       />
 
-      {/* 3. توهج الكشاف (تم توسيعه وجعله واقعي) */}
+      {/* 5. الكشاف التفاعلي */}
       <div
-        className="fixed pointer-events-none z-[51] w-[400px] h-[400px] rounded-full"
+        className="fixed pointer-events-none z-[51] w-[350px] h-[350px] rounded-full"
         style={{
-          left: mousePos.x - 200,
-          top: mousePos.y - 200,
-          background: "radial-gradient(circle, rgba(255, 230, 150, 0.15) 0%, rgba(255, 200, 100, 0.05) 40%, transparent 70%)",
-          filter: "blur(12px)",
-          mixBlendMode: "screen" // 👈 بيخلي الإضاءة تندمج مع الخلفية كأنها كشاف حقيقي
+          left: mousePos.x - 175,
+          top: mousePos.y - 175,
+          background: "radial-gradient(circle, rgba(255, 240, 200, 0.2) 0%, transparent 80%)",
+          boxShadow: "0 0 50px rgba(210, 160, 80, 0.3)",
+          mixBlendMode: "soft-light"
         }}
       />
-
-      {/* 4. طبقة ضوضاء خفيفة فوق كل شيء */}
-      <div className="fixed inset-0 pointer-events-none z-[52] noise" />
 
       <style>{`
-        /* طبقات الرمل */
         .sand-layer {
           position: absolute;
-          inset: -50%;
+          inset: -100%;
           background-image: url('https://www.transparenttextures.com/patterns/sandpaper.png');
           background-repeat: repeat;
+          background-size: 200px;
         }
 
-        .sand-layer.slow {
-          animation: sandMoveSlow 30s linear infinite;
-          opacity: 0.08;
-          transform: scale(1.2);
+        /* عاصفة سريعة وعشوائية */
+        .fast-storm {
+          animation: stormMove 3s linear infinite;
+          opacity: 0.3;
         }
 
-        .sand-layer.medium {
-          animation: sandMoveMedium 18s linear infinite;
-          opacity: 0.12;
+        .medium-storm {
+          animation: stormMove 7s linear reverse infinite;
+          opacity: 0.2;
+          filter: blur(2px);
         }
 
-        .sand-layer.fast {
-          animation: sandMoveFast 10s linear infinite;
-          opacity: 0.18;
-          filter: blur(1px); /* تقليل التغبيش عشان منأثرش على الرؤية العامة زيادة عن اللزوم */
+        @keyframes stormMove {
+          0% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(-5%, 5%) rotate(0.5deg); }
+          100% { transform: translate(-10%, 10%) rotate(0deg); }
         }
 
-        @keyframes sandMoveSlow {
-          0% { transform: translate(0, 0) scale(1.2); }
-          100% { transform: translate(-15%, 8%) scale(1.2); }
+        /* حركة ذرات الرمل الفردية */
+        @keyframes sandFly {
+          0% { transform: translate(0, 0) opacity: 0; }
+          10% { opacity: 0.8; }
+          90% { opacity: 0.8; }
+          100% { transform: translate(-500px, 300px); opacity: 0; }
         }
 
-        @keyframes sandMoveMedium {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(-35%, 18%); }
-        }
-
-        @keyframes sandMoveFast {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(-70%, 35%); }
-        }
-
-        /* تموج حرارة - تم تقليل الـ blur ليتناسب مع الرؤية المتوسطة */
         @keyframes heatDistortion {
-          0% { backdrop-filter: blur(3px) saturate(0.7); }
-          50% { backdrop-filter: blur(5px) saturate(0.6); }
-          100% { backdrop-filter: blur(3px) saturate(0.7); }
-        }
-
-        /* ضوضاء خفيفة */
-        .noise {
-          background-image: url('https://www.transparenttextures.com/patterns/noise.png');
-          opacity: 0.04;
-          animation: noiseMove 0.4s infinite;
-        }
-
-        @keyframes noiseMove {
-          0% { transform: translate(0,0); }
-          25% { transform: translate(-1%,1%); }
-          50% { transform: translate(1%,-1%); }
-          75% { transform: translate(-1%,-1%); }
-          100% { transform: translate(0,0); }
+          0%, 100% { backdrop-filter: blur(4px) brightness(1); }
+          50% { backdrop-filter: blur(6px) brightness(1.1); }
         }
       `}</style>
     </>
