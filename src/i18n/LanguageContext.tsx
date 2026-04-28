@@ -171,7 +171,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     if (stored) setLangState(stored);
   }, []);
 
-  // تعيين اتجاه الصفحة ولغتها تلقائياً
+  // 🔹 ضبط اتجاه الصفحة واللغة عند تغيير اللغة
   useEffect(() => {
     document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
     document.documentElement.setAttribute("lang", lang);
