@@ -39,13 +39,12 @@ const Index = () => {
   const [showWarning, setShowWarning] = useState(false);
   const [showSpotlight, setShowSpotlight] = useState(true);
 
-  // عند تبديل الوضع: نهار -> أظهر الرسالة، وأعد تفعيل العاصفة والكشاف
   useEffect(() => {
     if (mode === "day") {
       setShowSandstorm(true);
-      setShowWarning(true);     // 👈 هذا هو المفتاح: يجعل الرسالة تظهر
+      setShowWarning(true);
       setShowSpotlight(true);
-      console.log("🌞 Day mode activated – sandstorm warning should appear.");
+      console.log("🌞 Day mode – sandstorm warning should appear.");
     } else {
       setShowWarning(false);
       setShowSandstorm(true);
@@ -77,14 +76,10 @@ const Index = () => {
     <LanguageProvider>
       <SoundProvider mode={mode} intensity={intensity} reducedEffects={reducedEffects}>
         <div className={mode === "day" ? "day min-h-screen bg-stone-50" : "min-h-screen bg-black"}>
-          
           {!entered && <EntryGate onEnter={() => setEntered(true)} />}
-
           <CustomCursor mode={mode} />
           <TempleAtmosphere mode={mode} intensity={intensity} reducedEffects={reducedEffects} />
-          
           <Navbar />
-
           <div className="fixed top-6 right-6 z-[100] flex items-center gap-3">
             <LanguageToggle />
             <ModeToggle
@@ -104,23 +99,15 @@ const Index = () => {
               }}
             />
           </div>
-
           <div className="hidden pointer-events-none opacity-0">
-            <AtmosphereControls
-              intensity={intensity}
-              onIntensityToggle={() =>
-                setIntensity(v => (v === "immersive" ? "subtle" : "immersive"))
-              }
-            />
+            <AtmosphereControls intensity={intensity} onIntensityToggle={() => setIntensity(v => v === "immersive" ? "subtle" : "immersive")} />
           </div>
-
           <Mummies mode={mode} />
           <Curse reducedEffects={reducedEffects} />
           <Whispers />
           <SecretPapyrus />
           <HiddenChamber onOpenBox={openSarcophagus} />
           <FourthWall reducedEffects={reducedEffects} />
-
           <main className="relative z-10">
             <Hero mode={mode} onOpenBox={openSarcophagus} />
             <About />
@@ -132,15 +119,10 @@ const Index = () => {
             <VolunteeringSarcophagus />
             <Contact />
           </main>
-
           <PharaohChat mode={mode} />
           <SacredInsects mode={mode} />
-
           {mode === "day" && showSandstorm && <SandstormEffect mode={mode} showSpotlight={showSpotlight} />}
-
-          {showWarning && mode === "day" && (
-            <SandstormWarning onAccept={acceptChallenge} onReject={rejectChallenge} />
-          )}
+          {showWarning && mode === "day" && <SandstormWarning onAccept={acceptChallenge} onReject={rejectChallenge} />}
         </div>
       </SoundProvider>
     </LanguageProvider>
