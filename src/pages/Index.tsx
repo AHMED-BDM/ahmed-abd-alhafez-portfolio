@@ -25,8 +25,6 @@ import { VisionZone } from "@/components/portfolio/VisionZone";
 import { LanguageToggle } from "@/components/portfolio/LanguageToggle";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import { usePerformanceMode } from "@/hooks/usePerformanceMode";
-
-// ✅ استيراد قسم التطوع الجديد
 import { VolunteeringSarcophagus } from "@/components/portfolio/VolunteeringSarcophagus";
 
 const Index = () => {
@@ -35,12 +33,12 @@ const Index = () => {
   const [intensity, setIntensity] = useState<"subtle" | "immersive">("immersive");
   const { reducedEffects } = usePerformanceMode();
 
-  // 🔊 دالة تشغيل صوت التابوت
+  // 🔊 دالة تشغيل صوت التابوت عند التفاعل مع العناصر الملكية
   const openSarcophagus = () => {
     try {
       const audio = sounds.box;
       audio.currentTime = 0;
-      audio.play();
+      audio.play().catch(() => console.log("Audio play interaction needed"));
     } catch (err) {
       console.log("Audio not ready yet");
     }
@@ -49,16 +47,18 @@ const Index = () => {
   return (
     <LanguageProvider>
       <SoundProvider mode={mode} intensity={intensity} reducedEffects={reducedEffects}>
-        <div className={mode === "day" ? "day min-h-screen" : "min-h-screen"}>
+        <div className={mode === "day" ? "day min-h-screen bg-stone-50" : "min-h-screen bg-black"}>
+          
+          {/* بوابات الدخول والطقوس */}
           {!entered && <EntryGate onEnter={() => setEntered(true)} />}
 
+          {/* عناصر الواجهة الثابتة */}
           <CustomCursor mode={mode} />
           <TempleAtmosphere mode={mode} intensity={intensity} reducedEffects={reducedEffects} />
-          <VisionZone mode={mode} />
-
+          
           <Navbar />
 
-          {/* ✅ تجميع أزرار اللغة والمود في مكان واحد متناسق أعلى اليمين */}
+          {/* أزرار التحكم (اللغة والمود) */}
           <div className="fixed top-6 right-6 z-[100] flex items-center gap-3">
             <LanguageToggle />
             <ModeToggle
@@ -66,20 +66,21 @@ const Index = () => {
               onToggle={() => {
                 const nextMode = mode === "night" ? "day" : "night";
                 setMode(nextMode);
-
+                // تبديل الموسيقى الخلفية بناءً على الوقت (ليل/نهار)
                 if (nextMode === "day") {
                   sounds.night.pause();
                   sounds.day.currentTime = 0;
-                  sounds.day.play().catch(e => console.log("Audio play blocked"));
+                  sounds.day.play().catch(e => console.log("Audio blocked"));
                 } else {
                   sounds.day.pause();
                   sounds.night.currentTime = 0;
-                  sounds.night.play().catch(e => console.log("Audio play blocked"));
+                  sounds.night.play().catch(e => console.log("Audio blocked"));
                 }
               }}
             />
           </div>
 
+          {/* أدوات التحكم المخفية في الغلاف الجوي */}
           <div className="hidden pointer-events-none opacity-0">
             <AtmosphereControls
               intensity={intensity}
@@ -89,31 +90,42 @@ const Index = () => {
             />
           </div>
 
+          {/* العناصر التفاعلية السحرية */}
           <Mummies mode={mode} />
           <Curse reducedEffects={reducedEffects} />
           <Whispers />
           <SecretPapyrus />
-          
           <HiddenChamber onOpenBox={openSarcophagus} />
           <FourthWall reducedEffects={reducedEffects} />
 
-          <main>
+          {/* المحتوى الأساسي للموقع */}
+          <main className="relative z-10">
+            {/* 1. قسم الواجهة: يظهر فيه صورتك الرسمية professional-photo.jpeg */}
             <Hero mode={mode} onOpenBox={openSarcophagus} />
+            
             <About />
+            
             <Skills />
+
+            {/* 2. ✅ قسم الرؤية: يظهر فيه صورتك بالصولجان personal-photo.png في منتصف الصفحة */}
+            <VisionZone mode={mode} />
+
             <Certificates />
+            
             <Projects />
             
-            {/* ✅ تم إيقاف وضع المطور نهائياً بتمرير false */}
+            {/* لوحة بيانات GitHub (Developer Mode Off) */}
             <GithubDashboard devMode={false} />
 
-            {/* ✅ قسم التطوع الجديد المضاف بناءً على متطلبات التقييم */}
+            {/* قسم التطوع والقيادة (Required for Grade) */}
             <VolunteeringSarcophagus />
 
             <Contact />
           </main>
 
+          {/* شات القائد الفرعوني */}
           <PharaohChat mode={mode} />
+          
         </div>
       </SoundProvider>
     </LanguageProvider>
