@@ -331,3 +331,27 @@ html[dir="ltr"] {
   direction: ltr !important;
   unicode-bidi: embed;
 }
+
+/* ========== حل مشكلة تداخل الكلمات الإنجليزية وسط العربي ========== */
+[dir="rtl"] .hero-tagline,
+[dir="rtl"] .about-content,
+[dir="rtl"] p:not(.stats-number),
+[dir="rtl"] li,
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+  display: block;
+  unicode-bidi: isolate;  /* عزل النصوص الإنجليزية عن سياق الجملة العربية */
+  line-height: 1.8;       /* زيادة المسافة بين السطور لمنع التداخل البصري */
+}
+
+/* ضمان أن الكلمات التقنية مثل Python, SQL, Digilians تظهر بشكل منفصل */
+[dir="rtl"] code, [dir="rtl"] .tech-term {
+  unicode-bidi: embed;
+  direction: ltr;
+  display: inline-block;
+}
+
+/* للمحتوى الرئيسي في About تحديداً */
+[dir="rtl"] #about p {
+  unicode-bidi: isolate;
+  word-break: break-word;
+}
