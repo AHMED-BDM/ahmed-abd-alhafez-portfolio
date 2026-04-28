@@ -1,5 +1,13 @@
 import { useLang } from "@/i18n/LanguageContext";
 
+export const SectionTitle = ({ eyebrow, title }: { eyebrow: string; title: string }) => (
+  <div className="text-center mb-14">
+    <p className="font-display text-primary tracking-[0.4em] text-xs mb-3">{eyebrow}</p>
+    <h2 className="font-display text-4xl md:text-6xl font-black text-gold">{title}</h2>
+    <div className="mx-auto mt-4 h-px w-32 bg-gradient-to-r from-transparent via-primary to-transparent" />
+  </div>
+);
+
 export const About = () => {
   const { t } = useLang();
   const stats = [
@@ -11,12 +19,7 @@ export const About = () => {
   return (
     <section id="about" className="relative py-28 px-6">
       <div className="container max-w-5xl">
-        <div className="text-center mb-14">
-          <p className="font-display text-primary tracking-[0.4em] text-xs mb-3">{t("about.eyebrow")}</p>
-          <h2 className="font-display text-4xl md:text-6xl font-black text-gold">{t("about.title")}</h2>
-          <div className="mx-auto mt-4 h-px w-32 bg-gradient-to-r from-transparent via-primary to-transparent" />
-        </div>
-
+        <SectionTitle eyebrow={t("about.eyebrow")} title={t("about.title")} />
         <div className="relative bg-stone gold-frame p-10 md:p-14 shadow-deep">
           <div className="absolute inset-0 opacity-20 pointer-events-none" style={{
             backgroundImage: "linear-gradient(transparent 95%, hsl(var(--primary)/0.4) 96%), linear-gradient(90deg, transparent 95%, hsl(var(--primary)/0.3) 96%)",
