@@ -93,7 +93,7 @@ export const T: Dict = {
   "vol.project1.title": { en: "E-commerce Data Analytics (Team Lead)", ar: "تحليل بيانات التجارة الإلكترونية (قائد فريق)" },
   "vol.project1.desc": {
     en: "Led a team of 3 volunteers to analyze 50K sales records. Cleaned data with Python (pandas), built an interactive Power BI dashboard that increased marketing ROI by 12%, and presented insights to stakeholders.",
-    ar: "قادت فريقاً من 3 متطوعين لتحليل 50 ألف سجل مبيعات. قمنا بتنظيف البيانات باستخدام Python، وبناء لوحة تحكم تفاعلية باستخدام Power BI زادت عائد التسويق بنسبة 12%، وقدمنا التوصيات لأصحاب القرار."
+    ar: "قادت فريقاً من 4 متطوعين لتحليل 50 ألف سجل مبيعات. قمنا بتنظيف البيانات باستخدام Python، وبناء لوحة تحكم تفاعلية باستخدام Power BI زادت عائد التسويق بنسبة 12%، وقدمنا التوصيات لأصحاب القرار."
   },
   "vol.project1.tools": { en: "Python (pandas, matplotlib), SQL, Power BI, Excel", ar: "Python (pandas, matplotlib), SQL, Power BI, Excel" },
   "vol.project2.title": { en: "Fitness Body Performance Analysis (Team Lead)", ar: "تحليل أداء اللياقة البدنية (قائد فريق)" },
