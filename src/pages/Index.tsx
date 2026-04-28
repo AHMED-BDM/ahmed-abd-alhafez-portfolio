@@ -26,9 +26,9 @@ import { LanguageToggle } from "@/components/portfolio/LanguageToggle";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import { usePerformanceMode } from "@/hooks/usePerformanceMode";
 import { VolunteeringSarcophagus } from "@/components/portfolio/VolunteeringSarcophagus";
-// ✅ إضافة المكونات الجديدة
 import { SandstormEffect } from "@/components/portfolio/SandstormEffect";
 import { SacredInsects } from "@/components/portfolio/SacredInsects";
+import { SandstormWarning } from "@/components/portfolio/SandstormWarning"; // ✅ إضافة رسالة التحذير
 
 const Index = () => {
   const [entered, setEntered] = useState(false);
@@ -134,6 +134,9 @@ const Index = () => {
           
           {/* ✅ إضافة العاصفة الرملية (تظهر فقط في وضع النهار) */}
           <SandstormEffect mode={mode} />
+
+          {/* ✅ إضافة رسالة تحذير العاصفة الرملية (مرعبة وتظهر مرة واحدة لكل جلسة) */}
+          <SandstormWarning mode={mode} onAcknowledge={() => {}} />
           
         </div>
       </SoundProvider>
