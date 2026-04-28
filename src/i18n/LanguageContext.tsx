@@ -4,7 +4,7 @@ export type Lang = "en" | "ar";
 type Dict = Record<string, { en: string; ar: string }>;
 
 export const T: Dict = {
-  // Navigation
+  // ---------- Navigation ----------
   "nav.about": { en: "About", ar: "عنوان" },
   "nav.skills": { en: "Skills", ar: "المهارات" },
   "nav.certificates": { en: "Certificates", ar: "الشهادات" },
@@ -13,7 +13,7 @@ export const T: Dict = {
   "nav.contact": { en: "Contact", ar: "اتصل" },
   "nav.github": { en: "GitHub", ar: "جيت هاب" },
 
-  // Hero
+  // ---------- Hero ----------
   "hero.eyebrow": { en: "𓂀 DATA ANALYST & ML ENGINEER", ar: "𓂀 محلل بيانات ومهندس تعلم آلة" },
   "hero.name1": { en: "AHMED", ar: "أحمد" },
   "hero.name2": { en: "ABD AL-HAFEZ", ar: "عبد الحافظ" },
@@ -25,7 +25,7 @@ export const T: Dict = {
   "hero.cta1": { en: "Enter the Chamber", ar: "ادخل الحجرة" },
   "hero.cta2": { en: "See My Work", ar: "اطلع على أعمالي" },
 
-  // About
+  // ---------- About ----------
   "about.eyebrow": { en: "𓋴 THE SCRIBE'S IDENTITY", ar: "𓋴 هوية الكاتب" },
   "about.title": { en: "Who is Ahmed?", ar: "من هو أحمد؟" },
   "about.content": {
@@ -36,14 +36,14 @@ export const T: Dict = {
   "about.stat2": { en: "Certifications", ar: "شهادة" },
   "about.stat3": { en: "Year Experience", ar: "عام خبرة" },
 
-  // Skills
+  // ---------- Skills ----------
   "skills.eyebrow": { en: "𓋹 SACRED ARTS", ar: "𓋹 الفنون المقدسة" },
   "skills.title": { en: "My Tools & Powers", ar: "أدواتي وقواي" },
   "skills.g1": { en: "Data Analytics", ar: "تحليل البيانات" },
   "skills.g2": { en: "Development Tools", ar: "أدوات التطوير" },
   "skills.g3": { en: "AI & Machine Learning", ar: "الذكاء الاصطناعي وتعلم الآلة" },
 
-  // Projects
+  // ---------- Projects ----------
   "proj.eyebrow": { en: "𓊽 MY MONUMENTS", ar: "𓊽 آثاري" },
   "proj.title": { en: "Featured Projects", ar: "المشاريع البارزة" },
   "proj.sealLabel": { en: "BREAK THE SEAL", ar: "اكسر الختم" },
@@ -60,7 +60,7 @@ export const T: Dict = {
   "pi.5.title": { en: "Fitness Performance AI Model", ar: "نموذج الذكاء الاصطناعي لأداء اللياقة" },
   "pi.5.desc": { en: "AI-powered fitness analysis using Random Forest, XGBoost, and Neural Networks to predict athletic performance and generate training recommendations.", ar: "تحليل لياقة بدنية مدعوم بالذكاء الاصطناعي باستخدام Random Forest و XGBoost والشبكات العصبية للتنبؤ بالأداء الرياضي وتوليد توصيات تدريبية." },
 
-  // Certificates
+  // ---------- Certificates ----------
   "cert.eyebrow": { en: "𓂀 ROYAL SEALS", ar: "𓂀 الأختام الملكية" },
   "cert.title": { en: "Certifications", ar: "الشهادات" },
   "cert.sealLabel": { en: "UNSEAL THE CHAMBER", ar: "افتح الحجرة" },
@@ -86,7 +86,7 @@ export const T: Dict = {
   "ci.5.issuer": { en: "Microsoft / Alison", ar: "مايكروسوفت / أليسون" },
   "ci.5.date": { en: "2025", ar: "٢٠٢٥" },
 
-  // Volunteering
+  // ---------- Volunteering ----------
   "vol.eyebrow": { en: "𓋴 VOLUNTEERING · TEAM LEADER", ar: "𓋴 التطوع · قائد فريق" },
   "vol.title": { en: "Leadership Chamber", ar: "حجرة القيادة" },
   "vol.solve": { en: "Tap the symbols in the sacred order to unlock the scrolls", ar: "اضغط على الرموز بالترتيب المقدس لفتح الأسفار" },
@@ -107,7 +107,7 @@ export const T: Dict = {
     ar: "هذان المشروعان عززا مهاراتي في القيادة التقنية والعمل الجماعي وقدرتي على ترجمة احتياجات المستخدم إلى حلول عملية بالذكاء الاصطناعي. إذا أردت معرفة المزيد، فتوجه إلى غرفة الأحاديث المقدسة (شات الفرعون)."
   },
 
-  // Contact
+  // ---------- Contact ----------
   "contact.eyebrow": { en: "𓂀 SEND A SCROLL", ar: "𓂀 أرسل بردي" },
   "contact.title": { en: "Let's Talk", ar: "لنتحدث" },
   "contact.send": { en: "Send a Message", ar: "أرسل رسالة" },
@@ -120,7 +120,7 @@ export const T: Dict = {
   "contact.footer": { en: "All monuments are forged by the scribe of data.", ar: "جميع الآثار صُنعت على يد كاتب البيانات." },
   "contact.submit": { en: "SEAL & SEND", ar: "ختم وإرسال" },
 
-  // Hidden Chamber
+  // ---------- Hidden Chamber ----------
   "hidden.line1": { en: "You step into the darkness. The air is heavy with centuries.", ar: "تخطو في الظلام. الهواء ثقيل بقرون مضت." },
   "hidden.line2": { en: "A whisper comes from the walls: 'No one leaves without answering.'", ar: "همس يأتي من الجدران: 'لا أحد يغادر دون أن يجيب.'" },
   "hidden.line3": { en: "You see your reflection in an obsidian stone, but it smiles differently.", ar: "ترى انعكاسك في حجر سبج، لكنه يبتسم بشكل مختلف." },
@@ -128,7 +128,7 @@ export const T: Dict = {
   "hidden.line5": { en: "Suddenly, a scroll appears: 'Do not seek answers. Seek the right question.'", ar: "فجأة، يظهر بردية: 'لا تبحث عن إجابات. ابحث عن السؤال الصحيح.'" },
   "hidden.line6": { en: "The chamber shakes. A door opens to the Pharaoh's Chat. Enter if you dare.", ar: "الحجرة تهتز. باب يفتح على شات الفرعون. ادخل إن تجرأت." },
 
-  // Pharaoh Chat
+  // ---------- Pharaoh Chat ----------
   "chat.welcome": {
     en: "I knew you would come here... I saw your name on the tablet of fate 3,000 years ago.",
     ar: "كنت أعلم أنك ستأتي إلى هنا... لقد رأيت اسمك في لوحة الأقدار منذ 3000 سنة."
@@ -136,7 +136,21 @@ export const T: Dict = {
   "chat.placeholder": { en: "Whisper your question to the Servant of Horus...", ar: "اهمس بسؤالك لخادم حورس..." },
   "chat.button": { en: "Send message", ar: "أرسل الرسالة" },
 
-  // Generic
+  // ---------- Sandstorm Warning (العاصفة الرملية) ----------
+  "sandstorm.title": {
+    en: "𓂀 THE CURSE OF THE SANDSTORM 𓂀",
+    ar: "𓂀 لعنة العاصفة الرملية 𓂀"
+  },
+  "sandstorm.message": {
+    en: "You have entered the realm of the Day... the desert spirits are furious. A mighty sandstorm has been unleashed upon your path. You cannot see clearly... unless you move the sacred torch (your mouse cursor). Let its glow pierce the dust, or you shall wander blind. Do you accept this trial?",
+    ar: "لقد دخلت نطاق النهار... أرواح الصحراء غاضبة. عاصفة رملية هائلة أُطلقت على دربك. لا ترى بوضوح... إلا إذا حركت الشعلة المقدسة (مؤشر فأرتك). دع توهجها يخترق الغبار، وإلا ستظل تائهًا. أتقبل هذه المحنة؟"
+  },
+  "sandstorm.button": {
+    en: "I accept and proceed",
+    ar: "أقبل وأمضي"
+  },
+
+  // ---------- Generic ----------
   "gate.skip": { en: "SKIP THE RITUAL ›", ar: "تخطي الطقوس ›" },
   "mid.spirit": { en: "Data is the new papyrus · Insight is the new power", ar: "البيانات هي البردي الجديد · والرؤية هي القوة الجديدة" }
 };
@@ -157,7 +171,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     if (stored) setLangState(stored);
   }, []);
 
-  // 🔹 هذا هو الحل الأساسي لتداخل النصوص 🔹
+  // تعيين اتجاه الصفحة ولغتها تلقائياً
   useEffect(() => {
     document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
     document.documentElement.setAttribute("lang", lang);
