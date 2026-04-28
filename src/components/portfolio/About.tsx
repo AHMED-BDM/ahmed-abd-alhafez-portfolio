@@ -32,7 +32,7 @@ export const About = () => {
           <div className="relative grid grid-cols-3 gap-6 mt-10 text-center">
             {stats.map(s => (
               <div key={s.l} className="border-t-2 border-primary/40 pt-4">
-                <div className="font-display text-3xl text-gold">{s.n}</div>
+                <div className="font-display text-3xl text-gold stats-number">{s.n}</div>
                 <div className="text-xs tracking-widest text-foreground/60 mt-1">{s.l}</div>
               </div>
             ))}
