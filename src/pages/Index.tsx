@@ -37,9 +37,8 @@ const Index = () => {
   const { reducedEffects } = usePerformanceMode();
   const [showSandstorm, setShowSandstorm] = useState(true);
   const [showWarning, setShowWarning] = useState(false);
-  const [showSpotlight, setShowSpotlight] = useState(true); // التحكم في الكشاف
+  const [showSpotlight, setShowSpotlight] = useState(true);
 
-  // عند تغيير mode إلى day، نظهر الرسالة ونعيد تفعيل العاصفة والكشاف
   useEffect(() => {
     if (mode === "day") {
       setShowSandstorm(true);
@@ -52,19 +51,16 @@ const Index = () => {
     }
   }, [mode]);
 
-  // قبول التحدي: يبقى الكشاف مفعلاً
   const acceptChallenge = () => {
     setShowWarning(false);
     setShowSpotlight(true);
   };
 
-  // رفض التحدي: نطفئ الكشاف فقط (العاصفة باقية)
   const rejectChallenge = () => {
     setShowWarning(false);
     setShowSpotlight(false);
   };
 
-  // دالة تشغيل صوت التابوت
   const openSarcophagus = () => {
     try {
       const audio = sounds.box;
@@ -80,16 +76,13 @@ const Index = () => {
       <SoundProvider mode={mode} intensity={intensity} reducedEffects={reducedEffects}>
         <div className={mode === "day" ? "day min-h-screen bg-stone-50" : "min-h-screen bg-black"}>
           
-          {/* بوابات الدخول والطقوس */}
           {!entered && <EntryGate onEnter={() => setEntered(true)} />}
 
-          {/* عناصر الواجهة الثابتة */}
           <CustomCursor mode={mode} />
           <TempleAtmosphere mode={mode} intensity={intensity} reducedEffects={reducedEffects} />
           
           <Navbar />
 
-          {/* أزرار التحكم (اللغة والمود) */}
           <div className="fixed top-6 right-6 z-[100] flex items-center gap-3">
             <LanguageToggle />
             <ModeToggle
@@ -97,7 +90,6 @@ const Index = () => {
               onToggle={() => {
                 const nextMode = mode === "night" ? "day" : "night";
                 setMode(nextMode);
-                // تبديل الموسيقى الخلفية
                 if (nextMode === "day") {
                   sounds.night.pause();
                   sounds.day.currentTime = 0;
@@ -111,7 +103,6 @@ const Index = () => {
             />
           </div>
 
-          {/* أدوات التحكم المخفية */}
           <div className="hidden pointer-events-none opacity-0">
             <AtmosphereControls
               intensity={intensity}
@@ -121,7 +112,6 @@ const Index = () => {
             />
           </div>
 
-          {/* العناصر التفاعلية السحرية */}
           <Mummies mode={mode} />
           <Curse reducedEffects={reducedEffects} />
           <Whispers />
@@ -129,7 +119,6 @@ const Index = () => {
           <HiddenChamber onOpenBox={openSarcophagus} />
           <FourthWall reducedEffects={reducedEffects} />
 
-          {/* المحتوى الأساسي */}
           <main className="relative z-10">
             <Hero mode={mode} onOpenBox={openSarcophagus} />
             <About />
@@ -145,10 +134,8 @@ const Index = () => {
           <PharaohChat mode={mode} />
           <SacredInsects mode={mode} />
 
-          {/* العاصفة الرملية (تظهر فقط مع showSpotlight للتحكم في الكشاف) */}
           {mode === "day" && showSandstorm && <SandstormEffect mode={mode} showSpotlight={showSpotlight} />}
 
-          {/* رسالة التحذير (تظهر كل مرة ننتقل إلى النهار) */}
           {showWarning && mode === "day" && (
             <SandstormWarning onAccept={acceptChallenge} onReject={rejectChallenge} />
           )}
