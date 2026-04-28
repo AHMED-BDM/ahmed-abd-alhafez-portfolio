@@ -17,15 +17,15 @@ export const HiddenChamber = () => {
   const { play } = useSound();
   const { t, lang } = useLang();
 
-  // فتح القفل عند النزول لأكثر من 92% من الصفحة (بعد التأكد من أن الارتفاع كافٍ)
+  // فتح القفل عند النزول لأكثر من 92% (مع تجنب التفعيل المبكر)
   useEffect(() => {
     const onScroll = () => {
       const scrollHeight = document.body.scrollHeight;
       const windowHeight = window.innerHeight;
-      if (scrollHeight <= windowHeight) return; // صفحة قصيرة جدًا، لا نفعّل
+      if (scrollHeight <= windowHeight) return;
       const max = scrollHeight - windowHeight;
       const scrolled = window.scrollY / max;
-      if (scrolled > 0.92 && !unlocked) {
+      if (scrolled > 0.92 && !unlocked && window.scrollY > 30) {
         setUnlocked(true);
         console.log("[HiddenChamber] Unlocked via deep scroll");
       }
@@ -34,7 +34,7 @@ export const HiddenChamber = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [unlocked]);
 
-  // فتح القفل بالضغط ثلاث مرات على الختم
+  // فتح القفل بالضغط ثلاث مرات على الختم (دون فتح المودال مباشرة)
   const onSigilClick = () => {
     const now = Date.now();
     clicksRef.current = clicksRef.current.filter((t) => now - t < 2500);
@@ -43,11 +43,11 @@ export const HiddenChamber = () => {
     if (clicksRef.current.length >= 3) {
       clicksRef.current = [];
       setUnlocked(true);
-      setOpen(true); // نفتح المودال مباشرة أيضًا
       play("open", { pan: 0, volume: 0.7 });
       sounds.ancient.currentTime = 0;
       sounds.ancient.play().catch(e => console.log(e));
-      console.log("[HiddenChamber] Unlocked & opened via sigil triple-click");
+      console.log("[HiddenChamber] Unlocked via sigil triple-click");
+      // لا نفتح المودال هنا - نتركه للمستخدم بالنقر على زر الدخول
     }
   };
 
@@ -62,18 +62,15 @@ export const HiddenChamber = () => {
 
   return (
     <>
-      {/* الختم السري (الجعران) */}
       <button
         type="button"
         onClick={onSigilClick}
         aria-label="Ancient sigil"
         className="fixed bottom-20 left-6 z-[55] h-9 w-9 rounded-full text-primary/30 transition hover:scale-125 hover:text-primary cursor-pointer"
-        style={{ textShadow: "0 0 10px hsl(var(--primary) / 0.5)" }}
       >
         𓆣
       </button>
 
-      {/* زر الدخول (يظهر فقط بعد فتح القفل، ولا يفتح المودال إلا عند النقر عليه) */}
       {unlocked && !open && (
         <button
           type="button"
@@ -83,13 +80,12 @@ export const HiddenChamber = () => {
             sounds.ancient.currentTime = 0;
             sounds.ancient.play().catch(e => console.log(e));
           }}
-          className="fixed bottom-32 left-6 z-[55] rounded border border-primary/50 bg-card/85 px-3 py-1.5 font-display text-[10px] tracking-[0.25em] text-primary backdrop-blur-md hover:shadow-gold cursor-pointer pointer-events-auto"
+          className="fixed bottom-32 left-6 z-[55] rounded border border-primary/50 bg-card/85 px-3 py-1.5 font-display text-[10px] tracking-[0.25em] text-primary backdrop-blur-md hover:shadow-gold cursor-pointer"
         >
           𓂀 {lang === "ar" ? "ادخل الحجرة السرية" : "ENTER HIDDEN CHAMBER"}
         </button>
       )}
 
-      {/* المودال المنبثق (يظهر فقط عند open === true) */}
       {open && (
         <div
           className="fixed inset-0 z-[300] flex items-center justify-center bg-black/85 backdrop-blur-md pointer-events-auto"
@@ -117,12 +113,10 @@ export const HiddenChamber = () => {
               <X className="h-6 w-6" />
             </button>
 
-            {/* عنوان ذهبي */}
             <p className="font-display text-gold text-xs tracking-[0.4em] mb-4 drop-shadow-gold">
               𓂀 {lang === "ar" ? "حجرة الأسرار المحرمة" : "FORBIDDEN CHAMBER OF SECRETS"} 𓂀
             </p>
 
-            {/* النصوص المخيفة ذهبية */}
             <div className="space-y-3 text-gold/90 leading-relaxed mb-6 text-left drop-shadow-gold">
               {horrorLines.map((line, idx) => (
                 <p key={idx} className="border-l-2 border-gold/50 pl-4 text-sm italic">
@@ -131,7 +125,6 @@ export const HiddenChamber = () => {
               ))}
             </div>
 
-            {/* زر التوجيه إلى الشات */}
             <button
               onClick={() => {
                 openPharaohChat();
