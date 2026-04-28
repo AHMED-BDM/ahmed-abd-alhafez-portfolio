@@ -59,7 +59,6 @@ export const HiddenChamber = () => {
         onClick={onSigilClick}
         aria-label="Ancient sigil"
         className="fixed bottom-20 left-6 z-[55] h-9 w-9 rounded-full text-primary/30 transition hover:scale-125 hover:text-primary cursor-pointer"
-        style={{ textShadow: "0 0 10px hsl(var(--primary) / 0.5)" }}
       >
         𓆣
       </button>
@@ -73,7 +72,7 @@ export const HiddenChamber = () => {
             sounds.ancient.currentTime = 0;
             sounds.ancient.play().catch(e => console.log(e));
           }}
-          className="fixed bottom-32 left-6 z-[55] rounded border border-primary/50 bg-card/85 px-3 py-1.5 font-display text-[10px] tracking-[0.25em] text-primary backdrop-blur-md hover:shadow-gold cursor-pointer pointer-events-auto"
+          className="fixed bottom-32 left-6 z-[55] rounded border border-primary/50 bg-card/85 px-3 py-1.5 font-display text-[10px] tracking-[0.25em] text-primary backdrop-blur-md hover:shadow-gold cursor-pointer"
         >
           𓂀 {lang === "ar" ? "ادخل الحجرة السرية" : "ENTER HIDDEN CHAMBER"}
         </button>
@@ -88,6 +87,7 @@ export const HiddenChamber = () => {
             sounds.ancient.pause();
             sounds.ancient.currentTime = 0;
           }}
+          data-cursor="native"
         >
           <div
             className="relative max-w-xl w-full mx-4 border-2 border-gold bg-stone-950/95 p-6 text-center shadow-2xl rounded-xl"
