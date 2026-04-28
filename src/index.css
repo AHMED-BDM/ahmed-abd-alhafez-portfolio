@@ -355,3 +355,18 @@ html[dir="ltr"] {
   unicode-bidi: isolate;
   word-break: break-word;
 }
+/* تحسين وضوح النصوص تحت تأثير العاصفة الرملية */
+.sandstorm-viewport {
+  transition: mask-image 0.05s linear, -webkit-mask-image 0.05s linear;
+}
+
+/* ضمان أن العناصر التفاعلية تظهر فوق طبقة العاصفة */
+button, a, input, textarea, [role="button"], [data-cursor="native"] {
+  position: relative;
+  z-index: 55 !important;
+}
+
+/* للحشرات - تحريك أبطأ قليلاً في الليل */
+.night .sacred-insect {
+  transition: transform 0.1s linear;
+}
