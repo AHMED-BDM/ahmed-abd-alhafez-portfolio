@@ -17,17 +17,24 @@ export const HiddenChamber = () => {
   const { play } = useSound();
   const { t, lang } = useLang();
 
+  // فتح الغرفة عن طريق السكرول العميق (فقط بعد تحميل الصفحة ووجود ارتفاع كافٍ)
   useEffect(() => {
     const onScroll = () => {
-      const max = Math.max(document.body.scrollHeight - window.innerHeight, 1);
-      if (window.scrollY / max > 0.92 && !unlocked) {
+      const scrollHeight = document.body.scrollHeight;
+      const windowHeight = window.innerHeight;
+      if (scrollHeight <= windowHeight) return; // منع القسمة على صفر أو الصفحة القصيرة
+      const max = scrollHeight - windowHeight;
+      const scrolled = window.scrollY / max;
+      if (scrolled > 0.92 && !unlocked) {
         setUnlocked(true);
+        console.log("[HiddenChamber] Unlocked via deep scroll");
       }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [unlocked]);
 
+  // فتح الغرفة بالضغط ثلاث مرات على الختم
   const onSigilClick = () => {
     const now = Date.now();
     clicksRef.current = clicksRef.current.filter((t) => now - t < 2500);
@@ -40,6 +47,7 @@ export const HiddenChamber = () => {
       play("open", { pan: 0, volume: 0.7 });
       sounds.ancient.currentTime = 0;
       sounds.ancient.play().catch(e => console.log(e));
+      console.log("[HiddenChamber] Unlocked via sigil triple-click");
     }
   };
 
@@ -54,15 +62,18 @@ export const HiddenChamber = () => {
 
   return (
     <>
+      {/* الختم السري (يظهر دائماً) */}
       <button
         type="button"
         onClick={onSigilClick}
         aria-label="Ancient sigil"
         className="fixed bottom-20 left-6 z-[55] h-9 w-9 rounded-full text-primary/30 transition hover:scale-125 hover:text-primary cursor-pointer"
+        style={{ textShadow: "0 0 10px hsl(var(--primary) / 0.5)" }}
       >
         𓆣
       </button>
 
+      {/* زر الدخول (يظهر فقط بعد فتح القفل) */}
       {unlocked && !open && (
         <button
           type="button"
@@ -72,15 +83,16 @@ export const HiddenChamber = () => {
             sounds.ancient.currentTime = 0;
             sounds.ancient.play().catch(e => console.log(e));
           }}
-          className="fixed bottom-32 left-6 z-[55] rounded border border-primary/50 bg-card/85 px-3 py-1.5 font-display text-[10px] tracking-[0.25em] text-primary backdrop-blur-md hover:shadow-gold cursor-pointer"
+          className="fixed bottom-32 left-6 z-[55] rounded border border-primary/50 bg-card/85 px-3 py-1.5 font-display text-[10px] tracking-[0.25em] text-primary backdrop-blur-md hover:shadow-gold cursor-pointer pointer-events-auto"
         >
           𓂀 {lang === "ar" ? "ادخل الحجرة السرية" : "ENTER HIDDEN CHAMBER"}
         </button>
       )}
 
+      {/* المودال (يظهر فقط عند الضغط على زر الدخول) */}
       {open && (
         <div
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-md pointer-events-auto"
+          className="fixed inset-0 z-[300] flex items-center justify-center bg-black/80 backdrop-blur-md pointer-events-auto"
           style={{ animation: "fadeIn 0.3s ease-out" }}
           onClick={() => {
             setOpen(false);
