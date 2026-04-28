@@ -1,34 +1,13 @@
-import { useEffect, useState } from "react";
 import { useLang } from "@/i18n/LanguageContext";
 import { X } from "lucide-react";
 
 interface SandstormWarningProps {
-  mode: "day" | "night";
-  onAcknowledge: () => void;
+  onAccept: () => void;
+  onReject: () => void;
 }
 
-export const SandstormWarning = ({ mode, onAcknowledge }: SandstormWarningProps) => {
+export const SandstormWarning = ({ onAccept, onReject }: SandstormWarningProps) => {
   const { t, lang } = useLang();
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (mode === "day") {
-      const hasSeen = sessionStorage.getItem("sandstorm_warning_seen");
-      if (!hasSeen) {
-        setIsOpen(true);
-      }
-    } else {
-      setIsOpen(false);
-    }
-  }, [mode]);
-
-  const handleClose = () => {
-    setIsOpen(false);
-    sessionStorage.setItem("sandstorm_warning_seen", "true");
-    onAcknowledge();
-  };
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md pointer-events-auto">
@@ -37,8 +16,9 @@ export const SandstormWarning = ({ mode, onAcknowledge }: SandstormWarningProps)
         style={{ boxShadow: "0 0 50px rgba(255, 215, 0, 0.6)" }}
       >
         <button 
-          onClick={handleClose}
+          onClick={onReject}
           className="absolute top-3 right-3 text-gold/70 hover:text-gold transition"
+          aria-label="Close"
         >
           <X className="w-6 h-6" />
         </button>
@@ -55,12 +35,18 @@ export const SandstormWarning = ({ mode, onAcknowledge }: SandstormWarningProps)
           {t("sandstorm.message")}
         </p>
 
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center gap-4 mt-8">
           <button
-            onClick={handleClose}
-            className="px-8 py-3 bg-gold/20 border-2 border-gold text-gold font-display tracking-widest hover:bg-gold hover:text-black transition-all duration-300 shadow-gold rounded-md"
+            onClick={onAccept}
+            className="px-6 py-2 bg-gold/20 border-2 border-gold text-gold font-display tracking-widest hover:bg-gold hover:text-black transition-all duration-300 shadow-gold rounded-md"
           >
-            {t("sandstorm.button")}
+            {t("sandstorm.accept")}
+          </button>
+          <button
+            onClick={onReject}
+            className="px-6 py-2 bg-red-900/30 border-2 border-red-700 text-red-400 font-display tracking-widest hover:bg-red-800 hover:text-white transition-all duration-300 rounded-md"
+          >
+            {t("sandstorm.reject")}
           </button>
         </div>
 
