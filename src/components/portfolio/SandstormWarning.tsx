@@ -31,7 +31,7 @@ export const SandstormWarning = ({ mode, onAcknowledge }: SandstormWarningProps)
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-md pointer-events-auto">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/85 backdrop-blur-md pointer-events-auto">
       <div 
         className="relative max-w-lg w-full mx-4 p-6 border-4 border-primary/80 rounded-xl shadow-2xl bg-stone-900/95 animate-reveal-up"
         style={{ boxShadow: "0 0 50px rgba(210, 150, 50, 0.8)" }}
@@ -51,14 +51,14 @@ export const SandstormWarning = ({ mode, onAcknowledge }: SandstormWarningProps)
           <div className="w-24 h-px bg-primary/50 mx-auto my-3" />
         </div>
 
-        <p className="text-foreground/90 text-lg leading-relaxed text-center font-serif">
+        <p className="text-foreground text-lg leading-relaxed text-center font-serif bg-black/30 p-4 rounded-lg shadow-inner">
           {t("sandstorm.message")}
         </p>
 
         <div className="flex justify-center mt-8">
           <button
             onClick={handleClose}
-            className="px-8 py-3 bg-primary/20 border-2 border-primary text-primary font-display tracking-widest hover:bg-primary hover:text-black transition-all duration-300 shadow-gold"
+            className="px-8 py-3 bg-primary/30 border-2 border-primary text-primary font-display tracking-widest hover:bg-primary hover:text-black transition-all duration-300 shadow-gold text-lg"
           >
             {t("sandstorm.button")}
           </button>
