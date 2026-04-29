@@ -20,7 +20,7 @@ export const Hero = ({ mode, onOpenBox }: { mode: "night" | "day", onOpenBox: ()
       <div className="relative z-10 container grid md:grid-cols-2 gap-12 items-center py-20">
         {/* نداء الكاتب - الجانب النصي */}
         <div className="reveal-up">
-          <p className="font-display text-primary tracking-[0.5em] text-[10px] mb-6 uppercase animate-pulse">
+          <p className="font-display text-primary tracking-[0.5em] text-xs mb-6 uppercase animate-pulse">
             {t("hero.eyebrow")}
           </p>
           <h1 className="font-display text-5xl md:text-7xl font-black leading-[1.05] mb-6">
