@@ -360,8 +360,8 @@ html[dir="ltr"] {
   transition: mask-image 0.05s linear, -webkit-mask-image 0.05s linear;
 }
 
-/* ضمان أن العناصر التفاعلية تظهر فوق طبقة العاصفة */
-button, a, input, textarea, [role="button"], [data-cursor="native"] {
+/* ضمان أن العناصر التفاعلية تظهر فوق طبقة العاصفة (مع استثناء العناصر الثابتة) */
+button, a, input, textarea, [role="button"], [data-cursor="native"]:not(.fixed) {
   position: relative;
   z-index: 55 !important;
 }
