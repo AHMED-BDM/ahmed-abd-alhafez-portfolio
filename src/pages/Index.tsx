@@ -1,5 +1,5 @@
 import { sounds } from "../audio";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EntryGate } from "@/components/portfolio/EntryGate";
 import { CustomCursor } from "@/components/portfolio/CustomCursor";
 import { ModeToggle } from "@/components/portfolio/ModeToggle";
@@ -29,6 +29,7 @@ import { VolunteeringSarcophagus } from "@/components/portfolio/VolunteeringSarc
 import { SandstormEffect } from "@/components/portfolio/SandstormEffect";
 import { SacredInsects } from "@/components/portfolio/SacredInsects";
 import { SandstormWarning } from "@/components/portfolio/SandstormWarning";
+import { SarcasticWarning } from "@/components/portfolio/SarcasticWarning"; // ✅ ضفنا الرسالة الساخرة
 
 const Index = () => {
   const [entered, setEntered] = useState(false);
@@ -39,13 +40,25 @@ const Index = () => {
   const [showWarning, setShowWarning] = useState(false);
   const [showSpotlight, setShowSpotlight] = useState(true);
 
+  // استماع لقرار المستخدم من الرسالة الساخرة (هل هيوافق يشغل الكشاف ولا هيعاند؟)
+  useEffect(() => {
+    const handleTorchChange = () => {
+      const state = localStorage.getItem("sandstorm_torch");
+      if (state === "enabled") {
+        setShowSpotlight(true);
+      } else if (state === "suffering") {
+        setShowSpotlight(false);
+      }
+    };
+    window.addEventListener("torch_state_changed", handleTorchChange);
+    return () => window.removeEventListener("torch_state_changed", handleTorchChange);
+  }, []);
+
   // لما المستخدم يدوس على زرار تبديل الليل والنهار
   const handleThemeToggle = () => {
     if (mode === "night") {
-      // لو إحنا بالليل وعايز يروح للنهار -> نطلع تحذير العاصفة الأول
       setShowWarning(true);
     } else {
-      // لو إحنا في النهار وعايز يرجع لليل -> نرجعه فورا ونشغل صوت الليل
       setMode("night");
       sounds.day.pause();
       sounds.night.currentTime = 0;
@@ -65,10 +78,19 @@ const Index = () => {
     sounds.day.play().catch(e => console.log("Audio blocked"));
   };
 
-  // لو المستخدم خاف ورفض التحدي
+  // لو المستخدم خاف ورفض التحدي (هنا تبدأ المعاناة!)
   const rejectChallenge = () => {
     setShowWarning(false);
-    // هيفضل في مود الليل زي ما هو ومفيش حاجة هتتغير
+    setMode("day"); // هندخله النهار برضه
+    setShowSpotlight(false); // بس هنسحب منه الكشاف!
+    
+    // إرسال إشارة لـ SarcasticWarning عشان تظهر بعد 3 ثواني
+    localStorage.setItem("sandstorm_torch", "refused_first_time");
+    window.dispatchEvent(new Event("torch_state_changed"));
+
+    sounds.night.pause();
+    sounds.day.currentTime = 0;
+    sounds.day.play().catch(e => console.log("Audio blocked"));
   };
 
   const openSarcophagus = () => {
@@ -86,13 +108,15 @@ const Index = () => {
       <SoundProvider mode={mode} intensity={intensity} reducedEffects={reducedEffects}>
         <div className={mode === "day" ? "day min-h-screen bg-stone-50" : "min-h-screen bg-black"}>
           {!entered && <EntryGate onEnter={() => setEntered(true)} />}
-          <CustomCursor mode={mode} />
+          
+          {/* ✅ مررنا showSpotlight لـ CustomCursor عشان نتحكم فيه في الخطوة الجاية */}
+          <CustomCursor mode={mode} showSpotlight={showSpotlight} />
+          
           <TempleAtmosphere mode={mode} intensity={intensity} reducedEffects={reducedEffects} />
           <Navbar />
           
           <div className="fixed top-6 right-6 z-[100] flex items-center gap-3">
             <LanguageToggle />
-            {/* ربطنا الزرار بالدالة الجديدة */}
             <ModeToggle mode={mode} onToggle={handleThemeToggle} />
           </div>
 
@@ -104,7 +128,6 @@ const Index = () => {
           <Curse reducedEffects={reducedEffects} />
           <Whispers />
           <SecretPapyrus />
-          {/* تم إزالة onOpenBox من هنا لأننا مش عاملينها جوة المكون في الكود بتاعك، لو عاملها سيبها */}
           <HiddenChamber /> 
           <FourthWall reducedEffects={reducedEffects} />
           
@@ -123,11 +146,14 @@ const Index = () => {
           <PharaohChat mode={mode} />
           <SacredInsects mode={mode} />
           
-          {/* العاصفة الرملية هتظهر بس لو المود نهار */}
+          {/* العاصفة الرملية */}
           {mode === "day" && <SandstormEffect mode={mode} showSpotlight={showSpotlight} />}
           
-          {/* رسالة التحذير (بتظهر بناءً على الـ State اللي بره المود) */}
+          {/* رسالة التحذير العادية عند التحويل للنهار */}
           {showWarning && <SandstormWarning onAccept={acceptChallenge} onReject={rejectChallenge} />}
+          
+          {/* ✅ الرسالة الساخرة اللي هتظهرله لو رفض التحدي */}
+          <SarcasticWarning />
         </div>
       </SoundProvider>
     </LanguageProvider>
