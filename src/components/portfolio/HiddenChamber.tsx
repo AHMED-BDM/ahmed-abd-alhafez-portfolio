@@ -120,7 +120,7 @@ export const HiddenChamber = () => {
             </button>
 
             <p className="mt-10 text-[8px] tracking-[0.5em] text-gold/30 uppercase">
-              — 𓋴 sealed by the order of thoth 𓋴 —
+              {t("seal.thoth")}
             </p>
           </div>
         </div>,
