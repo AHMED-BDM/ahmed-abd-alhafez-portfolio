@@ -1,9 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom"; 
 import { X, MessageSquare } from "lucide-react";
-import { useSound } from "./SoundContext"; // تأكد من المسار هنا @/components/portfolio/SoundContext
+
+// ✅ التعديل الجوهري هنا: نخرج من pages ونروح لـ components/portfolio
+import { useSound } from "../components/portfolio/SoundContext"; 
 import { useLang } from "@/i18n/LanguageContext";
-import { sounds } from "../../audio";
+
+// --- إعداد الصوت يدوياً للهروب من مشاكل الـ Import في Vite ---
+const ancientAudio = typeof Audio !== "undefined" 
+  ? new Audio("/audio/Ancient-Egyptian-Language.mp3") 
+  : null;
 
 const openPharaohChat = () => {
   const chatButton = document.querySelector('[data-pharaoh-chat-trigger]') as HTMLElement;
@@ -14,12 +20,11 @@ const openPharaohChat = () => {
 export const HiddenChamber = () => {
   const [unlocked, setUnlocked] = useState(false);
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false); // للأمان مع الـ Portal
+  const [mounted, setMounted] = useState(false);
   const clicksRef = useRef<number[]>([]);
   const { play } = useSound();
   const { t, lang } = useLang();
 
-  // التأكد من أن المكون جاهز في المتصفح
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -31,7 +36,7 @@ export const HiddenChamber = () => {
       if (scrollHeight <= windowHeight) return;
       const max = scrollHeight - windowHeight;
       const scrolled = window.scrollY / max;
-      // تفعيل عند الوصول لـ 92% من الصفحة
+      
       if (scrolled > 0.92 && !unlocked && window.scrollY > 30) {
         setUnlocked(true);
       }
@@ -44,14 +49,17 @@ export const HiddenChamber = () => {
     const now = Date.now();
     clicksRef.current = clicksRef.current.filter((t) => now - t < 2500);
     clicksRef.current.push(now);
+    
     play("hover", { pan: 0.1, volume: 0.6 });
+
     if (clicksRef.current.length >= 3) {
       clicksRef.current = [];
       setUnlocked(true);
       play("open", { pan: 0, volume: 0.7 });
-      if (sounds.ancient) {
-        sounds.ancient.currentTime = 0;
-        sounds.ancient.play().catch(e => console.log("Audio play blocked", e));
+      
+      if (ancientAudio) {
+        ancientAudio.currentTime = 0;
+        ancientAudio.play().catch(e => console.log("Audio blocked by browser", e));
       }
     }
   };
@@ -61,29 +69,25 @@ export const HiddenChamber = () => {
     t("hidden.line4"), t("hidden.line5"), t("hidden.line6")
   ];
 
-  // إذا لم يتم تحميل المكون بعد، لا ترندر الـ Portal
   if (!mounted) return null;
 
   return (
     <>
-      {/* ختم الجعران المقدس */}
       <button
         type="button"
         onClick={onSigilClick}
-        title="Ancient Sigil"
-        className="fixed bottom-20 left-6 z-[55] h-9 w-9 rounded-full text-primary/30 transition-all duration-500 hover:scale-150 hover:text-primary cursor-pointer flex items-center justify-center bg-black/20 backdrop-blur-sm border border-white/5"
+        className="fixed bottom-20 left-6 z-[55] h-9 w-9 rounded-full text-primary/30 transition-all duration-500 hover:scale-150 hover:text-primary cursor-pointer flex items-center justify-center bg-black/10 backdrop-blur-sm border border-white/5"
       >
         <span className="text-xl">𓆣</span>
       </button>
 
-      {/* زر الدخول بعد فك القفل */}
       {unlocked && !open && (
         <button
           type="button"
           onClick={() => {
             setOpen(true);
             play("open", { pan: 0, volume: 0.7 });
-            if (sounds.ancient) sounds.ancient.play();
+            if (ancientAudio) ancientAudio.play().catch(() => {});
           }}
           className="fixed bottom-32 left-6 z-[55] rounded border border-gold/50 bg-stone-900/90 px-4 py-2 font-display text-[10px] tracking-[0.25em] text-gold backdrop-blur-md hover:shadow-[0_0_15px_rgba(212,175,55,0.5)] transition-all animate-pulse cursor-pointer"
         >
@@ -91,14 +95,14 @@ export const HiddenChamber = () => {
         </button>
       )}
 
-      {/* المودال باستخدام Portal للهروب من أي Stacking Context */}
+      {/* ✅ التعديل هنا لضبط موقع المودال في منتصف الشاشة */}
       {open && createPortal(
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-xl"
+          className="fixed top-0 left-0 w-screen h-[100dvh] z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-xl pointer-events-auto"
           style={{ animation: "hiddenFadeIn 0.5s ease-out forwards" }}
           onClick={() => {
             setOpen(false);
-            if (sounds.ancient) sounds.ancient.pause();
+            if (ancientAudio) ancientAudio.pause();
           }}
         >
           <div
@@ -106,14 +110,13 @@ export const HiddenChamber = () => {
             style={{ animation: "hiddenScaleIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards" }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* زخرفة خلفية خفيفة */}
             <div className="absolute inset-0 opacity-5 pointer-events-none text-[10rem] flex items-center justify-center">𓁹</div>
 
             <button
-              className="absolute top-4 right-4 text-gold/40 hover:text-gold transition-colors p-2"
+              className="absolute top-4 right-4 text-gold/40 hover:text-gold transition-colors p-2 z-10"
               onClick={() => {
                 setOpen(false);
-                if (sounds.ancient) sounds.ancient.pause();
+                if (ancientAudio) ancientAudio.pause();
               }}
             >
               <X className="h-6 w-6" />
@@ -135,9 +138,9 @@ export const HiddenChamber = () => {
               onClick={() => {
                 openPharaohChat();
                 setOpen(false);
-                if (sounds.ancient) sounds.ancient.pause();
+                if (ancientAudio) ancientAudio.pause();
               }}
-              className="group relative inline-flex items-center gap-3 rounded-full bg-gold/5 border border-gold/40 px-10 py-4 font-display text-xs tracking-[0.2em] text-gold transition-all hover:bg-gold hover:text-black hover:scale-105 active:scale-95"
+              className="group relative inline-flex items-center gap-3 rounded-full bg-gold/5 border border-gold/40 px-10 py-4 font-display text-xs tracking-[0.2em] text-gold transition-all hover:bg-gold hover:text-black hover:scale-105"
             >
               <MessageSquare className="h-4 w-4" />
               {lang === "ar" ? "استدعِ الكاهن" : "SUMMON THE PRIEST"}
