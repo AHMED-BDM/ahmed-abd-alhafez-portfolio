@@ -21,7 +21,7 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
 
     hasTriggeredRef.current = true;
     setOpening(true);
-    setShake(false); // إيقاف الاهتزاز عند الفتح
+    setShake(false);
 
     try {
       if (sounds.box) {
@@ -54,25 +54,25 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
 
     if (code === "BDM" && !hasTriggeredRef.current) {
       setIsSolved(true);
-      setShake(true); // تفعيل الاهتزاز
+      setShake(true);
 
-      // إيقاف الاهتزاز بعد نصف ثانية ثم فتح التابوت
+      // اهتزاز لمدة 4 ثوانٍ ثم اختفاءه والفتح
       setTimeout(() => {
         setShake(false);
         setTimeout(() => {
           triggerOpen(0);
         }, 100);
-      }, 500);
+      }, 4000);
     }
   };
 
   return (
-    <div className="relative max-w-lg w-[90%] mx-auto select-none">
-      <div className={`relative transition-all duration-300 ${shake ? "animate-shake-hard" : ""}`}>
+    // ✅ العرض أصبح ضعف العرض السابق (max-w-lg → max-w-4xl)
+    <div className="relative max-w-4xl w-[95%] mx-auto select-none">
+      <div className={`relative transition-all duration-300 ${shake ? "animate-shake-progressive" : ""}`}>
         <img src={sarc} alt="Sarcophagus" className="w-full" />
 
         <div className="absolute top-[40%] left-1/2 -translate-x-1/2 z-30">
-          {/* ✅ إضافة dir="ltr" لضمان ترتيب الأزرار من اليسار إلى اليمين دائماً */}
           <div className="flex gap-3 p-2 bg-black/90 border-2 border-primary/50 rounded-xl" dir="ltr">
             {input.map((char, i) => (
               <button
