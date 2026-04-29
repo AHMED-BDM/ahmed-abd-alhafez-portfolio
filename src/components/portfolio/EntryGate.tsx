@@ -91,7 +91,7 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
     <p className="
       font-display 
       font-extrabold 
-      text-5xl md:text-7xl 
+      !text-6xl md:!text-8xl 
       tracking-[0.6em] 
       text-gold
       animate-pulse
