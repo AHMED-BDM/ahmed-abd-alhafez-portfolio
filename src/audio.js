@@ -9,7 +9,7 @@ export const sounds = {
   ancient: new Audio("/audio/Ancient-Egyptian-Language.mp3"),
   explosion: new Audio("/audio/EXPLOSION.mp3"),
   // ✅ إضافة الصوت الجديد
-  scared: new Audio("/audio/scaredSound.ogg"),
+  scared: new Audio("/audio/scaredSound.mp3"),
 };
 
 // إعدادات أولية
