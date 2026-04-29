@@ -1,22 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * CustomCursor - نسخة الـ Ultra-Smooth
- * الحل العبقري: فصل حركة العين (لحظية) عن حركة الإضاءة (سلسة)
+ * CustomCursor - النسخة النهائية المطورة
+ * حل مشكلة اختفاء الكشاف في الليل + حركة لحظية للعين + نعومة فائقة للإضاءة
  */
 export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "day"; showSpotlight?: boolean }) => {
   const [hidden, setHidden] = useState(false);
   const spotlightRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
   
-  // إحداثيات الإضاءة (التي تلحق الماوس بسلاسة)
+  // إحداثيات الإضاءة (تتبع العين بنعومة)
   const lightPos = useRef({ x: -100, y: -100 });
-  // إحداثيات الماوس الحقيقية (الهدف)
   const targetPos = useRef({ x: -100, y: -100 });
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // إخفاء المؤشر الأصلي تماماً
     document.body.style.cursor = 'none';
 
     const isTouch = window.matchMedia("(hover: none)").matches;
@@ -26,8 +24,7 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
       const { clientX, clientY } = e;
       targetPos.current = { x: clientX, y: clientY };
 
-      // عبقرية الحل: تحريك "العين" فوراً دون انتظار الـ Frame القادم
-      // نستخدم الـ Ref للوصول المباشر للـ DOM لأداء خارق
+      // تحريك "عين حورس" لحظياً بدون أي Delay
       if (cursorRef.current) {
         cursorRef.current.style.setProperty('--x', `${clientX}px`);
         cursorRef.current.style.setProperty('--y', `${clientY}px`);
@@ -35,7 +32,7 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
     };
 
     const tick = () => {
-      // تنعيم حركة الإضاءة فقط لجعلها تبدو كأنها تأثير سحري يلحق بالعين
+      // تنعيم حركة الكشاف (اللحاق بالعين)
       const ease = 0.12; 
       lightPos.current.x += (targetPos.current.x - lightPos.current.x) * ease;
       lightPos.current.y += (targetPos.current.y - lightPos.current.y) * ease;
@@ -44,14 +41,16 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
         const { x, y } = lightPos.current;
         
         if (!showSpotlight && mode === "day") {
-          // تأثير العاصفة الرملية
+          // تأثير العاصفة الرملية عند الرفض
           spotlightRef.current.style.background = `radial-gradient(circle 180px at ${x}px ${y}px, rgba(194, 155, 87, 0.1) 0%, rgba(60, 40, 10, 0.98) 100%)`;
           spotlightRef.current.style.backdropFilter = "blur(15px) saturate(1.2)";
+        } else if (mode === "night") {
+          // ✅ تعديل الوضع الليلي: كشاف ذهبي قوي يسطع فوق السواد
+          spotlightRef.current.style.background = `radial-gradient(circle 350px at ${x}px ${y}px, rgba(255, 230, 150, 0.3) 0%, rgba(212, 175, 55, 0.1) 40%, transparent 80%)`;
+          spotlightRef.current.style.backdropFilter = "none";
         } else {
-          // الإضاءة في الليل أو النهار
-          const size = mode === "night" ? "350px" : "250px";
-          const opacity = mode === "night" ? "0.15" : "0.08";
-          spotlightRef.current.style.background = `radial-gradient(circle ${size} at ${x}px ${y}px, rgba(255, 230, 150, ${opacity}) 0%, transparent 80%)`;
+          // الوضع النهاري العادي
+          spotlightRef.current.style.background = `radial-gradient(circle 250px at ${x}px ${y}px, rgba(212, 175, 55, 0.15) 0%, transparent 75%)`;
           spotlightRef.current.style.backdropFilter = "none";
         }
       }
@@ -73,19 +72,21 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
 
   return (
     <>
-      {/* طبقة الإضاءة/العاصفة - تتحرك بنعومة (Smooth Trail) */}
+      {/* طبقة الكشاف - تم تغيير الـ mixBlendMode للوضع الليلي لضمان الظهور */}
       <div 
         ref={spotlightRef}
         className="pointer-events-none fixed inset-0 z-[999998] will-change-[background]"
-        style={{ mixBlendMode: mode === "night" ? "soft-light" : "normal" }} 
+        style={{ 
+          // screen يضمن أن الألوان الفاتحة (الكشاف) تظهر بقوة فوق الخلفيات الغامقة
+          mixBlendMode: mode === "night" ? "screen" : "normal" 
+        }} 
       />
       
-      {/* مؤشر عين حورس - يتحرك لحظياً (Zero Delay) */}
+      {/* مؤشر عين حورس - تحريك لحظي عبر متغيرات CSS */}
       <div
         ref={cursorRef}
         className="pointer-events-none fixed top-0 left-0 z-[1000000] will-change-transform"
         style={{
-          // استخدام CSS Variables للتحريك اللحظي فائق السرعة
           transform: `translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0)`,
         }}
       >
@@ -95,7 +96,6 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
           viewBox="0 0 100 100" 
           className="text-primary drop-shadow-[0_0_15px_rgba(212,175,55,1)]"
         >
-          {/* تصميم العين الذهبية المتوهجة */}
           <path 
             d="M10 50 Q50 10 90 50 Q50 90 10 50 Z" 
             fill="none" 
@@ -119,7 +119,6 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
         </svg>
       </div>
 
-      {/* Force hide default cursor across the entire app */}
       <style>{`
         html, body, * { cursor: none !important; }
       `}</style>
