@@ -26,7 +26,7 @@ export const VolunteeringSarcophagus = () => {
         errorAudioRef.current.pause();
         errorAudioRef.current.currentTime = 0;
       }
-      const boxAudio = new Audio("/audio/box.mp3");
+      const boxAudio = new Audio("/audio/Volunteering.mp3");
       boxAudio.play().catch(e => console.log("Box audio error:", e));
       setIsOpen(true);
     }
