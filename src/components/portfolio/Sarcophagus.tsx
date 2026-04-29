@@ -3,16 +3,17 @@ import sarc from "@/assets/sarcophagus.png";
 import { useSound } from "./SoundContext";
 import { sounds } from "../../audio";
 import { DustEffect } from "./DustEffect";
+import { useLang } from "@/i18n/LanguageContext";
 
 export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
   label: string; onOpen: () => void; intensity?: "normal" | "strong";
 }) => {
+  const { lang } = useLang();
   const [opening, setOpening] = useState(false);
   const [input, setInput] = useState(["A", "A", "A"]);
   const [isSolved, setIsSolved] = useState(false);
+  const [shake, setShake] = useState(false);
   const { play } = useSound();
-
-  // ✅ مهم جداً يمنع التكرار
   const hasTriggeredRef = useRef(false);
 
   const triggerOpen = useCallback((panX = 0) => {
@@ -20,6 +21,7 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
 
     hasTriggeredRef.current = true;
     setOpening(true);
+    setShake(false); // إيقاف الاهتزاز عند الفتح
 
     try {
       if (sounds.box) {
@@ -50,29 +52,28 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
 
     const code = newInput.join("");
 
-    // ✅ الحل الصح
     if (code === "BDM" && !hasTriggeredRef.current) {
       setIsSolved(true);
+      setShake(true); // تفعيل الاهتزاز
 
-      // delay بسيط للأنميشن
+      // إيقاف الاهتزاز بعد نصف ثانية ثم فتح التابوت
       setTimeout(() => {
-        triggerOpen(0);
-      }, 300);
+        setShake(false);
+        setTimeout(() => {
+          triggerOpen(0);
+        }, 100);
+      }, 500);
     }
   };
 
   return (
     <div className="relative max-w-lg w-[90%] mx-auto select-none">
-      <div className="relative">
-        
-        <img
-          src={sarc}
-          alt="Sarcophagus"
-          className="w-full"
-        />
+      <div className={`relative transition-all duration-300 ${shake ? "animate-shake-hard" : ""}`}>
+        <img src={sarc} alt="Sarcophagus" className="w-full" />
 
         <div className="absolute top-[40%] left-1/2 -translate-x-1/2 z-30">
-          <div className="flex gap-3 p-2 bg-black/90 border-2 border-primary/50 rounded-xl">
+          {/* ✅ إضافة dir="ltr" لضمان ترتيب الأزرار من اليسار إلى اليمين دائماً */}
+          <div className="flex gap-3 p-2 bg-black/90 border-2 border-primary/50 rounded-xl" dir="ltr">
             {input.map((char, i) => (
               <button
                 key={i}
@@ -80,7 +81,7 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
                   e.stopPropagation();
                   handleCharChange(i);
                 }}
-                className="w-12 h-16 flex items-center justify-center bg-stone-900 border-2 border-primary/30 rounded-lg"
+                className="w-12 h-16 flex items-center justify-center bg-stone-900 border-2 border-primary/30 rounded-lg transition-all hover:scale-105 active:scale-95"
               >
                 <span className="text-3xl text-primary/70">
                   {char}
