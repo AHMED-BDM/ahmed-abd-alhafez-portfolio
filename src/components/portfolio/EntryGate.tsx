@@ -57,20 +57,50 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
     <div className="fixed inset-0 z-[100] bg-black overflow-hidden flex items-center justify-center">
       <div className={`absolute inset-0 transition-opacity duration-1000 ${imgLoaded ? "opacity-100" : "opacity-0"}`}>
         
-        {/* ✅ الرسالة السرية */}
-        {!armed && !opening && (
-          <div className="absolute top-16 left-1/2 -translate-x-1/2 text-center w-full px-4 z-30 pointer-events-none transition-opacity duration-1000">
-            <p className="font-display text-primary/60 text-xs md:text-sm tracking-[0.2em] mb-2 uppercase drop-shadow-md">
-              Remember this code well, you might need it
-            </p>
-            <p className="font-display text-primary/60 text-xs md:text-sm tracking-[0.2em] mb-4 drop-shadow-md" dir="rtl">
-              تذكر هذا الرمز جيدا، ربما ستحتاجه
-            </p>
-            <p className="font-display text-primary font-bold text-3xl md:text-5xl tracking-[0.5em] drop-shadow-[0_0_20px_var(--primary)]">
-              B D M
-            </p>
-          </div>
-        )}
+       {/* ✅ الرسالة السرية */}
+{!armed && !opening && (
+  <div className="absolute top-20 left-1/2 -translate-x-1/2 text-center w-full px-4 z-30 pointer-events-none transition-opacity duration-1000">
+    
+    {/* النص الإنجليزي */}
+    <p className="
+      font-display 
+      text-primary/90 
+      text-sm md:text-lg 
+      tracking-[0.25em] 
+      mb-3 
+      uppercase
+      drop-shadow-[0_0_10px_rgba(255,215,0,0.7)]
+    ">
+      Remember this code well, you might need it
+    </p>
+
+    {/* النص العربي */}
+    <p className="
+      font-display 
+      text-primary/90 
+      text-sm md:text-lg 
+      tracking-[0.25em] 
+      mb-6 
+      drop-shadow-[0_0_10px_rgba(255,215,0,0.7)]
+    " dir="rtl">
+      تذكر هذا الرمز جيدا، ربما ستحتاجه
+    </p>
+
+    {/* الكود */}
+    <p className="
+      font-display 
+      font-extrabold 
+      text-5xl md:text-7xl 
+      tracking-[0.6em] 
+      text-gold
+      animate-pulse
+      drop-shadow-[0_0_25px_rgba(255,215,0,0.9)]
+    ">
+      B D M
+    </p>
+
+  </div>
+)}
 
         {/* تأثير الإضاءة الخلفية (تظهر من خلف البوابة عند رفعها) */}
         <div className="absolute inset-0 z-0 pointer-events-none" style={{
