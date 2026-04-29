@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
+import { useLang } from "@/i18n/LanguageContext";
 
 export const SarcasticWarning = () => {
   const [show, setShow] = useState(false);
+  const { t } = useLang();
 
   useEffect(() => {
     const checkSarcasm = () => {
-      // نتحقق إذا كان المستخدم في حالة "رفض أول مرة"
       if (localStorage.getItem("sandstorm_torch") === "refused_first_time") {
         setTimeout(() => {
           setShow(true);
-        }, 7000); // تظهر بعد 7 ثوان من دخول العاصفة
+        }, 7000);
       }
     };
     
@@ -27,48 +28,47 @@ export const SarcasticWarning = () => {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/90 backdrop-blur-md px-4">
-      <div className="bg-stone-950/95 border-4 border-gold p-8 md:p-12 max-w-2xl w-full text-center shadow-[0_0_120px_rgba(255,215,0,0.5)] rounded-2xl relative overflow-hidden animate-in fade-in zoom-in duration-500">
+    <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/95 backdrop-blur-xl pointer-events-auto px-4">
+      <div className="relative bg-stone-950 border-4 border-gold p-8 md:p-12 max-w-2xl w-full text-center shadow-[0_0_100px_rgba(212,175,55,0.6)] rounded-2xl overflow-hidden animate-in fade-in zoom-in duration-500">
         
-        {/* توهج داخلي ذهبي */}
-        <div className="absolute inset-0 bg-gold/5 animate-pulse pointer-events-none" />
+        {/* توهج داخلي */}
+        <div className="absolute inset-0 bg-gradient-to-t from-gold/10 to-transparent animate-pulse pointer-events-none" />
         
-        {/* أيقونة مخيفة */}
-        <div className="text-7xl mb-4 animate-pulse text-gold drop-shadow-[0_0_15px_gold]">𓂀</div>
-        
-        <h2 className="font-display text-3xl md:text-5xl text-gold mb-6 tracking-[0.1em] leading-tight drop-shadow-[0_0_10px_rgba(255,215,0,0.8)]">
-          ⚠️ أيها الفاني المتهور! ⚠️
-        </h2>
-        
-        <div className="w-24 h-px bg-gold/50 mx-auto my-4" />
-        
-        <p className="font-serif text-xl md:text-2xl text-gold/90 leading-relaxed mb-8 drop-shadow-[0_0_5px_rgba(255,215,0,0.5)]" dir="rtl">
-          لقد حذرتك من غضب العاصفة الرملية، لكنك اخترت العناد. 
-          <br/><br/>
-          الآن أنت تائه وسط الرمال، لا ترى طريقك ولن تنجو طويلاً في هذه الصحراء الملعونة.
-          <br/><br/>
-          <span className="text-gold text-2xl font-bold drop-shadow-[0_0_8px_gold]">سأعطيك فرصة أخيرة..</span> هل تريد إشعال الشعلة الآن، أم تفضل الضياع في العاصفة؟
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-6 justify-center relative z-10 mt-6">
-          <button 
-            onClick={() => handleAction("enabled")}
-            className="px-8 py-4 bg-gold text-black font-bold text-lg rounded-full hover:scale-105 hover:shadow-[0_0_25px_rgba(255,215,0,0.8)] transition-all duration-300 cursor-pointer"
-          >
-            🔥 أشعل الشعلة 🔥
-          </button>
+        <div className="relative z-10">
+          <span className="text-7xl block mb-4 text-gold drop-shadow-[0_0_20px_gold]">𓂀</span>
           
-          <button 
-            onClick={() => handleAction("suffering")}
-            className="px-8 py-4 bg-transparent border-2 border-red-600 text-red-500 hover:text-red-400 hover:border-red-500 hover:bg-red-950/30 transition-all duration-300 rounded-full text-lg font-bold cursor-pointer"
-          >
-            💀 سأواجه العاصفة وحدي 💀
-          </button>
+          <h2 className="font-display text-gold text-3xl md:text-5xl mb-6 tracking-wider drop-shadow-[0_0_15px_gold] leading-tight">
+            {t("sarcastic.title")}
+          </h2>
+          
+          <p className="text-gold/90 text-xl md:text-2xl leading-relaxed mb-8 font-serif drop-shadow-[0_0_5px_rgba(255,215,0,0.5)]" dir="auto">
+            {t("sarcastic.message")}
+          </p>
+
+          <p className="text-gold/80 text-lg italic mb-10">
+            {t("sarcastic.offer")}
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <button 
+              onClick={() => handleAction("enabled")}
+              className="px-8 py-3 bg-gold/20 border-2 border-gold text-gold font-display tracking-widest hover:bg-gold hover:text-black transition-all duration-300 shadow-gold rounded-lg text-base md:text-lg"
+            >
+              {t("sarcastic.accept")}
+            </button>
+            
+            <button 
+              onClick={() => handleAction("suffering")}
+              className="px-8 py-3 bg-red-900/30 border-2 border-red-600 text-red-400 font-display tracking-widest hover:bg-red-800 hover:text-white transition-all duration-300 rounded-lg text-base md:text-lg"
+            >
+              {t("sarcastic.reject")}
+            </button>
+          </div>
+
+          <p className="mt-10 text-[10px] tracking-[0.3em] text-gold/40">
+            𓋴 𓎟 𓏙
+          </p>
         </div>
-        
-        <p className="mt-8 text-[10px] tracking-[0.3em] text-gold/40">
-          𓋴 𓎟 𓏙
-        </p>
       </div>
     </div>
   );
