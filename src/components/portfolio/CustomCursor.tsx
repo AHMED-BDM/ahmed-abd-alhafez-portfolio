@@ -84,7 +84,7 @@ export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
       {/* Spotlight */}
       <div 
         ref={spotlightRef}
-        className="pointer-events-none fixed inset-0 z-[60] will-change-[background] transform-gpu" 
+        className="pointer-events-none fixed inset-0 z-[99997] will-change-[background] transform-gpu" 
         style={{ mixBlendMode: mode === "night" ? "multiply" : "screen" }} 
       />
       
@@ -92,7 +92,7 @@ export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
       {trail.map((point, index) => (
         <span
           key={point.id}
-          className="pointer-events-none fixed z-[110] block rounded-full bg-primary/40 transform-gpu will-change-transform"
+          className="pointer-events-none fixed z-[99998] block rounded-full bg-primary/40 transform-gpu will-change-transform"
           style={{
             left: point.x,
             top: point.y,
@@ -109,7 +109,7 @@ export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
       {/* Ankh cursor */}
       <div
         ref={ankhRef}
-        className="pointer-events-none fixed z-[120] -translate-x-1/2 -translate-y-1/2 transform-gpu will-change-transform"
+        className="pointer-events-none fixed z-[99999] -translate-x-1/2 -translate-y-1/2 transform-gpu will-change-transform"
         style={{
           transform: `translate(-50%, -50%) scale(${interactive ? 1.35 : 1}) rotate(${interactive ? 8 : 0}deg)`,
           transition: "transform 0.18s ease-out",
