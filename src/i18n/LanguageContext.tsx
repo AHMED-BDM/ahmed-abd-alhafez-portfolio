@@ -87,19 +87,19 @@ export const T: Dict = {
   "ci.5.date": { en: "2025", ar: "٢٠٢٥" },
 
   // ---------- Volunteering ----------
-  "vol.eyebrow": { en: "𓋴 VOLUNTEERING · TEAM LEADER", ar: "𓋴 التطوع · قائد فريق" },
-  "vol.title": { en: "Leadership Chamber", ar: "حجرة القيادة" },
+  "vol.eyebrow": { en: "𓋴 VOLUNTEERING", ar: "𓋴 التطوع" },
+  "vol.title": { en: "pharaoh Chamber", ar: "حجرة الفرعون" },
   "vol.solve": { en: "Tap the symbols in the sacred order to unlock the scrolls", ar: "اضغط على الرموز بالترتيب المقدس لفتح الأسفار" },
   "vol.project1.title": { en: "E-commerce Data Analytics (Team Lead)", ar: "تحليل بيانات التجارة الإلكترونية (قائد فريق)" },
   "vol.project1.desc": {
     en: "Led a team of 3 volunteers to analyze 50K sales records. Cleaned data with Python (pandas), built an interactive Power BI dashboard that increased marketing ROI by 12%, and presented insights to stakeholders.",
-    ar: "قادت فريقاً من 3 متطوعين لتحليل 50 ألف سجل مبيعات. قمنا بتنظيف البيانات باستخدام Python، وبناء لوحة تحكم تفاعلية باستخدام Power BI زادت عائد التسويق بنسبة 12%، وقدمنا التوصيات لأصحاب القرار."
+    ar: "عملت مع فريقاً من 4 متطوعين لتحليل 50 ألف سجل مبيعات. قمنا بتنظيف البيانات باستخدام Python، وبناء لوحة تحكم تفاعلية باستخدام Power BI قمنا بزيادة عائد التسويق بنسبة 12%، وقدمنا التوصيات لأصحاب القرار."
   },
   "vol.project1.tools": { en: "Python (pandas, matplotlib), SQL, Power BI, Excel", ar: "Python (pandas, matplotlib), SQL, Power BI, Excel" },
   "vol.project2.title": { en: "Fitness Body Performance Analysis (Team Lead)", ar: "تحليل أداء اللياقة البدنية (قائد فريق)" },
   "vol.project2.desc": {
     en: "Led 4 volunteers to build a machine learning model (Random Forest, XGBoost, Neural Networks) predicting athletic performance from body metrics. Achieved 86% accuracy and deployed via Streamlit for coaches.",
-    ar: "قادت 4 متطوعين لبناء نموذج تعلم آلة (Random Forest، XGBoost، شبكات عصبية) للتنبؤ بالأداء الرياضي من القياسات الجسمانية. حققنا دقة 86% ووفرنا النموذج عبر تطبيق Streamlit ليستخدمه المدربون."
+    ar: "عملت مع 4 متطوعين لبناء نموذج تعلم آلة (Random Forest، XGBoost، شبكات عصبية) للتنبؤ بالأداء الرياضي من القياسات الجسمانية. حققنا دقة 86% ووفرنا النموذج عبر تطبيق Streamlit ليستخدمه المدربون."
   },
   "vol.project2.tools": { en: "Python (scikit-learn, TensorFlow), Streamlit, Pandas, NumPy", ar: "Python (scikit-learn, TensorFlow), Streamlit, Pandas, NumPy" },
   "vol.closing": {
