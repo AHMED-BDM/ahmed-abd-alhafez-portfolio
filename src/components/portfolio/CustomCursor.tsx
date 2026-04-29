@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * CustomCursor - النسخة النهائية المطورة
- * حل مشكلة اختفاء الكشاف في الليل + حركة لحظية للعين + نعومة فائقة للإضاءة
+ * CustomCursor - نسخة التوهج الذهبي الملكي (Royal Gold Glow)
+ * تم تعديل الوضع الليلي ليعطي كشافاً ذهبياً متوهجاً شديد الإضاءة،
+ * مع الحفاظ على الحركة اللحظية للعين والنعومة الفائقة للإضاءة.
  */
 export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "day"; showSpotlight?: boolean }) => {
   const [hidden, setHidden] = useState(false);
@@ -15,6 +16,7 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
+    // إخفاء المؤشر الأصلي قسرياً
     document.body.style.cursor = 'none';
 
     const isTouch = window.matchMedia("(hover: none)").matches;
@@ -24,7 +26,7 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
       const { clientX, clientY } = e;
       targetPos.current = { x: clientX, y: clientY };
 
-      // تحريك "عين حورس" لحظياً بدون أي Delay
+      // تحريك "عين حورس" لحظياً عبر متغيرات CSS لأداء خارق
       if (cursorRef.current) {
         cursorRef.current.style.setProperty('--x', `${clientX}px`);
         cursorRef.current.style.setProperty('--y', `${clientY}px`);
@@ -32,7 +34,7 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
     };
 
     const tick = () => {
-      // تنعيم حركة الكشاف (اللحاق بالعين)
+      // تنعيم حركة الكشاف (تأثير فيزيائي جذاب)
       const ease = 0.12; 
       lightPos.current.x += (targetPos.current.x - lightPos.current.x) * ease;
       lightPos.current.y += (targetPos.current.y - lightPos.current.y) * ease;
@@ -41,15 +43,22 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
         const { x, y } = lightPos.current;
         
         if (!showSpotlight && mode === "day") {
-          // تأثير العاصفة الرملية عند الرفض
+          // تأثير العاصفة الرملية الكثيفة عند الرفض
           spotlightRef.current.style.background = `radial-gradient(circle 180px at ${x}px ${y}px, rgba(194, 155, 87, 0.1) 0%, rgba(60, 40, 10, 0.98) 100%)`;
           spotlightRef.current.style.backdropFilter = "blur(15px) saturate(1.2)";
         } else if (mode === "night") {
-          // ✅ تعديل الوضع الليلي: كشاف ذهبي قوي يسطع فوق السواد
-          spotlightRef.current.style.background = `radial-gradient(circle 350px at ${x}px ${y}px, rgba(255, 230, 150, 0.3) 0%, rgba(212, 175, 55, 0.1) 40%, transparent 80%)`;
+          // ✅ تعديل العبقرية: توهج ذهبي ملكي مكثف وساطع جداً
+          // المركز ذهبي خالص فاقع، يليه ذهبي ناعم، ثم يتلاشى.
+          spotlightRef.current.style.background = `radial-gradient(
+            circle 350px at ${x}px ${y}px, 
+            rgba(255, 215, 0, 0.6) 0%,     /* ذهبي خالص (Gold) بتركيز عالٍ في السنتر */
+            rgba(234, 193, 92, 0.3) 30%,  /* ذهبي ناعم (Pharaoh Gold) */
+            rgba(212, 175, 55, 0.1) 60%,  /* هالة خارجية خفيفة */
+            transparent 85%               /* تلاشي تام */
+          )`;
           spotlightRef.current.style.backdropFilter = "none";
         } else {
-          // الوضع النهاري العادي
+          // الوضع النهاري العادي (ذهبي خفيف جداً)
           spotlightRef.current.style.background = `radial-gradient(circle 250px at ${x}px ${y}px, rgba(212, 175, 55, 0.15) 0%, transparent 75%)`;
           spotlightRef.current.style.backdropFilter = "none";
         }
@@ -72,21 +81,22 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
 
   return (
     <>
-      {/* طبقة الكشاف - تم تغيير الـ mixBlendMode للوضع الليلي لضمان الظهور */}
+      {/* طبقة الكشاف - تم ضبط الـ z-index والـ blend mode */}
       <div 
         ref={spotlightRef}
         className="pointer-events-none fixed inset-0 z-[999998] will-change-[background]"
         style={{ 
-          // screen يضمن أن الألوان الفاتحة (الكشاف) تظهر بقوة فوق الخلفيات الغامقة
+          // screen هي السر وراء جعل الألوان الذهبية المشبعة تلمع بقوة فوق الخلفيات الغامقة
           mixBlendMode: mode === "night" ? "screen" : "normal" 
         }} 
       />
       
-      {/* مؤشر عين حورس - تحريك لحظي عبر متغيرات CSS */}
+      {/* مؤشر عين حورس - تحريك لحظي وترصيع ذهبي */}
       <div
         ref={cursorRef}
         className="pointer-events-none fixed top-0 left-0 z-[1000000] will-change-transform"
         style={{
+          // تحريك العين لحظياً باستخدام قيم CSS المتغيرة
           transform: `translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0)`,
         }}
       >
@@ -94,15 +104,17 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
           width="48" 
           height="48" 
           viewBox="0 0 100 100" 
-          className="text-primary drop-shadow-[0_0_15px_rgba(212,175,55,1)]"
+          // توهج ذهبي كثيف حول العين نفسها
+          className="text-primary drop-shadow-[0_0_20px_rgba(255,215,0,1)]"
         >
+          {/* تصميم عين حورس الفرعونية الذهبية */}
           <path 
             d="M10 50 Q50 10 90 50 Q50 90 10 50 Z" 
             fill="none" 
             stroke="currentColor" 
             strokeWidth="4" 
           />
-          <circle cx="50" cy="50" r="14" fill="currentColor" />
+          <circle cx="50" cy="50" r="14" fill="currentColor" className="animate-pulse" />
           <path 
             d="M50 64 Q60 88 88 82 M50 64 Q40 88 12 82" 
             fill="none" 
@@ -119,6 +131,7 @@ export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "
         </svg>
       </div>
 
+      {/* ضمان اختفاء المؤشر الأصلي في كل مكان */}
       <style>{`
         html, body, * { cursor: none !important; }
       `}</style>
