@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom"; 
 import { X, MessageSquare } from "lucide-react";
-import { useSound } from "./SoundContext"; 
+
+// ✅ التعديل الجوهري هنا: نخرج من pages ونروح لـ components/portfolio
+import { useSound } from "../components/portfolio/SoundContext"; 
 import { useLang } from "@/i18n/LanguageContext";
 
 // --- إعداد الصوت يدوياً للهروب من مشاكل الـ Import في Vite ---
-// ملاحظة: المسار يبدأ بـ /audio لأن الملفات في فولدر public/audio
 const ancientAudio = typeof Audio !== "undefined" 
   ? new Audio("/audio/Ancient-Egyptian-Language.mp3") 
   : null;
@@ -21,10 +22,9 @@ export const HiddenChamber = () => {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const clicksRef = useRef<number[]>([]);
-  const { play } = useSound();
+  const { play } = useSound(); // سيعمل الآن لأن المسار بالأعلى أصبح صحيحاً
   const { t, lang } = useLang();
 
-  // تأمين الـ Portal للـ SSR
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -37,7 +37,6 @@ export const HiddenChamber = () => {
       const max = scrollHeight - windowHeight;
       const scrolled = window.scrollY / max;
       
-      // يظهر الزر عند الوصول لآخر الصفحة تقريباً
       if (scrolled > 0.92 && !unlocked && window.scrollY > 30) {
         setUnlocked(true);
       }
@@ -74,7 +73,6 @@ export const HiddenChamber = () => {
 
   return (
     <>
-      {/* أيقونة الجعران المخفية */}
       <button
         type="button"
         onClick={onSigilClick}
@@ -83,7 +81,6 @@ export const HiddenChamber = () => {
         <span className="text-xl">𓆣</span>
       </button>
 
-      {/* زر الدخول للحجرة السرية */}
       {unlocked && !open && (
         <button
           type="button"
@@ -98,7 +95,6 @@ export const HiddenChamber = () => {
         </button>
       )}
 
-      {/* المودال باستخدام Portal */}
       {open && createPortal(
         <div
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-xl pointer-events-auto"
@@ -113,7 +109,6 @@ export const HiddenChamber = () => {
             style={{ animation: "hiddenScaleIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards" }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* زخرفة خلفية */}
             <div className="absolute inset-0 opacity-5 pointer-events-none text-[10rem] flex items-center justify-center">𓁹</div>
 
             <button
