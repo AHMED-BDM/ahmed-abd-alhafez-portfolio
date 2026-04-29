@@ -159,13 +159,18 @@ export const T: Dict = {
   },
 
   // ---------- Generic ----------
-  "gate.skip": { en: "SKIP THE RITUAL ›", ar: "تخطي الطقوس ›" },
-  "mid.spirit": { en: "Data is the new papyrus · Insight is the new power", ar: "البيانات هي البردي الجديد · والرؤية هي القوة الجديدة" }
-};
-  "footer.sealed": {
-    en: "sealed by the order of thoth",
-    ar: "مختوم بأمر تحوت"
-  }
+"gate.skip": { en: "SKIP THE RITUAL ›", ar: "تخطي الطقوس ›" },
+"mid.spirit": { 
+  en: "Data is the new papyrus · Insight is the new power", 
+  ar: "البيانات هي البردي الجديد · والرؤية هي القوة الجديدة" 
+},
+"footer.sealed": {
+  en: "sealed by the order of thoth",
+  ar: "مختوم بأمر تحوت"
+},
+
+}; // 👈 قفل الـ object هنا فقط
+
 const LangCtx = createContext<any>(null);
 
 export const useLang = () => {
