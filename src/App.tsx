@@ -53,6 +53,20 @@ const App = () => {
     return () => clearInterval(ghostInterval);
   }, []);
 
+  // ✅ صوت خائف كل 80 ثانية (يتم تشغيله بغض النظر عن الوضع)
+  useEffect(() => {
+    const scaredInterval = setInterval(() => {
+      try {
+        sounds.scared.currentTime = 0;
+        sounds.scared.play().catch(e => console.log("scaredSound play blocked:", e));
+      } catch (err) {
+        console.log("scaredSound error:", err);
+      }
+    }, 80000); // 80 ثانية
+
+    return () => clearInterval(scaredInterval);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster />
