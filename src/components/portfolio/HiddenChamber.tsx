@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom"; 
 import { X, MessageSquare } from "lucide-react";
 
-// ✅ التعديل الجوهري هنا: نخرج من pages ونروح لـ components/portfolio
-import { useSound } from "../components/portfolio/SoundContext"; 
+// ✅ تم تعديل المسار هنا ليصبح ./SoundContext بدلاً من مسار الفولدرات الطويل
+import { useSound } from "./SoundContext"; 
 import { useLang } from "@/i18n/LanguageContext";
 
 // --- إعداد الصوت يدوياً للهروب من مشاكل الـ Import في Vite ---
@@ -95,7 +95,6 @@ export const HiddenChamber = () => {
         </button>
       )}
 
-      {/* ✅ التعديل هنا لضبط موقع المودال في منتصف الشاشة */}
       {open && createPortal(
         <div
           className="fixed top-0 left-0 w-screen h-[100dvh] z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-xl pointer-events-auto"
