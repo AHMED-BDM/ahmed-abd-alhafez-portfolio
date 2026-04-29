@@ -1,7 +1,8 @@
 import { useLang } from "@/i18n/LanguageContext";
 import { useState, useEffect, useRef } from "react";
 
-const SYMBOLS = [
+// الرموز الأساسية (6 رموز)
+const ALL_SYMBOLS = [
   { sym: "𓋴", name: "Sa (Protection)" },
   { sym: "𓎟", name: "Neb (Lord)" },
   { sym: "𓏙", name: "Was (Power)" },
@@ -12,6 +13,16 @@ const SYMBOLS = [
 
 const CORRECT_SEQUENCE = ["𓋴", "𓎟", "𓏙"];
 
+// دالة لخلط المصفوفة عشوائياً (Fisher-Yates)
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
 export const VolunteeringSarcophagus = () => {
   const { t, lang } = useLang();
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +30,24 @@ export const VolunteeringSarcophagus = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSolved, setIsSolved] = useState(false);
   const errorAudioRef = useRef<HTMLAudioElement | null>(null);
+  const successAudioRef = useRef<HTMLAudioElement | null>(null);
+  // حالة التخزين للرموز المخلوطة (تتغير عند كل تحميل للمكون)
+  const [shuffledSymbols, setShuffledSymbols] = useState(ALL_SYMBOLS);
+
+  // تهيئة الصوت والترتيب العشوائي (مرة واحدة لكل جلسة)
+  useEffect(() => {
+    // ترتيب عشوائي للرموز
+    setShuffledSymbols(shuffleArray(ALL_SYMBOLS));
+    // تهيئة صوت النجاح
+    successAudioRef.current = new Audio("/audio/VolunteeringSound.mp3");
+    successAudioRef.current.volume = 0.8;
+    return () => {
+      if (successAudioRef.current) {
+        successAudioRef.current.pause();
+        successAudioRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (isSolved && !isOpen) {
@@ -26,8 +55,10 @@ export const VolunteeringSarcophagus = () => {
         errorAudioRef.current.pause();
         errorAudioRef.current.currentTime = 0;
       }
-      const boxAudio = new Audio("/audio/Volunteering.mp3");
-      boxAudio.play().catch(e => console.log("Box audio error:", e));
+      if (successAudioRef.current) {
+        successAudioRef.current.currentTime = 0;
+        successAudioRef.current.play().catch(e => console.log("Success audio error:", e));
+      }
       setIsOpen(true);
     }
   }, [isSolved, isOpen]);
@@ -54,7 +85,6 @@ export const VolunteeringSarcophagus = () => {
       const errorAudio = new Audio("/audio/error.mp3");
       errorAudioRef.current = errorAudio;
       errorAudio.play().catch(e => console.log("Error audio:", e));
-      
       setErrorMsg(lang === "ar" ? "❌ تسلسل خاطئ! ابدأ من جديد." : "❌ Wrong sequence! Start over.");
       setSelected([]);
       return;
@@ -101,8 +131,9 @@ export const VolunteeringSarcophagus = () => {
                 {t("vol.solve")}
               </p>
               
+              {/* عرض الأزرار بالترتيب العشوائي (مختلف لكل جلسة) */}
               <div className="flex flex-wrap justify-center gap-5 mb-8">
-                {SYMBOLS.map((item) => (
+                {shuffledSymbols.map((item) => (
                   <button
                     key={item.sym}
                     onClick={() => handleSymbolClick(item.sym)}
