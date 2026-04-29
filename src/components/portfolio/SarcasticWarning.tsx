@@ -5,25 +5,21 @@ export const SarcasticWarning = () => {
 
   useEffect(() => {
     const checkSarcasm = () => {
+      // نتحقق إذا كان المستخدم في حالة "رفض أول مرة"
       if (localStorage.getItem("sandstorm_torch") === "refused_first_time") {
         setTimeout(() => {
           setShow(true);
-        }, 2500);
+        }, 1500); // تظهر بعد ثانية ونصف من دخول العاصفة
       }
     };
+    
     checkSarcasm();
     window.addEventListener("torch_state_changed", checkSarcasm);
     return () => window.removeEventListener("torch_state_changed", checkSarcasm);
   }, []);
 
-  const enableTorch = () => {
-    localStorage.setItem("sandstorm_torch", "enabled");
-    window.dispatchEvent(new Event("torch_state_changed"));
-    setShow(false);
-  };
-
-  const sufferInDarkness = () => {
-    localStorage.setItem("sandstorm_torch", "suffering");
+  const handleAction = (status: "enabled" | "suffering") => {
+    localStorage.setItem("sandstorm_torch", status);
     window.dispatchEvent(new Event("torch_state_changed"));
     setShow(false);
   };
@@ -31,16 +27,17 @@ export const SarcasticWarning = () => {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-stone-900/40 backdrop-blur-md px-4">
-      <div className="bg-stone-950 border-2 border-primary/50 p-8 md:p-12 max-w-xl w-full text-center shadow-[0_0_60px_rgba(212,175,55,0.2)] rounded-lg relative overflow-hidden animate-in fade-in zoom-in duration-500">
+    <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/80 backdrop-blur-md px-4">
+      <div className="bg-stone-950 border-2 border-primary p-8 md:p-12 max-w-xl w-full text-center shadow-[0_0_100px_rgba(212,175,55,0.4)] rounded-2xl relative overflow-hidden animate-in fade-in zoom-in duration-500">
         
-        <div className="absolute inset-0 bg-orange-900/5 animate-pulse pointer-events-none" />
+        {/* توهج داخلي */}
+        <div className="absolute inset-0 bg-primary/5 animate-pulse pointer-events-none" />
         
-        <h2 className="font-display text-primary text-2xl md:text-4xl mb-6 tracking-[0.2em] drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+        <h2 className="font-display text-primary text-2xl md:text-4xl mb-6 tracking-[0.1em] leading-tight">
           أيها الفاني المتهور!
         </h2>
         
-        <p className="font-display text-primary/80 text-base md:text-lg leading-relaxed mb-10" dir="rtl">
+        <p className="font-display text-primary/90 text-lg leading-relaxed mb-10" dir="rtl">
           لقد حذرتك من غضب العاصفة الرملية، لكنك اخترت العناد. 
           الآن أنت تائه وسط الرمال، لا ترى طريقك ولن تنجو طويلاً في هذه الصحراء الملعونة.
           <br/><br/>
@@ -48,11 +45,17 @@ export const SarcasticWarning = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-6 justify-center relative z-10">
-          <button onClick={enableTorch} className="px-6 py-3 bg-stone-900 border-2 border-primary text-primary hover:bg-primary hover:text-black transition-all duration-300 font-display tracking-widest text-sm cursor-pointer">
+          <button 
+            onClick={() => handleAction("enabled")}
+            className="px-8 py-3 bg-primary text-black font-bold rounded-full hover:scale-105 transition-transform cursor-pointer"
+          >
             أشعل الشعلة
           </button>
           
-          <button onClick={sufferInDarkness} className="px-6 py-3 bg-transparent border-2 border-primary/20 text-primary/40 hover:border-red-900 hover:text-red-600 transition-all duration-300 font-display tracking-widest text-sm cursor-pointer">
+          <button 
+            onClick={() => handleAction("suffering")}
+            className="px-8 py-3 bg-transparent border border-primary/30 text-primary/60 hover:text-red-500 hover:border-red-500 transition-all cursor-pointer"
+          >
             سأواجه العاصفة وحدي
           </button>
         </div>
