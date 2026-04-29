@@ -1,18 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 
-export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
+// ✅ أضفنا showSpotlight كخاصية لتحديد هل الكشاف يعمل أم تم رفضه
+export const CustomCursor = ({ mode, showSpotlight = true }: { mode: "night" | "day"; showSpotlight?: boolean }) => {
   const [hidden, setHidden] = useState(false);
   const [interactive, setInteractive] = useState(false);
   const [trail, setTrail] = useState<Array<{ x: number; y: number; id: number }>>([]);
   
-  // استخدام useRef بدل useState لمنع إعادة التحميل (Re-render) مع كل حركة للماوس
   const posRef = useRef({ x: -100, y: -100 });
   const targetRef = useRef({ x: -100, y: -100 });
   const interactiveRef = useRef(false);
   const rafRef = useRef<number | null>(null);
   const lastTrailRef = useRef(0);
 
-  // Refs للتحكم المباشر في الـ DOM
   const spotlightRef = useRef<HTMLDivElement>(null);
   const ankhRef = useRef<HTMLDivElement>(null);
 
@@ -38,20 +37,27 @@ export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
       posRef.current.x += dx * 0.35;
       posRef.current.y += dy * 0.35;
 
-      // تحديث العناصر مباشرة في الـ DOM (GPU Accelerated)
       if (spotlightRef.current) {
-        spotlightRef.current.style.background = mode === "night"
-          ? `radial-gradient(circle 220px at ${posRef.current.x}px ${posRef.current.y}px, transparent 0%, hsl(var(--background)/0.55) 70%)`
-          : `radial-gradient(circle 280px at ${posRef.current.x}px ${posRef.current.y}px, hsl(var(--primary-glow)/0.18) 0%, transparent 60%)`;
+        if (!showSpotlight) {
+          // ✅ العمى التام: إذا رفض المستخدم التحدي، سيعاني ولن يرى شيئاً
+          spotlightRef.current.style.background = "rgba(0,0,0,0.98)";
+        } else {
+          // ✅ تم تكبير قطر الإضاءة في الليل وجعل التباين أقوى لإضاءة شديدة وواضحة
+          spotlightRef.current.style.background = mode === "night"
+            ? `radial-gradient(circle 350px at ${posRef.current.x}px ${posRef.current.y}px, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.98) 85%)`
+            : `radial-gradient(circle 280px at ${posRef.current.x}px ${posRef.current.y}px, hsl(var(--primary-glow)/0.25) 0%, transparent 60%)`;
+        }
       }
 
       if (ankhRef.current) {
+        // إخفاء مؤشر الماوس نفسه (مفتاح الحياة) في حالة العمى
+        ankhRef.current.style.opacity = !showSpotlight ? "0" : "1";
         ankhRef.current.style.left = `${posRef.current.x}px`;
         ankhRef.current.style.top = `${posRef.current.y}px`;
       }
 
       const now = performance.now();
-      if (now - lastTrailRef.current > 60 && Math.hypot(dx, dy) > 4) {
+      if (now - lastTrailRef.current > 60 && Math.hypot(dx, dy) > 4 && showSpotlight) {
         lastTrailRef.current = now;
         setTrail((current) => [...current.slice(-3), { x: posRef.current.x, y: posRef.current.y, id: now + Math.random() }]);
       }
@@ -68,7 +74,7 @@ export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       document.documentElement.classList.remove("has-custom-cursor");
     };
-  }, [mode]);
+  }, [mode, showSpotlight]); // أضفنا showSpotlight ليعاد تشغيل الـ effect عند تغييره
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -84,15 +90,17 @@ export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
       {/* Spotlight */}
       <div 
         ref={spotlightRef}
-        className="pointer-events-none fixed inset-0 z-[99997] will-change-[background] transform-gpu" 
-        style={{ mixBlendMode: mode === "night" ? "multiply" : "screen" }} 
+        // أضفنا transition ناعم عشان لما يختفي النور يضلم بشكل تدريجي مرعب
+        className="pointer-events-none fixed inset-0 z-[99997] will-change-[background] transform-gpu transition-all duration-700" 
+        // في حالة الرفض (العمى)، نلغي الـ blend mode عشان السواد يغطي كل حاجة تماماً
+        style={{ mixBlendMode: !showSpotlight ? "normal" : (mode === "night" ? "multiply" : "screen") }} 
       />
       
       {/* Trail */}
-      {trail.map((point, index) => (
+      {showSpotlight && trail.map((point, index) => (
         <span
           key={point.id}
-          className="pointer-events-none fixed z-[99998] block rounded-full bg-primary/40 transform-gpu will-change-transform"
+          className="pointer-events-none fixed z-[99998] block rounded-full bg-primary/40 transform-gpu will-change-transform transition-opacity duration-300"
           style={{
             left: point.x,
             top: point.y,
@@ -112,7 +120,7 @@ export const CustomCursor = ({ mode }: { mode: "night" | "day" }) => {
         className="pointer-events-none fixed z-[99999] -translate-x-1/2 -translate-y-1/2 transform-gpu will-change-transform"
         style={{
           transform: `translate(-50%, -50%) scale(${interactive ? 1.35 : 1}) rotate(${interactive ? 8 : 0}deg)`,
-          transition: "transform 0.18s ease-out",
+          transition: "transform 0.18s ease-out, opacity 0.5s ease-out",
           filter: `drop-shadow(0 0 6px hsl(var(--primary) / 0.85)) drop-shadow(0 0 14px hsl(var(--primary-glow) / 0.55))`,
         }}
       >
