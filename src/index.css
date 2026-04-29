@@ -916,21 +916,23 @@ nav a {
 
 }
 /* اهتزاز قوي جداً عند نجاح الكود */
-@keyframes shake-hard {
-  0% { transform: translate(1px, 1px) rotate(0deg); }
-  10% { transform: translate(-1px, -2px) rotate(-1deg); }
-  20% { transform: translate(-3px, 0px) rotate(1deg); }
-  30% { transform: translate(3px, 2px) rotate(0deg); }
-  40% { transform: translate(1px, -1px) rotate(1deg); }
-  50% { transform: translate(-1px, 2px) rotate(-1deg); }
-  60% { transform: translate(-3px, 1px) rotate(0deg); }
-  70% { transform: translate(3px, 1px) rotate(-1deg); }
-  80% { transform: translate(-1px, -1px) rotate(1deg); }
-  90% { transform: translate(1px, 2px) rotate(0deg); }
-  100% { transform: translate(1px, -2px) rotate(-1deg); }
+/* اهتزاز لمدة 4 ثواني – يبدأ بطيئاً ثم يزداد سرعة */
+@keyframes shake-progressive {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  5% { transform: translate(1px, 1px) rotate(0.5deg); }
+  10% { transform: translate(-1px, -2px) rotate(-0.8deg); }
+  20% { transform: translate(2px, -1px) rotate(1deg); }
+  30% { transform: translate(-2px, 1px) rotate(-1.2deg); }
+  40% { transform: translate(3px, 2px) rotate(1.5deg); }
+  50% { transform: translate(-3px, -1px) rotate(-1.8deg); }
+  60% { transform: translate(4px, -2px) rotate(2deg); }
+  70% { transform: translate(-4px, 2px) rotate(-2.2deg); }
+  80% { transform: translate(5px, 1px) rotate(2.5deg); }
+  90% { transform: translate(-5px, -2px) rotate(-2.8deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
 }
 
-.animate-shake-hard {
-  animation: shake-hard 0.4s ease-in-out 0s 2;
+.animate-shake-progressive {
+  animation: shake-progressive 4s cubic-bezier(0.25, 0.1, 0.1, 1) forwards;
   will-change: transform;
 }
