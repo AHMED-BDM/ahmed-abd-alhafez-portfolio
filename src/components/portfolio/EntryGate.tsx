@@ -56,7 +56,7 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
     <div className="fixed inset-0 z-[100] bg-black overflow-hidden flex items-center justify-center">
       <div className={`absolute inset-0 transition-opacity duration-1000 ${imgLoaded ? "opacity-100" : "opacity-0"}`}>
         
-        {/* ✅ الرسالة السرية (أضفناها هنا) */}
+        {/* ✅ الرسالة السرية */}
         {!armed && !opening && (
           <div className="absolute top-16 left-1/2 -translate-x-1/2 text-center w-full px-4 z-30 pointer-events-none transition-opacity duration-1000">
             <p className="font-display text-primary/60 text-xs md:text-sm tracking-[0.2em] mb-2 uppercase drop-shadow-md">
@@ -71,44 +71,44 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
           </div>
         )}
 
-        {/* تأثير الإضاءة الخلفية */}
+        {/* تأثير الإضاءة الخلفية (تظهر من خلف البوابة عند رفعها) */}
         <div className="absolute inset-0 z-0 pointer-events-none" style={{
           transition: "opacity 5s cubic-bezier(0.2, 0.9, 0.4, 1)",
           opacity: opening ? 1 : 0,
-          background: `radial-gradient(ellipse at center, rgba(212, 175, 55, 0.25) 0%, rgba(180, 120, 40, 0.4) 40%, transparent 80%)`,
-          transform: `scale(${opening ? 1.2 : 0.8})`,
+          background: `radial-gradient(ellipse at center, rgba(212, 175, 55, 0.4) 0%, rgba(180, 120, 40, 0.2) 50%, transparent 100%)`,
+          transform: `scale(${opening ? 1.1 : 0.8})`,
         }} />
 
         <div className="absolute inset-0 z-0 pointer-events-none" style={{
-          boxShadow: opening ? "inset 0 0 80px rgba(212, 175, 55, 0.6), 0 0 120px rgba(212, 175, 55, 0.4)" : "inset 0 0 20px rgba(212, 175, 55, 0.2)",
+          boxShadow: opening ? "inset 0 0 100px rgba(212, 175, 55, 0.7), 0 0 150px rgba(212, 175, 55, 0.3)" : "inset 0 0 20px rgba(212, 175, 55, 0.1)",
           transition: "box-shadow 5s cubic-bezier(0.2, 0.9, 0.4, 1)",
         }} />
 
         <DustEffect isActive={opening} />
 
-        <div className="absolute inset-0 flex z-10" style={{ perspective: "1800px", perspectiveOrigin: "center" }}>
-          <div className="w-1/2 h-full bg-cover bg-right border-r border-primary/20 transform-gpu will-change-transform"
+        {/* ✅ البوابة الحجرية (ترتفع للأعلى وتميل للداخل) */}
+        <div className="absolute inset-0 flex z-10" style={{ perspective: "1500px", perspectiveOrigin: "bottom center" }}>
+          <div className="w-full h-full transform-gpu will-change-transform border-b-[12px] border-primary/30 shadow-[0_20px_50px_rgba(0,0,0,0.9)]"
             style={{
-              backgroundImage: `url(${gateImg})`,
-              backgroundPosition: "right",
-              transformOrigin: "left center",
-              transition: "transform 5s cubic-bezier(0.23, 1, 0.32, 1)",
-              transform: opening ? "rotateY(-112deg) translate3d(-5px, 0, 0)" : "rotateY(0deg)",
-            }} />
-          <div className="w-1/2 h-full bg-cover bg-left border-l border-primary/20 transform-gpu will-change-transform"
-            style={{
-              backgroundImage: `url(${gateImg})`,
-              backgroundPosition: "left",
-              transformOrigin: "right center",
-              transition: "transform 5s cubic-bezier(0.23, 1, 0.32, 1)",
-              transform: opening ? "rotateY(112deg) translate3d(5px, 0, 0)" : "rotateY(0deg)",
-            }} />
+              backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%), url(${gateImg})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              transformOrigin: "top center",
+              /* منحنى الحركة (Cubic-bezier) يعطي إحساس بالوزن الثقيل في البداية ثم يتسارع قليلاً */
+              transition: "transform 5s cubic-bezier(0.4, 0, 0.2, 1), opacity 5s ease",
+              /* الرفع للأعلى بنسبة 110% والدخول للعمق بـ 300px وميلان 25 درجة */
+              transform: opening ? "translate3d(0, -110%, -300px) rotateX(25deg)" : "translate3d(0, 0, 0) rotateX(0deg)",
+              opacity: opening ? 0.7 : 1
+            }}>
+          </div>
         </div>
 
+        {/* اهتزاز المعبد (طولناه ليناسب حركة الحجر البطيئة) */}
         {opening && (
-          <div className="absolute inset-0 z-20 pointer-events-none" style={{ animation: "templeShake 1.5s ease-in-out 0.2s 1" }} />
+          <div className="absolute inset-0 z-20 pointer-events-none" style={{ animation: "templeShake 4s ease-in-out 0s 1" }} />
         )}
 
+        {/* أزرار التحكم (الرموز) */}
         <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-6"
           style={{
             transition: "all 1.2s ease-out",
@@ -131,25 +131,27 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
             ))}
           </div>
           <button onClick={() => { setHidden(true); onEnter(); }}
-            className="mt-4 text-[9px] font-display tracking-[0.2em] text-primary/30 hover:text-primary transition-colors">
+            className="mt-4 text-[9px] font-display tracking-[0.2em] text-primary/30 hover:text-primary transition-colors cursor-pointer">
             {t("gate.skip")}
           </button>
         </div>
 
+        {/* وميض أبيض عند فتح القفل */}
         <div className="absolute inset-0 z-30 pointer-events-none bg-white" style={{
           transition: "opacity 0.8s ease-out",
           opacity: armed && !opening ? 0.08 : 0,
         }} />
 
+        {/* شرارات الذهب المتطايرة مع الاحتكاك */}
         {opening && (
           <div className="absolute inset-0 z-15 pointer-events-none overflow-hidden">
-            {Array.from({ length: 30 }).map((_, i) => (
-              <div key={i} className="absolute w-1 h-1 bg-gold rounded-full"
+            {Array.from({ length: 40 }).map((_, i) => (
+              <div key={i} className="absolute w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_10px_var(--primary)]"
                 style={{
-                  top: `${Math.random() * 100}%`,
-                  left: `${Math.random() * 100}%`,
-                  animation: `glowParticle ${1 + Math.random() * 2}s linear forwards`,
-                  opacity: 0.6,
+                  top: `80%`, // الشرارات تبدأ من أسفل البوابة
+                  left: `${10 + Math.random() * 80}%`,
+                  animation: `glowParticle ${1.5 + Math.random() * 3}s cubic-bezier(0.2, 0.8, 0.2, 1) forwards`,
+                  opacity: 0.8,
                 }} />
             ))}
           </div>
@@ -157,8 +159,15 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
       </div>
 
       <style>{`
-        @keyframes templeShake { 0%,100%{transform:translate(0,0)}15%{transform:translate(2px,-1px)}30%{transform:translate(-2px,1px)}45%{transform:translate(1px,-2px)}60%{transform:translate(-1px,2px)}75%{transform:translate(0,0)} }
-        @keyframes glowParticle { 0%{transform:scale(0) translate(0,0);opacity:0.8} 100%{transform:scale(1.5) translate(${Math.random()*100-50}px,${Math.random()*-200-50}px);opacity:0} }
+        @keyframes templeShake { 
+          0%, 100% { transform: translate(0, 0) }
+          10%, 30%, 50%, 70%, 90% { transform: translate(3px, -2px) }
+          20%, 40%, 60%, 80% { transform: translate(-3px, 2px) }
+        }
+        @keyframes glowParticle { 
+          0% { transform: scale(0) translate(0, 0); opacity: 0.9 } 
+          100% { transform: scale(1.5) translate(${Math.random() * 200 - 100}px, ${Math.random() * -400 - 100}px); opacity: 0 } 
+        }
         .will-change-transform { will-change: transform; }
         .transform-gpu { transform: translate3d(0,0,0); }
       `}</style>
