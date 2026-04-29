@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom"; 
 import { X, MessageSquare } from "lucide-react";
-
-// ✅ تم تعديل المسار هنا ليصبح ./SoundContext بدلاً من مسار الفولدرات الطويل
 import { useSound } from "./SoundContext"; 
 import { useLang } from "@/i18n/LanguageContext";
 
-// --- إعداد الصوت يدوياً للهروب من مشاكل الـ Import في Vite ---
+// --- إعداد الصوت يدوياً ---
 const ancientAudio = typeof Audio !== "undefined" 
   ? new Audio("/audio/Ancient-Egyptian-Language.mp3") 
   : null;
@@ -21,7 +19,6 @@ export const HiddenChamber = () => {
   const [unlocked, setUnlocked] = useState(false);
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const clicksRef = useRef<number[]>([]);
   const { play } = useSound();
   const { t, lang } = useLang();
 
@@ -29,6 +26,7 @@ export const HiddenChamber = () => {
     setMounted(true);
   }, []);
 
+  // الحجرة تفتح فقط عند الوصول لنهاية الصفحة (مكافأة للقارئ المجتهد)
   useEffect(() => {
     const onScroll = () => {
       const scrollHeight = document.body.scrollHeight;
@@ -37,6 +35,7 @@ export const HiddenChamber = () => {
       const max = scrollHeight - windowHeight;
       const scrolled = window.scrollY / max;
       
+      // إذا وصل المستخدم لـ 92% من الصفحة تظهر له الحجرة
       if (scrolled > 0.92 && !unlocked && window.scrollY > 30) {
         setUnlocked(true);
       }
@@ -44,25 +43,6 @@ export const HiddenChamber = () => {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [unlocked]);
-
-  const onSigilClick = () => {
-    const now = Date.now();
-    clicksRef.current = clicksRef.current.filter((t) => now - t < 2500);
-    clicksRef.current.push(now);
-    
-    play("hover", { pan: 0.1, volume: 0.6 });
-
-    if (clicksRef.current.length >= 3) {
-      clicksRef.current = [];
-      setUnlocked(true);
-      play("open", { pan: 0, volume: 0.7 });
-      
-      if (ancientAudio) {
-        ancientAudio.currentTime = 0;
-        ancientAudio.play().catch(e => console.log("Audio blocked by browser", e));
-      }
-    }
-  };
 
   const horrorLines = [
     t("hidden.line1"), t("hidden.line2"), t("hidden.line3"),
@@ -73,13 +53,7 @@ export const HiddenChamber = () => {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={onSigilClick}
-        className="fixed bottom-20 left-6 z-[55] h-9 w-9 rounded-full text-primary/30 transition-all duration-500 hover:scale-150 hover:text-primary cursor-pointer flex items-center justify-center bg-black/10 backdrop-blur-sm border border-white/5"
-      >
-        <span className="text-xl">𓆣</span>
-      </button>
+      {/* تم حذف زرار الحشرة (𓆣) نهائياً من هنا */}
 
       {unlocked && !open && (
         <button
