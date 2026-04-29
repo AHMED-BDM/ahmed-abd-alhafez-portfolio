@@ -11,7 +11,7 @@ export const SandstormWarning = ({ onAccept, onReject }: SandstormWarningProps) 
 
   return (
     <div 
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-md pointer-events-auto"
+      className="fixed top-0 left-0 w-screen h-[100dvh] z-[9998] flex items-center justify-center bg-black/90 backdrop-blur-md pointer-events-auto"
       data-cursor="native"
     >
       <div 
