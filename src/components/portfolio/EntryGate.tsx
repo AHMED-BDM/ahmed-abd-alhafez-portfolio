@@ -35,10 +35,11 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
       setTimeout(() => {
         setOpening(true);
         playGateSound();
+        // تم زيادة الوقت لـ 7.2 ثانية ليتناسب مع حركة البوابة البطيئة
         setTimeout(() => {
           setHidden(true);
           onEnter();
-        }, 5200);
+        }, 7200); 
       }, 650);
     }
   }, [dials, armed, onEnter]);
@@ -73,7 +74,7 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
 
         {/* تأثير الإضاءة الخلفية (تظهر من خلف البوابة عند رفعها) */}
         <div className="absolute inset-0 z-0 pointer-events-none" style={{
-          transition: "opacity 5s cubic-bezier(0.2, 0.9, 0.4, 1)",
+          transition: "opacity 7s ease-in-out",
           opacity: opening ? 1 : 0,
           background: `radial-gradient(ellipse at center, rgba(212, 175, 55, 0.4) 0%, rgba(180, 120, 40, 0.2) 50%, transparent 100%)`,
           transform: `scale(${opening ? 1.1 : 0.8})`,
@@ -81,31 +82,30 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
 
         <div className="absolute inset-0 z-0 pointer-events-none" style={{
           boxShadow: opening ? "inset 0 0 100px rgba(212, 175, 55, 0.7), 0 0 150px rgba(212, 175, 55, 0.3)" : "inset 0 0 20px rgba(212, 175, 55, 0.1)",
-          transition: "box-shadow 5s cubic-bezier(0.2, 0.9, 0.4, 1)",
+          transition: "box-shadow 7s ease-in-out",
         }} />
 
         <DustEffect isActive={opening} />
 
-        {/* ✅ البوابة الحجرية (ترتفع للأعلى وتميل للداخل) */}
-        <div className="absolute inset-0 flex z-10" style={{ perspective: "1500px", perspectiveOrigin: "bottom center" }}>
-          <div className="w-full h-full transform-gpu will-change-transform border-b-[12px] border-primary/30 shadow-[0_20px_50px_rgba(0,0,0,0.9)]"
+        {/* ✅ البوابة الحجرية (ترتفع للأعلى بشكل مستقيم وبطيء) */}
+        <div className="absolute inset-0 flex z-10 overflow-hidden">
+          <div className="w-full h-full transform-gpu will-change-transform border-b-[16px] border-primary/40 shadow-[0_30px_60px_rgba(0,0,0,1)] flex items-end justify-center pb-20"
             style={{
-              backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%), url(${gateImg})`,
+              backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%), url(${gateImg})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
-              transformOrigin: "top center",
-              /* منحنى الحركة (Cubic-bezier) يعطي إحساس بالوزن الثقيل في البداية ثم يتسارع قليلاً */
-              transition: "transform 5s cubic-bezier(0.4, 0, 0.2, 1), opacity 5s ease",
-              /* الرفع للأعلى بنسبة 110% والدخول للعمق بـ 300px وميلان 25 درجة */
-              transform: opening ? "translate3d(0, -110%, -300px) rotateX(25deg)" : "translate3d(0, 0, 0) rotateX(0deg)",
-              opacity: opening ? 0.7 : 1
+              /* 7 ثواني مع منحنى فيزيائي: صعوبة في البداية ثم انتظام ثم بطء في النهاية */
+              transition: "transform 7s cubic-bezier(0.35, 0.05, 0.2, 1)",
+              transform: opening ? "translate3d(0, -105%, 0)" : "translate3d(0, 0, 0)",
             }}>
+              {/* خطوط زخرفية أسفل البوابة للإيحاء بسماكة الحجر */}
+              <div className="w-full h-2 bg-primary/20 absolute bottom-0 shadow-[0_-5px_20px_rgba(212,175,55,0.3)]"></div>
           </div>
         </div>
 
-        {/* اهتزاز المعبد (طولناه ليناسب حركة الحجر البطيئة) */}
+        {/* اهتزاز المعبد (طولناه لـ 6.5 ثواني ليواكب رفع الحجر) */}
         {opening && (
-          <div className="absolute inset-0 z-20 pointer-events-none" style={{ animation: "templeShake 4s ease-in-out 0s 1" }} />
+          <div className="absolute inset-0 z-20 pointer-events-none" style={{ animation: "templeShake 6.5s ease-in-out 0s 1" }} />
         )}
 
         {/* أزرار التحكم (الرموز) */}
@@ -142,31 +142,40 @@ export const EntryGate = ({ onEnter }: { onEnter: () => void }) => {
           opacity: armed && !opening ? 0.08 : 0,
         }} />
 
-        {/* شرارات الذهب المتطايرة مع الاحتكاك */}
+        {/* غبار متساقط من السقف بسبب احتكاك البوابة أثناء الرفع */}
         {opening && (
           <div className="absolute inset-0 z-15 pointer-events-none overflow-hidden">
-            {Array.from({ length: 40 }).map((_, i) => (
-              <div key={i} className="absolute w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_10px_var(--primary)]"
-                style={{
-                  top: `80%`, // الشرارات تبدأ من أسفل البوابة
-                  left: `${10 + Math.random() * 80}%`,
-                  animation: `glowParticle ${1.5 + Math.random() * 3}s cubic-bezier(0.2, 0.8, 0.2, 1) forwards`,
-                  opacity: 0.8,
-                }} />
-            ))}
+            {Array.from({ length: 60 }).map((_, i) => {
+              const delay = Math.random() * 5; // توزيع تساقط الغبار على مدار أول 5 ثواني
+              const duration = 2 + Math.random() * 3; 
+              return (
+                <div key={i} className="absolute bg-primary/60 rounded-full blur-[1px]"
+                  style={{
+                    top: `-20px`,
+                    left: `${Math.random() * 100}%`,
+                    width: `${Math.random() * 4 + 2}px`,
+                    height: `${Math.random() * 6 + 4}px`,
+                    animation: `fallingDust ${duration}s linear ${delay}s forwards`,
+                    opacity: 0,
+                  }} />
+              );
+            })}
           </div>
         )}
       </div>
 
       <style>{`
+        /* اهتزاز طويل وعشوائي نسبياً */
         @keyframes templeShake { 
           0%, 100% { transform: translate(0, 0) }
-          10%, 30%, 50%, 70%, 90% { transform: translate(3px, -2px) }
-          20%, 40%, 60%, 80% { transform: translate(-3px, 2px) }
+          5%, 15%, 25%, 35%, 45%, 55%, 65%, 75%, 85%, 95% { transform: translate(2px, -1px) }
+          10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90% { transform: translate(-2px, 1px) }
         }
-        @keyframes glowParticle { 
-          0% { transform: scale(0) translate(0, 0); opacity: 0.9 } 
-          100% { transform: scale(1.5) translate(${Math.random() * 200 - 100}px, ${Math.random() * -400 - 100}px); opacity: 0 } 
+        /* حركة الغبار المتساقط من أعلى لأسفل */
+        @keyframes fallingDust { 
+          0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0; } 
+          10% { opacity: 0.8; }
+          100% { transform: translateY(110vh) scale(1.5) rotate(360deg); opacity: 0; } 
         }
         .will-change-transform { will-change: transform; }
         .transform-gpu { transform: translate3d(0,0,0); }
