@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import sarc from "@/assets/sarcophagus.png";
 import { useSound } from "./SoundContext";
 import { sounds } from "../../audio"; 
@@ -11,6 +11,7 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
   const [input, setInput] = useState(["A", "A", "A"]);
   const [isSolved, setIsSolved] = useState(false);
   const { play } = useSound();
+  const hasTriggeredRef = useRef(false);
 
   const getPan = (event: React.MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -18,56 +19,63 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
     return (relativeX - 0.5) * 1.4;
   };
 
-  // ✅ دالة الفتح أصبحت مستقلة لضمان استدعائها بدقة
   const triggerOpen = useCallback((panX = 0) => {
-    if (opening) return;
+    if (opening || hasTriggeredRef.current) return;
+    hasTriggeredRef.current = true;
     setOpening(true);
 
     try {
-      sounds.box.currentTime = 0;
-      sounds.box.play().catch(e => console.log("Audio blocked"));
+      if (sounds.box) {
+        sounds.box.currentTime = 0;
+        sounds.box.play().catch(e => console.log("box audio blocked"));
+      }
     } catch (err) { }
 
     play("spell", { pan: panX, volume: 1 });
     play("open", { pan: panX, volume: 1 });
     if (intensity === "strong") play("rumble", { pan: panX, volume: 1 });
     
-    // الانتقال للمرحلة التالية بعد انتهاء الأنميشن
-    setTimeout(onOpen, 5000);
+    setTimeout(() => {
+      onOpen();
+    }, 5000);
   }, [opening, play, intensity, onOpen]);
 
-  // ✅ تعديل منطق تغيير الحرف ليكون أسرع ويتحقق فوراً
+  // ✅ تغيير الحرف عند النقر
   const handleCharChange = (index: number) => {
     if (isSolved || opening) return;
     
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const currentIndex = chars.indexOf(input[index]);
-    const nextIndex = (currentIndex + 1) % chars.length;
+    const currentChar = input[index];
+    const currentIdx = chars.indexOf(currentChar);
+    const nextIdx = (currentIdx + 1) % chars.length;
+    const newChar = chars[nextIdx];
     
     const newInput = [...input];
-    newInput[index] = chars[nextIndex];
+    newInput[index] = newChar;
     setInput(newInput);
 
-    // التحقق الفوري داخل الدالة لضمان عدم حدوث Delay من الـ useEffect
-    if (newInput.join("") === "BDM") {
+    // ✅ التحقق الفوري
+    const code = newInput.join("");
+    if (code === "BDM" && !isSolved && !opening) {
       setIsSolved(true);
-      setTimeout(() => triggerOpen(0), 600);
+      setTimeout(() => triggerOpen(0), 200);
     }
-    
-    // صوت النقرة البسيط
+
+    // صوت النقرة الصغير (اختياري)
     try {
       const AudioContextClass = (window as any).AudioContext || (window as any).webkitAudioContext;
       if (AudioContextClass) {
         const ctx = new AudioContextClass();
         const osc = ctx.createOscillator();
-        const g = ctx.createGain();
+        const gain = ctx.createGain();
         osc.frequency.value = 180;
-        g.gain.setValueAtTime(0.05, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.1);
-        osc.connect(g).connect(ctx.destination);
-        osc.start(); osc.stop(ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.1);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.1);
       }
-    } catch(e) {}
+    } catch(e) { /* ignore */ }
   };
 
   return (
@@ -76,14 +84,13 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
         onMouseEnter={(event) => !opening && play("hover", { pan: getPan(event), volume: 0.9 })}
         className={`group relative ${opening ? "" : "hover:scale-[1.02]"} transition-transform duration-500 will-change-transform`}
       >
-        
-        {/* التوهج الخلفي */}
         <div className={`absolute inset-0 -m-8 rounded-[100px] bg-primary/40 blur-[60px] transition-opacity duration-[3000ms] ${opening ? "opacity-100" : "opacity-0 group-hover:opacity-30"} pointer-events-none z-0`} />
         
         <div className="relative overflow-visible z-10 scale-x-105">
-          {/* جسم التابوت السفلي */}
+          {/* الجسم السفلي */}
           <img
-            src={sarc} alt="Sarcophagus"
+            src={sarc}
+            alt="Sarcophagus"
             className="relative w-full h-auto [clip-path:inset(22%_0_0_0)] transform-gpu"
             style={{ animation: opening ? "none" : "float 6s ease-in-out infinite" }}
           />
@@ -99,13 +106,14 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
 
           {/* الغطاء المنزلق */}
           <img
-            src={sarc} alt=""
+            src={sarc}
+            alt=""
             className={`absolute inset-0 w-full h-auto z-20 [clip-path:inset(0_0_78%_0)] origin-bottom-right transition-all duration-[4500ms] ease-in-out transform-gpu
             ${opening ? "translate-x-[40%] -translate-y-[20%] rotate-[15deg] opacity-0" : ""}`}
             style={{ animation: opening ? "none" : "float 6s ease-in-out infinite" }}
           />
 
-          {/* لوحة اللغز */}
+          {/* لوحة الأزرار (اللغز) */}
           <div className={`absolute top-[40%] left-1/2 -translate-x-1/2 z-30 transition-all duration-1000 ${opening ? "opacity-0 scale-50 pointer-events-none" : "opacity-100"}`}>
              <div className="flex gap-3 p-2 bg-black/90 backdrop-blur-md border-2 border-primary/50 rounded-xl shadow-2xl">
                 {input.map((char, i) => (
@@ -123,7 +131,7 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
              </div>
           </div>
 
-          {/* تأثيرات الانفجار الضوئي */}
+          {/* تأثير الانفجار الضوئي عند الفتح */}
           {opening && (
             <div className="absolute inset-0 pointer-events-none">
                <div className="absolute left-1/2 top-[35%] -translate-x-1/2 w-64 h-64 rounded-full bg-primary/30 blur-[50px] animate-pulse" />
