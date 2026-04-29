@@ -9,7 +9,7 @@ export const SarcasticWarning = () => {
       if (localStorage.getItem("sandstorm_torch") === "refused_first_time") {
         setTimeout(() => {
           setShow(true);
-        }, 1500); // تظهر بعد ثانية ونصف من دخول العاصفة
+        }, 7000); // تظهر بعد ثانية ونصف من دخول العاصفة
       }
     };
     
