@@ -4,8 +4,6 @@
 
 @tailwind utilities;
 
-
-
 @layer base {
 
   /* Day mode readability boost — light text-shadow so text stays
@@ -759,5 +757,161 @@ button, a, input, textarea, [role="button"], [data-cursor="native"]:not(.fixed) 
 .volunteering-hint p {
 
   text-shadow: 1px 1px 2px black;
+
+}
+
+
+
+/* ========== تحسين أحجام النصوص للقراءة المثالية ========== */
+
+/* زيادة حجم الخط الأساسي للصفحة */
+
+body {
+
+  font-size: 18px !important;  /* بدلاً من 16px الافتراضية */
+
+  line-height: 1.65;
+
+}
+
+
+
+/* جميع العناوين الرئيسية (h1, h2, h3) */
+
+h1, h2, h3, h4, .font-display {
+
+  letter-spacing: 0.05em;
+
+}
+
+
+
+h2 {
+
+  font-size: 2.2rem !important;  /* ~35px */
+
+}
+
+
+
+h3 {
+
+  font-size: 1.6rem !important;  /* ~26px */
+
+}
+
+
+
+/* الفقرات والنصوص العادية */
+
+p, li, .text-foreground, .leading-relaxed {
+
+  font-size: 1.05rem !important;  /* ~17px */
+
+  line-height: 1.7;
+
+}
+
+
+
+/* النصوص الصغيرة جداً (مثل eyebrow, التواقيع الصغيرة) */
+
+.text-xs, .tracking-[0.5em], .text-[10px], .uppercase.tracking-widest {
+
+  font-size: 0.8rem !important;  /* ~13px بدلاً من 10px */
+
+  letter-spacing: 0.15em;
+
+}
+
+
+
+/* أزرار التنفيذ الأساسية */
+
+a.px-8.py-3, button.px-8.py-3 {
+
+  font-size: 1rem !important;
+
+  padding: 0.75rem 1.8rem;
+
+}
+
+
+
+/* النصوص داخل الإطارات الذهبية والتابوت */
+
+.gold-frame p, .gold-frame li, .reveal-up p {
+
+  font-size: 1rem !important;
+
+}
+
+
+
+/* الأرقام الإحصائية في About */
+
+.stats-number {
+
+  font-size: 2.8rem !important;
+
+}
+
+
+
+/* تلميح اللغز في Volunteering */
+
+.volunteering-hint p {
+
+  font-size: 1.2rem !important;
+
+}
+
+
+
+.volunteering-hint .text-primary.text-3xl {
+
+  font-size: 2rem !important;
+
+}
+
+
+
+/* روابط شريط التنقل */
+
+nav a {
+
+  font-size: 0.9rem !important;
+
+}
+
+
+
+/* زر الغرفة السرية */
+
+.fixed.bottom-32.left-6 {
+
+  font-size: 0.8rem !important;
+
+}
+
+
+
+/* شارة الخرطوش في الهيرو */
+
+.absolute.-bottom-5 .font-display {
+
+  font-size: 0.85rem !important;
+
+  letter-spacing: 0.25em;
+
+}
+
+
+
+/* الرموز الفرعونية (𓂀 𓋹) */
+
+.text-primary.text-2xl, .text-primary.text-3xl {
+
+  font-size: 1.8rem !important;
 
 }
