@@ -19,7 +19,6 @@
     text-shadow: 0 1px 2px hsl(38 50% 95% / 0.65), 0 0 6px hsl(38 50% 95% / 0.35);
   }
 
-  /* تأثير التوهج عند التمرير (الشعلة) */
   .day p:hover,
   .day h1:hover,
   .day h2:hover,
@@ -41,7 +40,6 @@
 
 @layer base {
   :root {
-    /* NIGHT MODE — Temple interior */
     --background: 30 25% 6%;
     --foreground: 42 70% 88%;
     --card: 28 22% 10%;
@@ -64,7 +62,6 @@
     --ring: 42 78% 55%;
     --radius: 0.25rem;
 
-    /* Pharaonic gradients & Shadows */
     --gradient-gold: linear-gradient(135deg, hsl(42 90% 65%), hsl(38 78% 45%), hsl(42 90% 65%));
     --gradient-night: radial-gradient(ellipse at center, hsl(28 30% 12%), hsl(28 35% 4%) 70%);
     --gradient-day: linear-gradient(180deg, hsl(38 60% 80%), hsl(35 55% 65%));
@@ -106,36 +103,81 @@
 @layer base {
   * { @apply border-border; }
   html { scroll-behavior: smooth; }
-  
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Cormorant Garamond', serif;
     transition: background-color 0.8s var(--transition-temple), color 0.6s ease;
     overflow-x: hidden;
-    /* ✅ تكبير ذكي للنص الأساسي */
-    font-size: 1.1rem; 
+
+    /* 🔥 حجم أساسي أكبر */
+    font-size: 1.15rem;
+    line-height: 1.75;
   }
 
-  /* ✅ تكبير النصوص الصغيرة (الفقرات والقوائم والروابط) لزيادة الوضوح */
-  p, li, a, label, button {
-    font-size: 1.125rem; /* 18px */
-    line-height: 1.7;
-  }
-
-  /* ✅ معالجة خاصة للنصوص الصغيرة جداً لتصبح مقروءة */
-  small, .text-xs, .text-sm {
-    font-size: 0.95rem !important; /* رفع الحجم من 12px إلى 15px تقريباً */
-    font-weight: 500;
-  }
-
-  h1, h2, h3, h4, .display {
+  /* 👑 العنوان الأساسي */
+  h1 {
+    @apply text-6xl md:text-8xl;
     font-family: 'Cinzel', serif;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
   }
 
-  /* العناوين الكبيرة تظل كما هي لأنها واضحة */
-  h1 { @apply text-5xl md:text-7xl; }
-  h2 { @apply text-3xl md:text-5xl; }
+  /* 🏛️ عناوين كبيرة */
+  h2 {
+    @apply text-4xl md:text-6xl;
+    font-family: 'Cinzel', serif;
+  }
+
+  /* 📜 عناوين متوسطة */
+  h3 {
+    @apply text-3xl md:text-4xl;
+    font-family: 'Cinzel', serif;
+  }
+
+  h4 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  /* 📝 النصوص */
+  p {
+    font-size: 1.2rem;
+    line-height: 1.85;
+  }
+
+  li {
+    font-size: 1.15rem;
+  }
+
+  a {
+    font-size: 1.15rem;
+  }
+
+  button {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  label {
+    font-size: 1.05rem;
+  }
+
+  /* 🔹 النصوص الصغيرة */
+  small, .text-xs, .text-sm {
+    font-size: 1rem !important;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+}
+
+/* 🔥 تحسين العربي */
+[dir="rtl"] p,
+[dir="rtl"] li,
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3 {
+  unicode-bidi: isolate;
+  font-size: 1.25rem;
+  line-height: 2;
 }
 
 @layer utilities {
@@ -146,87 +188,10 @@
     color: transparent;
     text-shadow: 0 0 30px hsl(var(--primary) / 0.4);
   }
-  .bg-stone {
-    background-image: var(--gradient-stone), url('/src/assets/stone-texture.jpg');
-    background-blend-mode: multiply;
-    background-size: cover;
-  }
-  .bg-papyrus {
-    background-image: url('/src/assets/papyrus.jpg');
-    background-size: cover;
-    background-position: center;
-  }
-  .shadow-gold { box-shadow: var(--shadow-gold); }
-  .shadow-engrave { box-shadow: var(--shadow-engrave); }
-  .shadow-deep { box-shadow: var(--shadow-deep); }
-  .shadow-torch { box-shadow: var(--shadow-torch); }
-
-  .gold-frame {
-    position: relative;
-    border: 2px solid hsl(var(--primary) / 0.6);
-    box-shadow: var(--shadow-gold), inset 0 0 20px hsl(var(--primary) / 0.1);
-  }
-  .gold-frame::before, .gold-frame::after {
-    content: ''; position: absolute; width: 24px; height: 24px;
-    border: 2px solid hsl(var(--primary));
-  }
-  .gold-frame::before { top: -6px; left: -6px; border-right: none; border-bottom: none; }
-  .gold-frame::after  { bottom: -6px; right: -6px; border-left: none; border-top: none; }
-
-  .torch-flicker { animation: torch 2.4s ease-in-out infinite; }
-  .float-slow { animation: float 6s ease-in-out infinite; }
-  .reveal-up { animation: revealUp 0.9s var(--transition-temple) both; }
-  .shimmer-gold {
-    background: linear-gradient(110deg, transparent 30%, hsl(var(--primary-glow) / 0.5) 50%, transparent 70%);
-    background-size: 200% 100%;
-    animation: shimmer 3s linear infinite;
-  }
 }
 
-/* الأنميشن الأساسي */
-@keyframes torch { 0%, 100% { opacity: 1; filter: brightness(1); } 50% { opacity: 0.85; filter: brightness(1.15); } }
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-@keyframes revealUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-/* ========== دعم اللغات وتحسين النصوص الصغيرة ========== */
-html[dir="rtl"] {
-  direction: rtl;
-  text-align: right;
-}
-
-[dir="rtl"] p, [dir="rtl"] li, [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
-  unicode-bidi: isolate;
-  /* ✅ الخط العربي يظهر أصغر من اللاتيني، لذا نزيد حجمه قليلاً للتوازن */
-  font-size: 1.18rem; 
-  line-height: 1.85;
-}
-
-/* عزل الكلمات التقنية الإنجليزية داخل الجمل العربية */
-[dir="rtl"] code, [dir="rtl"] .tech-term {
-  unicode-bidi: embed;
-  direction: ltr;
-  display: inline-block;
-}
-
-/* تحسين وضوح المحتوى تحت تأثير العاصفة */
-.sandstorm-viewport {
-  transition: mask-image 0.05s linear, -webkit-mask-image 0.05s linear;
-}
-
-/* لضمان ظهور الأزرار بوضوح */
-button, a {
-  position: relative;
-  z-index: 55 !important;
-}
-
-/* Developer mode styling */
-.dev-mode body { font-family: 'Inter', system-ui, sans-serif; }
-.dev-mode .gold-frame { border-radius: 12px; border-color: hsl(var(--primary) / 0.35); }
-
-/* تلميح اللغز - وضوح فائق للخط الصغير داخل التلميحات */
-.volunteering-hint p {
-  font-size: 1rem;
-  font-weight: 600;
-  text-shadow: 1px 1px 2px black;
+/* أنيميشن */
+@keyframes torch {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
 }
