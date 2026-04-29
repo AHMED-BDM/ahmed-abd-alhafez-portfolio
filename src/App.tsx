@@ -14,20 +14,27 @@ const queryClient = new QueryClient();
 const App = () => {
   const { lang } = useLang();
 
-  // تغيير اتجاه الصفحة عند تغيير اللغة
+  // تغيير اتجاه الصفحة حسب اللغة
   useEffect(() => {
     document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
   }, [lang]);
 
-  // تشغيل الصوت الخلفي
+  // تشغيل الصوت الأساسي (مرة واحدة عند أول click)
   useEffect(() => {
     const startAudio = () => {
       setupAudio();
-      sounds.night.currentTime = 0;
-      sounds.night.loop = true;
-      sounds.night.play().catch(e => console.log("Audio play blocked"));
+
+      const audio = sounds.night;
+      audio.currentTime = 0;
+      audio.loop = true;
+
+      audio.play().catch((e) => {
+        console.log("Audio play blocked:", e);
+      });
+
       document.removeEventListener("click", startAudio);
     };
+
     document.addEventListener("click", startAudio);
   }, []);
 
@@ -35,10 +42,12 @@ const App = () => {
   useEffect(() => {
     const whisperInterval = setInterval(() => {
       if (Math.random() < 0.5) {
-        sounds.whisper.currentTime = 0;
-        sounds.whisper.play().catch(e => {});
+        const audio = sounds.whisper;
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
       }
     }, 30000);
+
     return () => clearInterval(whisperInterval);
   }, []);
 
@@ -46,23 +55,29 @@ const App = () => {
   useEffect(() => {
     const ghostInterval = setInterval(() => {
       if (Math.random() < 0.3) {
-        sounds.ghost.currentTime = 0;
-        sounds.ghost.play().catch(e => {});
+        const audio = sounds.ghost;
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
       }
     }, 50000);
+
     return () => clearInterval(ghostInterval);
   }, []);
 
-  // ✅ صوت خائف كل 80 ثانية (يتم تشغيله بغض النظر عن الوضع)
+  // ✅ صوت الخوف (Scared Sound)
   useEffect(() => {
     const scaredInterval = setInterval(() => {
-      try {
-        sounds.scared.currentTime = 0;
-        sounds.scared.play().catch(e => console.log("scaredSound play blocked:", e));
-      } catch (err) {
-        console.log("scaredSound error:", err);
-      }
-    }, 80000); // 80 ثانية
+      const audio = sounds.scared;
+
+      if (!audio) return;
+
+      audio.currentTime = 0;
+      audio.volume = 0.7;
+
+      audio.play().catch((e) => {
+        console.log("scaredSound blocked:", e);
+      });
+    }, 80000);
 
     return () => clearInterval(scaredInterval);
   }, []);
