@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import sarc from "@/assets/sarcophagus.png";
 import { useSound } from "./SoundContext";
 import { sounds } from "../../audio";
@@ -11,16 +11,13 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
   const [input, setInput] = useState(["A", "A", "A"]);
   const [isSolved, setIsSolved] = useState(false);
   const { play } = useSound();
-  const hasTriggeredRef = useRef(false);
 
-  const getPan = (event: React.MouseEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const relativeX = (event.clientX - rect.left) / rect.width;
-    return (relativeX - 0.5) * 1.4;
-  };
+  // ✅ مهم جداً يمنع التكرار
+  const hasTriggeredRef = useRef(false);
 
   const triggerOpen = useCallback((panX = 0) => {
     if (opening || hasTriggeredRef.current) return;
+
     hasTriggeredRef.current = true;
     setOpening(true);
 
@@ -40,83 +37,60 @@ export const Sarcophagus = ({ label, onOpen, intensity = "normal" }: {
     }, 5000);
   }, [opening, play, intensity, onOpen]);
 
-  // ✅ الحل هنا: التحقق داخل useEffect
-  useEffect(() => {
-    const code = input.join("");
-    if (code === "BDM" && !isSolved && !opening) {
-      setIsSolved(true);
-      setTimeout(() => triggerOpen(0), 200);
-    }
-  }, [input, isSolved, opening, triggerOpen]);
-
   const handleCharChange = (index: number) => {
     if (isSolved || opening) return;
 
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const currentChar = input[index];
-    const currentIdx = chars.indexOf(currentChar);
-    const nextIdx = (currentIdx + 1) % chars.length;
-    const newChar = chars[nextIdx];
+    const currentIndex = chars.indexOf(input[index]);
+    const nextIndex = (currentIndex + 1) % chars.length;
 
     const newInput = [...input];
-    newInput[index] = newChar;
+    newInput[index] = chars[nextIndex];
     setInput(newInput);
 
-    // صوت بسيط
-    try {
-      const AudioContextClass =
-        (window as any).AudioContext || (window as any).webkitAudioContext;
-      if (AudioContextClass) {
-        const ctx = new AudioContextClass();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.frequency.value = 180;
-        gain.gain.setValueAtTime(0.05, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.1);
-        osc.connect(gain).connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.1);
-      }
-    } catch {}
+    const code = newInput.join("");
+
+    // ✅ الحل الصح
+    if (code === "BDM" && !hasTriggeredRef.current) {
+      setIsSolved(true);
+
+      // delay بسيط للأنميشن
+      setTimeout(() => {
+        triggerOpen(0);
+      }, 300);
+    }
   };
 
   return (
-    <div className="relative max-w-lg w-[90%] mx-auto select-none perspective-1000">
-      <div
-        onMouseEnter={(event) =>
-          !opening && play("hover", { pan: getPan(event), volume: 0.9 })
-        }
-        className={`group relative ${opening ? "" : "hover:scale-[1.02]"} transition-transform duration-500`}
-      >
-        <div className="relative overflow-visible z-10 scale-x-105">
-          
-          <img
-            src={sarc}
-            alt="Sarcophagus"
-            className="relative w-full h-auto [clip-path:inset(22%_0_0_0)]"
-          />
+    <div className="relative max-w-lg w-[90%] mx-auto select-none">
+      <div className="relative">
+        
+        <img
+          src={sarc}
+          alt="Sarcophagus"
+          className="w-full"
+        />
 
-          {/* Puzzle */}
-          <div className={`absolute top-[40%] left-1/2 -translate-x-1/2 z-30 ${opening ? "opacity-0" : "opacity-100"}`}>
-            <div className="flex gap-3 p-2 bg-black/90 border-2 border-primary/50 rounded-xl">
-              {input.map((char, i) => (
-                <button
-                  key={i}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCharChange(i);
-                  }}
-                  className="w-12 h-16 flex items-center justify-center bg-stone-900 border-2 border-primary/30 rounded-lg"
-                >
-                  <span className="text-3xl text-primary/70">
-                    {char}
-                  </span>
-                </button>
-              ))}
-            </div>
+        <div className="absolute top-[40%] left-1/2 -translate-x-1/2 z-30">
+          <div className="flex gap-3 p-2 bg-black/90 border-2 border-primary/50 rounded-xl">
+            {input.map((char, i) => (
+              <button
+                key={i}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCharChange(i);
+                }}
+                className="w-12 h-16 flex items-center justify-center bg-stone-900 border-2 border-primary/30 rounded-lg"
+              >
+                <span className="text-3xl text-primary/70">
+                  {char}
+                </span>
+              </button>
+            ))}
           </div>
-
         </div>
+
+        {opening && <DustEffect isActive={true} />}
       </div>
 
       <p className="mt-10 text-center text-primary">
