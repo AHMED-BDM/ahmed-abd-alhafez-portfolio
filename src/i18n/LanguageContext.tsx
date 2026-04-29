@@ -168,7 +168,28 @@ export const T: Dict = {
   en: "sealed by the order of thoth",
   ar: "مختوم بأمر تحوت"
 },
-
+ // ---------- Sarcastic Warning (تحذير العاصفة للساخر) ----------
+"sarcastic.title": {
+  en: "⚠️ You reckless mortal! ⚠️",
+  ar: "⚠️ أيها الفاني المتهور! ⚠️"
+},
+"sarcastic.message": {
+  en: "I warned you about the wrath of the sandstorm, but you chose stubbornness. Now you are lost amid the sands. You cannot see your path and you will not survive long in this cursed desert.",
+  ar: "لقد حذرتك من غضب العاصفة الرملية، لكنك اخترت العناد. الآن أنت تائه وسط الرمال، لا ترى طريقك ولن تنجو طويلاً في هذه الصحراء الملعونة."
+},
+"sarcastic.offer": {
+  en: "I will give you one last chance... Do you want to light the torch now, or would you rather be lost in the storm?",
+  ar: "سأعطيك فرصة أخيرة.. هل تريد إشعال الشعلة الآن، أم تفضل الضياع في العاصفة؟"
+},
+"sarcastic.accept": {
+  en: "🔥 Light the torch 🔥",
+  ar: "🔥 أشعل الشعلة 🔥"
+},
+"sarcastic.reject": {
+  en: "💀 I'll face the storm alone 💀",
+  ar: "💀 سأواجه العاصفة وحدي 💀"
+},
+  
 }; // 👈 قفل الـ object هنا فقط
 
 const LangCtx = createContext<any>(null);
